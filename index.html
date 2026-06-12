@@ -584,11 +584,9 @@ const CC = {
   Uzbekistan: "uz"
 };
 function Flag({ t }) {
-  const [err, setErr] = useState(false);
-  const cc = CC[t];
-  const e = FLAGS[t] || "\xB7";
-  if (!cc || err) return /* @__PURE__ */ React.createElement("span", { className: "femoji" }, e);
-  return /* @__PURE__ */ React.createElement("img", { className: "fimg", src: "https://flagcdn.com/" + cc + ".svg", alt: t, loading: "lazy", decoding: "async", onError: () => setErr(true) });
+  if (t === "England" || t === "Scotland" || t === "Wales" || t === "Northern Ireland")
+    return /* @__PURE__ */ React.createElement("span", { className: "fcode" }, CODES[t] || (t || "").slice(0, 3).toUpperCase());
+  return /* @__PURE__ */ React.createElement("span", { className: "femoji" }, FLAGS[t] || "\xB7");
 }
 function WCTrophy({ className, style }) {
   return /* @__PURE__ */ React.createElement("svg", { className, style, viewBox: "0 0 48 58", xmlns: "http://www.w3.org/2000/svg", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("defs", null, /* @__PURE__ */ React.createElement("linearGradient", { id: "wcGold", x1: "0", y1: "0", x2: "0", y2: "1" }, /* @__PURE__ */ React.createElement("stop", { offset: "0", stopColor: "#FCE49A" }), /* @__PURE__ */ React.createElement("stop", { offset: ".42", stopColor: "#E9B23C" }), /* @__PURE__ */ React.createElement("stop", { offset: "1", stopColor: "#A5701a" }))), /* @__PURE__ */ React.createElement("rect", { x: "12", y: "52", width: "24", height: "5.2", rx: "2.4", fill: "url(#wcGold)" }), /* @__PURE__ */ React.createElement("rect", { x: "12", y: "52", width: "24", height: "1.6", fill: "#FCE49A", opacity: ".7" }), /* @__PURE__ */ React.createElement("rect", { x: "16", y: "47.5", width: "16", height: "4.6", rx: "1.6", fill: "#1f7a44" }), /* @__PURE__ */ React.createElement("rect", { x: "18.5", y: "42", width: "11", height: "6", rx: "1.4", fill: "url(#wcGold)" }), /* @__PURE__ */ React.createElement("path", { d: "M18.5 18 C 15 27, 21.2 30, 21.2 35 C 21.2 39.5, 17.4 39.5, 19 43 L29 43 C 30.6 39.5, 26.8 39.5, 26.8 35 C 26.8 30, 33 27, 29.5 18 Z", fill: "url(#wcGold)" }), /* @__PURE__ */ React.createElement("circle", { cx: "24", cy: "13", r: "8.1", fill: "url(#wcGold)" }), /* @__PURE__ */ React.createElement("path", { d: "M24 5 C 18.8 8.8, 18.8 17.2, 24 21 M24 5 C 29.2 8.8, 29.2 17.2, 24 21 M16 13 H32", stroke: "#8f6314", strokeWidth: "1", fill: "none", opacity: ".5" }), /* @__PURE__ */ React.createElement("path", { d: "M20.6 8.6 C 19.4 11, 19.4 15.4, 21.2 17.8", stroke: "#fff", strokeWidth: "1.4", fill: "none", opacity: ".5", strokeLinecap: "round" }));
@@ -862,9 +860,12 @@ const CAPSULES = {
 };
 const ROUNDS = [["adv", "R32"], ["r16", "R16"], ["qf", "QF"], ["sf", "SF"], ["final", "Final"], ["win", "Cup"]];
 const STAGE_LABEL = { GROUP: "Group stage", R32: "Round of 32", R16: "Round of 16", QF: "Quarter-final", SF: "Semi-final", RU: "Runner-up", WIN: "Champion" };
+function prettyStage(s) {
+  return { GROUP_STAGE: "Group stage", LAST_32: "Round of 32", ROUND_OF_32: "Round of 32", LAST_16: "Round of 16", ROUND_OF_16: "Round of 16", QUARTER_FINALS: "Quarter-finals", QUARTER_FINAL: "Quarter-final", SEMI_FINALS: "Semi-finals", SEMI_FINAL: "Semi-final", THIRD_PLACE: "Third place", PLAYOFF_FOR_THIRD_PLACE: "Third place", FINAL: "Final" }[s] || (s ? s.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase()) : "Knockouts");
+}
 const MODEL_GOALS = 280, GOALS_LO = 258, GOALS_HI = 301;
 const MAX_TOTAL = Object.keys(RECO).reduce((s, p) => s + TEAMS[RECO[p]].ep, 0);
-const PLAYERS = ["Jason", "Alex", "Luke D", "Luke M", "Conor", "Cian", "David", "Ryan", "Stephen", "Shane"];
+const PLAYERS = ["Alex", "Ryan", "Luke D", "David", "Fergal", "Jason", "Conor"];
 const TEAM_LIST = Object.keys(TEAMS);
 const TEAM_IDX = Object.fromEntries(TEAM_LIST.map((t, i) => [t, i]));
 const CODE2T = Object.fromEntries(TEAM_LIST.map((t) => [CODES[t], t]));
@@ -1063,8 +1064,18 @@ function standings(picks, res, guesses) {
   });
   return { rows, goals, played };
 }
-const DEFAULT_PICKS = PLAYERS.map((name, k) => [1, 2, 3, 4, 5, 6].map((p) => POT_TEAMS[p][k % POT_TEAMS[p].length]));
-DEFAULT_PICKS[0] = ["France", "Belgium", "Morocco", "Australia", "Iran", "South Korea"];
+const PLAYER_PICKS = {
+  "Alex": ["England", "Belgium", "Austria", "Sweden", "DR Congo", "South Korea"],
+  "Ryan": ["Spain", "Turkey", "Switzerland", "Scotland", "Iran", "Czechia"],
+  "Luke D": ["Spain", "Belgium", "Croatia", "Scotland", "Iran", "Egypt"],
+  "David": ["France", "Turkey", "Croatia", "Sweden", "New Zealand", "South Korea"],
+  "Fergal": ["Spain", "Norway", "Croatia", "Scotland", "Iran", "South Korea"],
+  "Jason": ["France", "Belgium", "Morocco", "Australia", "Iran", "South Korea"],
+  "Conor": ["Spain", "Belgium", "Morocco", "Sweden", "New Zealand", "Czechia"]
+};
+const PLAYER_GUESSES = { "Alex": 312, "Ryan": 304, "Luke D": 190, "David": 305, "Fergal": 293, "Jason": 280, "Conor": 215 };
+const DEFAULT_PICKS = PLAYERS.map((n) => (PLAYER_PICKS[n] || []).slice());
+const DEFAULT_GUESSES = PLAYERS.map((n) => PLAYER_GUESSES[n] != null ? PLAYER_GUESSES[n] : "");
 function b64u(s) {
   return btoa(unescape(encodeURIComponent(s))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
@@ -1091,7 +1102,7 @@ function fitLeague(d) {
   if (!d) return d;
   const n = PLAYERS.length;
   const picks = Array.from({ length: n }, (_, i) => d.picks && d.picks[i] ? d.picks[i] : DEFAULT_PICKS[i] ? [...DEFAULT_PICKS[i]] : ["", "", "", "", "", ""]);
-  const guesses = Array.from({ length: n }, (_, i) => d.guesses && d.guesses[i] != null ? d.guesses[i] : "");
+  const guesses = Array.from({ length: n }, (_, i) => d.guesses && d.guesses[i] != null ? d.guesses[i] : DEFAULT_GUESSES[i] != null ? DEFAULT_GUESSES[i] : "");
   return __spreadProps(__spreadValues({}, d), { picks, guesses });
 }
 function decodeLeague(str) {
@@ -1123,14 +1134,14 @@ function loadLeague() {
   } catch (e) {
   }
   try {
-    const ls = localStorage.getItem("wc26league");
+    const ls = localStorage.getItem("wc26league4");
     if (ls) {
       const d = decodeLeague(ls);
       if (d) return d;
     }
   } catch (e) {
   }
-  return { picks: DEFAULT_PICKS.map((r) => [...r]), guesses: PLAYERS.map(() => ""), group: {}, ko: {} };
+  return { picks: DEFAULT_PICKS.map((r) => [...r]), guesses: DEFAULT_GUESSES.slice(), group: {}, ko: {} };
 }
 const RANK_TONE = ["#E9B23C", "#C8D2E2", "#CD7F45"];
 const HOST = /* @__PURE__ */ new Set(["USA", "Canada", "Mexico"]);
@@ -1516,7 +1527,24 @@ function Simcast() {
     }
     const pA = wA / N, pD = d / N, pB = wB / N;
     const od = (p) => p > 1e-4 ? 1 / p : 99;
-    setPred({ pA, pD, pB, oddsA: od(pA), oddsD: od(pD), oddsB: od(pB), likely: Math.round(la) + "\u2013" + Math.round(lb) });
+    const _fact = (n) => {
+      let r = 1;
+      for (let k = 2; k <= n; k++) r *= k;
+      return r;
+    };
+    const _pmf = (k, l) => Math.exp(-l) * Math.pow(l, k) / _fact(k);
+    let _bi = 0, _bj = 0, _bp = -1;
+    for (let i = 0; i <= 8; i++) {
+      for (let j = 0; j <= 8; j++) {
+        const p = _pmf(i, la) * _pmf(j, lb);
+        if (p > _bp) {
+          _bp = p;
+          _bi = i;
+          _bj = j;
+        }
+      }
+    }
+    setPred({ pA, pD, pB, oddsA: od(pA), oddsD: od(pD), oddsB: od(pB), likely: _bi + "\u2013" + _bj });
     setSc([0, 0]);
     setMinute(0);
     setFt(false);
@@ -1635,19 +1663,22 @@ function Simcast() {
         let bx = p.bx * W, by = p.by * H;
         const has = o.phase.pos === p.team;
         const dir = p.team === "A" ? 1 : -1;
-        let tx = bx + (has ? 0.06 : -0.03) * W * dir, ty = by;
-        tx += Math.sin(o.t * 1e-3 + p.seed) * 6;
-        ty += Math.cos(o.t * 13e-4 + p.seed * 1.7) * 6;
+        let tx = bx + (o.ball.x - W * 0.5) * (p.gk ? 0.08 : 0.55);
+        tx += (has ? 0.05 : -0.045) * W * dir * (p.gk ? 0.15 : 1);
+        let ty = by + (o.ball.y - by) * (p.gk ? 0.03 : 0.12);
         if (!p.gk) {
           const dbx = o.ball.x - tx, dby = o.ball.y - ty, db = Math.hypot(dbx, dby);
-          if (db < 130) {
-            tx += dbx * 0.16;
-            ty += dby * 0.16;
+          if (db < 120) {
+            tx += dbx * 0.22;
+            ty += dby * 0.22;
           }
         }
-        p.x += (tx - p.x) * 0.06;
-        p.y += (ty - p.y) * 0.06;
-        p.x = Math.max(10, Math.min(W - 10, p.x));
+        tx += Math.sin(o.t * 1e-3 + p.seed) * 5;
+        ty += Math.cos(o.t * 13e-4 + p.seed * 1.7) * 5;
+        p.x += (tx - p.x) * 0.05;
+        p.y += (ty - p.y) * 0.05;
+        const gkMin = p.team === "A" ? 8 : W * 0.8, gkMax = p.team === "A" ? W * 0.2 : W - 8;
+        p.x = Math.max(p.gk ? gkMin : 12, Math.min(p.gk ? gkMax : W - 12, p.x));
         p.y = Math.max(12, Math.min(H - 12, p.y));
       });
       if (o.playing) o.t += dt;
@@ -1734,6 +1765,402 @@ function Simcast() {
     pickTeams(a, b);
   } }, "\u{1F3B2} Random")), pred && /* @__PURE__ */ React.createElement("div", { className: "sc-pred" }, /* @__PURE__ */ React.createElement("div", { className: "sc-pred-h" }, "Model verdict \u2014 who should win"), /* @__PURE__ */ React.createElement("div", { className: "sc-bars" }, /* @__PURE__ */ React.createElement("div", { className: "sc-bar" }, /* @__PURE__ */ React.createElement("span", null, CODES[teamA], " win"), /* @__PURE__ */ React.createElement("b", null, Math.round(pred.pA * 100), "%"), /* @__PURE__ */ React.createElement("i", { style: { width: pred.pA * 100 + "%" } })), /* @__PURE__ */ React.createElement("div", { className: "sc-bar" }, /* @__PURE__ */ React.createElement("span", null, "Draw"), /* @__PURE__ */ React.createElement("b", null, Math.round(pred.pD * 100), "%"), /* @__PURE__ */ React.createElement("i", { style: { width: pred.pD * 100 + "%" } })), /* @__PURE__ */ React.createElement("div", { className: "sc-bar" }, /* @__PURE__ */ React.createElement("span", null, CODES[teamB], " win"), /* @__PURE__ */ React.createElement("b", null, Math.round(pred.pB * 100), "%"), /* @__PURE__ */ React.createElement("i", { style: { width: pred.pB * 100 + "%" } }))), /* @__PURE__ */ React.createElement("div", { className: "sc-odds" }, "Model odds \xB7 ", CODES[teamA], " ", fmtOdds(pred.oddsA), " \xB7 Draw ", fmtOdds(pred.oddsD), " \xB7 ", CODES[teamB], " ", fmtOdds(pred.oddsB), " \xB7 likely score ", pred.likely), /* @__PURE__ */ React.createElement("div", { className: "sc-tip" }, pred.pA >= pred.pB ? CODES[teamA] : CODES[teamB], " favoured", Math.abs(pred.pA - pred.pB) < 0.08 ? " \u2014 but it's tight" : ".")));
 }
+const BANKER = "He's a Banker Bai";
+const HORSE_CURATED = ["Gallop Poll", "Neigh Sayer", "Hoof Hearted", "Usain Colt", "Sir Loin of Trot", "Foal Play", "Canter Berry", "Pony Soprano", "Mane Event", "Buckin' Bronco", "Last Place Larry", "Photo Finish Phil", "Furlong Goodbye", "Saddle Up Sully", "Whip Smart", "Dark Horse Diaz", "Odds On Aoife", "Each Way Eddie", "Steward's Enquiry", "Going Soft", "The Gambler's Ruin", "Nag Champa", "Centaur of Attention", "Bridle Suite", "Reins of Terror", "Gee Gee Whiz", "Trot in Hell", "Filly Buster", "Glue Factory Reject", "Hay Fever", "Stable Genius", "Trough Love", "Maximum Effort", "Minimum Wage", "Quick Quid", "Slow Burner", "The Favourite", "Outsider Trading", "Long Shot Larry", "Banker's Bonus", "Sure Thing Sean", "Acting the Maggot", "Grand So", "Feckin' Eejit", "The Auld Fella", "Culchie Express", "Jackeen Jet", "Savage Stamina", "Sound Out Sham", "Donkey Derby", "Up the Field", "Hold Me Pint", "Notorious N.A.G.", "Conor McTrotter", "Park the Bus", "Tippy Tappy Toe", "VAR Disallowed", "Bouncebackability", "Hoof It Up Top", "Early Doors", "Fergie Time", "Hand of Nag", "Two Nil Down", "Bottle Job", "Squeaky Bum", "Worldie Winner", "Screamer", "Tekkers", "Bantersaurus", "Lad on Tour", "Session Moth", "The Hangover", "One More Pint", "Taxi for Dobbin", "Penalty Box", "Wet Wednesday", "Stormin' Norman", "Gale Force Gerry", "Drizzle Hooves", "Mucky Pup", "Soft Lad", "Daisy Cutter", "Flat Track Bully", "Comfortably Nag", "Stairway to Devon", "Mr Ed-ucated", "Trigger Happy", "Shergar's Ghost", "Red Rum-our", "Desert Storm", "Lucky Last", "Nearly Man Ned", "Almost There Andy", "Wonky Donkey", "Brave Sir Robin", "Premature Acceleration", "Gravy Train", "All the Lads", "Steady Eddie"];
+const HORSE_POOL = (() => {
+  const ADJ = ["Galloping", "Soggy", "Furious", "Lazy", "Dizzy", "Thunderin'", "Mad", "Sneaky", "Greedy", "Wobbly", "Rapid", "Cheeky", "Grumpy", "Posh", "Feral", "Electric", "Hungover", "Majestic", "Clumsy", "Bald"];
+  const NOUN = ["Larry", "Lightning", "Biscuit", "Trotter", "Wanderer", "Hooves", "Express", "Disaster", "Whisper", "Comet", "Custard", "Rascal", "Maverick", "Pickle", "Tornado", "Gambit", "Nugget", "Shadow", "Drifter", "Banjo"];
+  const set = new Set(HORSE_CURATED);
+  for (let i = 0; i < ADJ.length && set.size < 200; i++) {
+    for (let j = 0; j < NOUN.length && set.size < 200; j++) {
+      set.add(ADJ[i] + " " + NOUN[j]);
+    }
+  }
+  return [...set].slice(0, 200);
+})();
+function drawLeg(ctx, hx, hy, ph, amp) {
+  const sw = Math.sin(ph);
+  const kx = hx + sw * amp * 0.45, ky = hy + 8;
+  const fx = kx + Math.sin(ph + 0.7) * amp * 0.5, fy = hy + 18;
+  ctx.beginPath();
+  ctx.moveTo(hx, hy);
+  ctx.lineTo(kx, ky);
+  ctx.lineTo(fx, fy);
+  ctx.stroke();
+}
+function drawHorse(ctx, x, yG, phase, silk, saddle, coat, opt) {
+  opt = opt || {};
+  coat = coat || "#7a5230";
+  const mane = opt.mane || "#3a2a1c";
+  ctx.save();
+  ctx.translate(x, yG);
+  if (opt.fallen) {
+    ctx.translate(-2, 9);
+    ctx.rotate(0.6);
+    ctx.globalAlpha = 0.82;
+  }
+  ctx.scale(0.82, 0.82);
+  const run = opt.fallen ? 0 : 1;
+  ctx.strokeStyle = mane;
+  ctx.lineWidth = 4;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.beginPath();
+  ctx.moveTo(-22, -26);
+  ctx.quadraticCurveTo(-34, -22, -31, -5);
+  ctx.stroke();
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(-22, -24);
+  ctx.quadraticCurveTo(-30, -17, -27, -3);
+  ctx.stroke();
+  ctx.strokeStyle = coat;
+  ctx.lineWidth = 4.2;
+  drawLeg(ctx, -13, -15, phase, 12 * run);
+  drawLeg(ctx, -16, -15, phase + 2.3, 12 * run);
+  ctx.fillStyle = coat;
+  ctx.beginPath();
+  ctx.ellipse(-13, -21, 12, 11, 0, 0, 7);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(0, -22, 19, 9.5, 0, 0, 7);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(12, -22, 10, 10, 0, 0, 7);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(6, -28);
+  ctx.lineTo(14, -25);
+  ctx.lineTo(28, -37);
+  ctx.lineTo(22, -42);
+  ctx.closePath();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(21, -43);
+  ctx.lineTo(34, -40);
+  ctx.lineTo(35, -36);
+  ctx.quadraticCurveTo(30, -35, 25, -37);
+  ctx.lineTo(20, -39);
+  ctx.closePath();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(22, -43);
+  ctx.lineTo(23.5, -48);
+  ctx.lineTo(25.5, -43);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = mane;
+  ctx.beginPath();
+  ctx.moveTo(22, -42);
+  ctx.lineTo(20, -46);
+  ctx.lineTo(17.5, -41);
+  ctx.lineTo(15, -45);
+  ctx.lineTo(12, -39);
+  ctx.lineTo(8.5, -43);
+  ctx.lineTo(8, -30);
+  ctx.lineTo(14, -32);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = "#15100a";
+  ctx.beginPath();
+  ctx.arc(28, -39, 1.4, 0, 7);
+  ctx.fill();
+  ctx.strokeStyle = coat;
+  ctx.lineWidth = 4.2;
+  drawLeg(ctx, 11, -15, phase + 3.1, 13 * run);
+  drawLeg(ctx, 14, -15, phase + 1, 13 * run);
+  ctx.fillStyle = saddle;
+  ctx.beginPath();
+  ctx.moveTo(-6, -30);
+  ctx.lineTo(7, -30);
+  ctx.lineTo(6, -25);
+  ctx.lineTo(-5, -25);
+  ctx.closePath();
+  ctx.fill();
+  if (!opt.fallen) {
+    ctx.save();
+    ctx.translate(1, -31);
+    ctx.rotate(-0.35);
+    ctx.strokeStyle = silk;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(2, -3);
+    ctx.lineTo(12, -6);
+    ctx.stroke();
+    ctx.fillStyle = silk;
+    ctx.beginPath();
+    ctx.ellipse(0, -3, 5.5, 6.5, 0, 0, 7);
+    ctx.fill();
+    ctx.fillStyle = "#e8b98a";
+    ctx.beginPath();
+    ctx.arc(5, -9, 3, 0, 7);
+    ctx.fill();
+    ctx.fillStyle = silk;
+    ctx.beginPath();
+    ctx.arc(5, -10.5, 3.3, Math.PI, 0);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(8, -10.5);
+    ctx.lineTo(11.5, -9.5);
+    ctx.lineTo(8, -9);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+    ctx.strokeStyle = "#23262e";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(0, -26);
+    ctx.lineTo(3, -18);
+    ctx.stroke();
+  } else {
+    ctx.fillStyle = silk;
+    ctx.beginPath();
+    ctx.arc(-22, -3, 5, 0, 7);
+    ctx.fill();
+    ctx.fillStyle = "#e8b98a";
+    ctx.beginPath();
+    ctx.arc(-27, -4, 3, 0, 7);
+    ctx.fill();
+  }
+  ctx.restore();
+}
+function AlexsCorner({ bets, setBets, setToast }) {
+  const HURDLES = [0.22, 0.42, 0.62, 0.82];
+  const buildRace = () => {
+    const pool = HORSE_POOL.filter((n) => n !== BANKER);
+    const used = /* @__PURE__ */ new Set(), picks = [];
+    while (picks.length < 5) {
+      const n = pool[Math.floor(Math.random() * pool.length)];
+      if (!used.has(n)) {
+        used.add(n);
+        picks.push(n);
+      }
+    }
+    const names = [BANKER, ...picks];
+    for (let i = names.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const t = names[i];
+      names[i] = names[j];
+      names[j] = t;
+    }
+    const SILK = ["#e23b3b", "#2f7de1", "#27a567", "#e0a52b", "#8e44d0", "#e8559f", "#16b6c4", "#cbd5e1"].sort(() => Math.random() - 0.5);
+    const SAD = ["#3a2a6b", "#6b2a2a", "#22503a", "#2a3a6b", "#5b3a16", "#404a5c"];
+    const COATS = [["#7a5230", "#3a2a1c"], ["#9c5a2b", "#5e3115"], ["#4a3526", "#241910"], ["#9aa0a8", "#5b6068"], ["#3a3330", "#1c1916"], ["#c9a063", "#8a6a38"]];
+    const hs = names.map((nm, i) => {
+      const isB = nm === BANKER;
+      const rating = isB ? 1.18 : 0.78 + Math.random() * 0.5;
+      const ct = COATS[Math.floor(Math.random() * COATS.length)];
+      return {
+        name: nm,
+        num: i + 1,
+        silk: SILK[i % SILK.length],
+        saddle: SAD[i % SAD.length],
+        coat: ct[0],
+        mane: ct[1],
+        rating,
+        isBanker: isB,
+        progress: 0,
+        jumpUntil: 0,
+        jumped: {},
+        fallen: false,
+        fellAt: 0,
+        fallAt: isB ? 1 + Math.floor(Math.random() * 3) : -1,
+        target: 18 + (1.1 - rating) * 4 + Math.random() * 2,
+        sp: 0.6 + Math.random() * 0.9,
+        ph: Math.random() * 6.28,
+        sp2: 0.3 + Math.random() * 0.5,
+        odds: 2
+      };
+    });
+    const ws = hs.map((h) => Math.pow(h.rating, 3));
+    const sum = ws.reduce((a, b) => a + b, 0);
+    hs.forEach((h, i) => {
+      h.odds = Math.max(1.3, Math.round(1 / (ws[i] / sum) * 0.86 * 100) / 100);
+    });
+    return hs;
+  };
+  const [horses, setHorses] = useState(buildRace);
+  const [pick, setPick] = useState(null);
+  const [stake, setStake] = useState(10);
+  const [phase, setPhase] = useState("idle");
+  const [result, setResult] = useState(null);
+  const [lead, setLead] = useState("");
+  const cv = useRef(null), raf = useRef(0), race = useRef(null);
+  const draw = (hs, t, cameraOverride) => {
+    const c = cv.current;
+    if (!c) return;
+    const dpr = Math.min(2, (typeof window !== "undefined" ? window.devicePixelRatio : 1) || 1);
+    const W = c.clientWidth || 340, H = 300;
+    if (c.width !== Math.round(W * dpr) || c.height !== Math.round(H * dpr)) {
+      c.width = Math.round(W * dpr);
+      c.height = Math.round(H * dpr);
+    }
+    const ctx = c.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    const GUT = 26, Wworld = Math.max(2400, W * 4), startPad = 54, endPad = 80, trackLen = Wworld - startPad - endPad, finishX = startPad + trackLen;
+    const leadP = Math.max(0, ...hs.map((h) => h.progress));
+    const camRaw = startPad + leadP * trackLen - W * 0.58;
+    const cameraX = cameraOverride != null ? cameraOverride : Math.max(0, Math.min(Wworld - W, camRaw));
+    const sky = ctx.createLinearGradient(0, 0, 0, H);
+    sky.addColorStop(0, "#0e2a1a");
+    sky.addColorStop(1, "#0a1f14");
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, W, H);
+    const top = 12, laneH = (H - top - 8) / 6;
+    ctx.strokeStyle = "rgba(255,255,255,.05)";
+    ctx.lineWidth = 2;
+    for (let wx = Math.floor(cameraX / 180) * 180; wx < cameraX + W; wx += 180) {
+      const sx = wx - cameraX;
+      if (sx < GUT) continue;
+      ctx.beginPath();
+      ctx.moveTo(sx, top);
+      ctx.lineTo(sx, H - 8);
+      ctx.stroke();
+    }
+    for (let i = 0; i < 6; i++) {
+      const y0 = top + i * laneH;
+      ctx.fillStyle = i % 2 ? "rgba(255,255,255,.022)" : "rgba(255,255,255,.05)";
+      ctx.fillRect(GUT, y0, W - GUT, laneH);
+    }
+    const fsx = finishX - cameraX;
+    if (fsx > GUT - 12 && fsx < W + 12) {
+      for (let i = 0; i < 6; i++) {
+        const y0 = top + i * laneH;
+        for (let r = 0; r < laneH; r += 8) {
+          ctx.fillStyle = (Math.floor(r / 8) + i) % 2 ? "#fff" : "#0a1f14";
+          ctx.fillRect(fsx - 5, y0 + r, 10, 8);
+        }
+      }
+    }
+    HURDLES.forEach((hp) => {
+      const wx = startPad + hp * trackLen, sx = wx - cameraX;
+      if (sx < GUT - 20 || sx > W + 20) return;
+      for (let i = 0; i < 6; i++) {
+        const gy = top + i * laneH + laneH - 7;
+        ctx.fillStyle = "#caa46a";
+        ctx.fillRect(sx - 1, gy - 15, 2, 15);
+        ctx.fillRect(sx + 8, gy - 15, 2, 15);
+        ctx.fillStyle = "#e3c184";
+        ctx.fillRect(sx - 3, gy - 15, 15, 4);
+        ctx.fillStyle = "#b98a4e";
+        ctx.fillRect(sx - 3, gy - 9, 15, 3);
+      }
+    });
+    hs.forEach((h, i) => {
+      const gy = top + i * laneH + laneH - 8;
+      const wx = startPad + h.progress * trackLen;
+      const sx = Math.max(GUT + 14, wx - cameraX);
+      let yoff = 0;
+      if (t < h.jumpUntil) {
+        const jp = 1 - (h.jumpUntil - t) / 0.5;
+        yoff = -30 * Math.sin(Math.PI * Math.max(0, Math.min(1, jp)));
+      }
+      const gait = h.fallen ? 0 : t * 9 * (0.6 + h.progress * 0.6) + i * 1.3;
+      drawHorse(ctx, sx, gy + yoff, gait, h.silk, h.saddle, h.coat, { fallen: h.fallen, mane: h.mane });
+      if (h.isBanker && h.fallen) {
+        ctx.fillStyle = "#ffd9df";
+        ctx.font = "bold 9px Archivo,sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("DNF", sx, gy - 34);
+        ctx.textAlign = "left";
+      }
+    });
+    ctx.fillStyle = "rgba(10,20,14,.85)";
+    ctx.fillRect(0, top, GUT, H - top - 8);
+    for (let i = 0; i < 6; i++) {
+      const h = hs[i];
+      const cy = top + i * laneH + laneH / 2;
+      ctx.fillStyle = h.silk;
+      ctx.beginPath();
+      ctx.arc(GUT / 2, cy, 9, 0, 7);
+      ctx.fill();
+      ctx.fillStyle = "#0a1326";
+      ctx.font = "bold 11px Archivo,sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(String(h.num), GUT / 2, cy + 0.5);
+    }
+    ctx.textAlign = "left";
+    ctx.textBaseline = "alphabetic";
+  };
+  useEffect(() => {
+    if (phase !== "running") draw(horses, 0, 0);
+  }, [horses, phase]);
+  useEffect(() => () => cancelAnimationFrame(raf.current), []);
+  const startRace = () => {
+    if (phase === "running" || pick == null) return;
+    const st = +stake;
+    if (!(st > 0)) {
+      setToast("Enter a stake first");
+      return;
+    }
+    if (st > bets.balance) {
+      setToast("Not enough funds");
+      return;
+    }
+    setBets((b) => __spreadProps(__spreadValues({}, b), { balance: Math.round((b.balance - st) * 100) / 100 }));
+    const hs = horses.map((h) => __spreadProps(__spreadValues({}, h), { progress: 0, jumpUntil: 0, jumped: {}, fallen: false, fellAt: 0 }));
+    race.current = { hs, t0: 0, winner: -1, finishT: 0 };
+    setResult(null);
+    setPhase("running");
+    const step = (ts) => {
+      const R = race.current;
+      if (!R) return;
+      if (!R.t0) R.t0 = ts;
+      const t = (ts - R.t0) / 1e3;
+      const dt = Math.min(0.05, R.last ? (ts - R.last) / 1e3 : 0.016);
+      R.last = ts;
+      R.hs.forEach((h) => {
+        if (h.fallen || h.progress >= 1) return;
+        const mult = 1 + 0.3 * Math.sin(t * h.sp + h.ph) + 0.1 * Math.sin(t * h.sp2);
+        h.progress += 1 / h.target * Math.max(0.2, mult) * dt;
+        if (h.progress > 1) h.progress = 1;
+        HURDLES.forEach((hp, hi) => {
+          if (h.progress >= hp && !h.jumped[hi]) {
+            h.jumped[hi] = true;
+            if (h.isBanker && hi === h.fallAt) {
+              h.fallen = true;
+              h.fellAt = t;
+            } else h.jumpUntil = t + 0.5;
+          }
+        });
+      });
+      const ld = R.hs.reduce((a, b) => b.progress > a.progress ? b : a);
+      setLead(ld.name);
+      if (R.winner < 0) {
+        const w = R.hs.findIndex((h) => h.progress >= 1);
+        if (w >= 0) {
+          R.winner = w;
+          R.finishT = t;
+        }
+      }
+      draw(R.hs, t);
+      if (R.winner >= 0 && t > R.finishT + 1.6) {
+        const wi = R.winner;
+        const won = pick === wi;
+        const od = horses[pick] ? horses[pick].odds : 0;
+        const pay = won ? Math.round(st * od * 100) / 100 : 0;
+        if (won) setBets((b) => __spreadProps(__spreadValues({}, b), { balance: Math.round((b.balance + pay) * 100) / 100 }));
+        setResult({ winner: R.hs[wi].name, won, pay, mine: horses[pick] ? horses[pick].name : "" });
+        setToast(won ? "\u{1F3C6} " + R.hs[wi].name + " wins \u2014 you're up \u20AC" + pay.toFixed(2) + "!" : R.hs[wi].name + " takes it. Hard luck.");
+        setPhase("done");
+        race.current = null;
+        return;
+      }
+      raf.current = requestAnimationFrame(step);
+    };
+    raf.current = requestAnimationFrame(step);
+  };
+  const newRace = () => {
+    if (phase === "running") return;
+    setHorses(buildRace());
+    setPick(null);
+    setResult(null);
+    setPhase("idle");
+  };
+  return /* @__PURE__ */ React.createElement("div", { className: "ac" }, /* @__PURE__ */ React.createElement("div", { className: "ac-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ac-t" }, "\u{1F3C7} Alex's Corner"), /* @__PURE__ */ React.createElement("div", { className: "ac-s" }, "the 20-second dash \xB7 pick a runner, lump on, hold your breath")), /* @__PURE__ */ React.createElement("div", { className: "ac-bal" }, /* @__PURE__ */ React.createElement("span", null, "Wallet"), /* @__PURE__ */ React.createElement("b", null, "\u20AC", bets.balance.toFixed(2)))), /* @__PURE__ */ React.createElement("canvas", { ref: cv, className: "ac-canvas" }), phase === "running" && /* @__PURE__ */ React.createElement("div", { className: "ac-live" }, /* @__PURE__ */ React.createElement("span", { className: "ac-dot" }), "They're off! Leader: ", /* @__PURE__ */ React.createElement("b", null, lead)), result && /* @__PURE__ */ React.createElement("div", { className: "ac-result" + (result.won ? " win" : " lose") }, result.won ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("b", null, "Get in!"), " ", result.mine, " romped home \u2014 ", /* @__PURE__ */ React.createElement("b", null, "\u20AC", result.pay.toFixed(2)), " back in your wallet.") : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("b", null, "Ah here."), " ", result.winner, " won it. ", result.mine, " let you down.")), /* @__PURE__ */ React.createElement("div", { className: "ac-card-grid" }, horses.map((h, i) => /* @__PURE__ */ React.createElement("button", { key: i, className: "ac-runner" + (pick === i ? " on" : ""), onClick: () => phase !== "running" && setPick(i), disabled: phase === "running" }, /* @__PURE__ */ React.createElement("span", { className: "ac-num", style: { background: h.silk } }, h.num), /* @__PURE__ */ React.createElement("span", { className: "ac-rn" }, /* @__PURE__ */ React.createElement("span", { className: "ac-rname" }, h.name, h.isBanker && /* @__PURE__ */ React.createElement("i", { className: "ac-tip" }, "banker")), /* @__PURE__ */ React.createElement("span", { className: "ac-rodds" }, toFrac(h.odds))), /* @__PURE__ */ React.createElement("span", { className: "ac-silk", style: { background: h.silk } })))), /* @__PURE__ */ React.createElement("div", { className: "ac-bet" }, /* @__PURE__ */ React.createElement("div", { className: "ac-stake" }, /* @__PURE__ */ React.createElement("span", null, "\u20AC"), /* @__PURE__ */ React.createElement("input", { type: "number", min: "1", value: stake, onChange: (e) => setStake(e.target.value), disabled: phase === "running" })), phase !== "done" ? /* @__PURE__ */ React.createElement("button", { className: "ac-go", onClick: startRace, disabled: phase === "running" || pick == null || !(+stake > 0) || +stake > bets.balance }, phase === "running" ? "Racing\u2026" : pick == null ? "Pick a horse" : "Place \u20AC" + (+stake || 0).toFixed(2) + " & race") : /* @__PURE__ */ React.createElement("button", { className: "ac-go ac-again", onClick: newRace }, "New race \u2192")), pick != null && phase !== "running" && /* @__PURE__ */ React.createElement("div", { className: "ac-tobet" }, "Backing ", /* @__PURE__ */ React.createElement("b", null, "#", horses[pick].num, " ", horses[pick].name), " at ", toFrac(horses[pick].odds), " \u2014 returns ", /* @__PURE__ */ React.createElement("b", null, "\u20AC", ((+stake || 0) * horses[pick].odds).toFixed(2)), " if it wins."), +stake > bets.balance && /* @__PURE__ */ React.createElement("div", { className: "bk-warn" }, "Not enough funds"), /* @__PURE__ */ React.createElement("div", { className: "ac-foot" }, "Play money only. Odds set in-house. One runner always fancies himself and never quite stays on his feet \u2014 you'll spot him."));
+}
 function App() {
   const [tab, setTab] = useState("standings");
   const [pot, setPot] = useState(1);
@@ -1791,6 +2218,7 @@ function App() {
   const [runs, setRuns] = useState(0);
   const [league, setLeague] = useState(loadLeague);
   const [manage, setManage] = useState(false);
+  const [lgView, setLgView] = useState("table");
   const [mView, setMView] = useState("results");
   const [koRound, setKoRound] = useState("Round of 32");
   const [openPlayer, setOpenPlayer] = useState(null);
@@ -1810,7 +2238,7 @@ function App() {
       if (typeof window !== "undefined") {
         history.replaceState(null, "", "#" + code);
       }
-      localStorage.setItem("wc26league", code);
+      localStorage.setItem("wc26league4", code);
     } catch (e) {
     }
   }, [league]);
@@ -1856,11 +2284,11 @@ function App() {
     else setTimeout(go, 750);
   };
   const copyCoupon = () => {
-    const lines = ["DALY SPORT CO. \xB7 WC26 COUPON", "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014"];
+    const lines = ["DALY SPORT CO. \xB7 WC26 BUSTER", "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014"];
     Object.keys(POTS).forEach((p) => lines.push("Pot " + p + ":  " + picks[p]));
     lines.push("\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014", "Total goals:  " + goals, "Projected points:  " + total.toFixed(1));
     try {
-      navigator.clipboard.writeText(lines.join("\n")).then(() => setToast("Coupon copied"), () => setToast("Copy failed"));
+      navigator.clipboard.writeText(lines.join("\n")).then(() => setToast("Buster copied"), () => setToast("Copy failed"));
     } catch (e) {
       setToast("Copy failed");
     }
@@ -2003,11 +2431,11 @@ function App() {
   };
   const resetLeague = () => {
     if (typeof window !== "undefined" && !window.confirm("Clear all entered results and reset picks to defaults?")) return;
-    setLeague({ picks: DEFAULT_PICKS.map((r) => [...r]), guesses: PLAYERS.map(() => ""), group: {}, ko: {} });
+    setLeague({ picks: DEFAULT_PICKS.map((r) => [...r]), guesses: DEFAULT_GUESSES.slice(), group: {}, ko: {} });
     setToast("League reset");
   };
   const cloudPulled = useRef(false);
-  const leagueUrl = () => (workerUrl || DEFAULT_WORKER).replace(/\/+$/, "") + "/league?id=ladsbuster";
+  const leagueUrl = () => (workerUrl || DEFAULT_WORKER).replace(/\/+$/, "") + "/league?id=ladsbuster4";
   const mergeCloudLeague = (L) => {
     if (!L || !Array.isArray(L.picks) || !L.picks.some((p) => Array.isArray(p) && p.some(Boolean))) return false;
     setLeague((prev) => {
@@ -2088,6 +2516,55 @@ function App() {
   });
   const koByRound = KO_DEF.filter((d) => d.round === koRound);
   const groupsDone = Object.values(gTables).filter((x) => x.complete).length;
+  const bracket = useMemo(() => {
+    const liveKO = {};
+    (live.matches || []).forEach((m) => {
+      if (!m || m.stage === "GROUP_STAGE" || m.hs == null || m.as == null) return;
+      const h = normTeam(m.home), a = normTeam(m.away);
+      liveKO[[h, a].sort().join("|")] = { home: h, away: a, hs: m.hs, as: m.as, status: m.status, winner: m.winner ? normTeam(m.winner) : null, penHome: m.penHome, penAway: m.penAway };
+    });
+    const pairLive = (a, b) => {
+      if (!a || !b) return null;
+      const lv = liveKO[[normTeam(a), normTeam(b)].sort().join("|")];
+      if (!lv) return null;
+      const aHome = normTeam(a) === lv.home;
+      const sa = aHome ? lv.hs : lv.as, sb = aHome ? lv.as : lv.hs;
+      let win = null;
+      if (lv.winner) win = normTeam(a) === lv.winner ? "a" : normTeam(b) === lv.winner ? "b" : null;
+      else if (sa > sb) win = "a";
+      else if (sb > sa) win = "b";
+      else if (lv.penHome != null && lv.penAway != null) {
+        const pa = aHome ? lv.penHome : lv.penAway, pb = aHome ? lv.penAway : lv.penHome;
+        win = pa > pb ? "a" : pb > pa ? "b" : null;
+      }
+      return { sa, sb, win, status: lv.status };
+    };
+    const af = applyAutoFill(lgRes);
+    const resolved = {};
+    const winById = (id) => {
+      const r = resolved[id];
+      if (r && r.win) return r.win === "a" ? r.a : r.b;
+      const w = winnerOf(lgRes, id);
+      return w || "";
+    };
+    KO_DEF.forEach((d) => {
+      let a = "", b = "";
+      if (d.src[0][0] === "k") a = winById(d.src[0]);
+      if (d.src[1][0] === "k") b = winById(d.src[1]);
+      const slot = af.ko[d.id] || {};
+      if (!a) a = slot.a || "";
+      if (!b) b = slot.b || "";
+      const lv = pairLive(a, b);
+      resolved[d.id] = { a, b, sa: lv ? lv.sa : null, sb: lv ? lv.sb : null, win: lv ? lv.win : null, status: lv ? lv.status : null, round: d.round };
+    });
+    const rounds = {};
+    KO_ROUNDS.forEach((r) => rounds[r] = []);
+    KO_DEF.forEach((d) => {
+      rounds[d.round].push(resolved[d.id]);
+    });
+    const anyLive = Object.values(resolved).some((r) => r.sa != null);
+    return { rounds, anyLive };
+  }, [lgRes, live.matches]);
   const [bets, setBets] = useState(() => {
     try {
       const s = localStorage.getItem("wc26bets");
@@ -2096,9 +2573,10 @@ function App() {
     }
     return { balance: 100, open: [], settled: [] };
   });
+  const [bkView, setBkView] = useState("book");
   const [slip, setSlip] = useState([]);
   const [stake, setStake] = useState(10);
-  const [mdTab, setMdTab] = useState(1);
+  const [dayTab, setDayTab] = useState("");
   const [showAllOut, setShowAllOut] = useState(false);
   useEffect(() => {
     try {
@@ -2212,7 +2690,6 @@ function App() {
     setBets({ balance: 100, open: [], settled: [] });
     setSlip([]);
   };
-  const mdFixtures = GROUP_FIXTURES.filter((f) => f.md === mdTab);
   const fixtureIndex = useMemo(() => {
     const idx = {};
     GROUP_FIXTURES.forEach((f) => {
@@ -2286,37 +2763,77 @@ function App() {
     }
   }, []);
   const liveGroups = live.matches ? live.matches.filter((m) => m.stage === "GROUP_STAGE") : null;
-  const bkFixtures = liveGroups && liveGroups.length ? liveGroups.filter((m) => m.matchday === mdTab).map((m) => {
-    const fx = fixtureFor(m.group, m.home, m.away);
-    const o = fx ? matchOdds[fx.id] : null;
-    return {
-      id: String(m.id),
-      group: (m.group || "").replace("GROUP_", ""),
-      a: m.home,
-      b: m.away,
-      oH: o ? fx.a === m.home ? o[0] : o[2] : null,
-      oD: o ? o[1] : null,
-      oA: o ? fx.a === m.home ? o[2] : o[0] : null,
-      hs: m.hs,
-      as: m.as,
-      status: m.status,
-      live: true
-    };
-  }) : mdFixtures.map((f) => {
-    const o = matchOdds[f.id];
-    return { id: f.id, group: f.group, a: f.a, b: f.b, oH: o[0], oD: o[1], oA: o[2], hs: null, as: null, status: null, live: false };
-  });
+  const schedule = useMemo(() => {
+    if (!live.matches || !live.matches.length) return null;
+    const byDate = {};
+    live.matches.forEach((m) => {
+      const d = new Date(m.date);
+      const k = isNaN(d.getTime()) ? "TBD" : d.toISOString().slice(0, 10);
+      (byDate[k] = byDate[k] || []).push(m);
+    });
+    Object.keys(byDate).forEach((k) => byDate[k].sort((a, b) => new Date(a.date) - new Date(b.date)));
+    const dates = Object.keys(byDate).filter((k) => k !== "TBD").sort();
+    if (byDate.TBD) dates.push("TBD");
+    return { byDate, dates };
+  }, [live.matches]);
+  const selDate = useMemo(() => {
+    if (!schedule) return null;
+    if (schedule.dates.includes(dayTab)) return dayTab;
+    const today = (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
+    if (schedule.dates.includes(today)) return today;
+    const up = schedule.dates.find((d) => d !== "TBD" && d >= today);
+    return up || schedule.dates[0];
+  }, [schedule, dayTab]);
+  const dayMatches = useMemo(() => {
+    if (!schedule || !selDate) return [];
+    return (schedule.byDate[selDate] || []).map((m) => {
+      const a = normTeam(m.home), b = normTeam(m.away);
+      const isKO = m.stage !== "GROUP_STAGE";
+      let oH = null, oD = null, oA = null, advA = null, advB = null;
+      if (a && b && TEAMS[a] && TEAMS[b]) {
+        const [pH, pD, pA] = matchProbs(a, b, radj);
+        oH = oddsDec(pH);
+        oD = oddsDec(pD);
+        oA = oddsDec(pA);
+        advA = oddsDec(pH + pD / 2);
+        advB = oddsDec(pA + pD / 2);
+      }
+      return {
+        id: String(m.id),
+        a,
+        b,
+        isKO,
+        label: isKO ? prettyStage(m.stage) : "Group " + (m.group || "").replace("GROUP_", ""),
+        oH,
+        oD,
+        oA,
+        advA,
+        advB,
+        hs: m.hs,
+        as: m.as,
+        status: m.status,
+        played: m.hs != null && m.as != null,
+        live: true
+      };
+    });
+  }, [schedule, selDate, radj]);
   const liveAgo = live.ts ? Math.round((Date.now() - live.ts) / 6e4) : null;
   useEffect(() => {
     if (tab === "bookie") {
       const tt = [];
-      bkFixtures.forEach((f) => {
+      dayMatches.forEach((f) => {
         tt.push(f.a, f.b);
       });
       outright.slice(0, 8).forEach((o) => tt.push(o.t));
       fetchNewsFor(tt);
     }
-  }, [tab, mdTab, live.matches]);
+  }, [tab, selDate, live.matches]);
+  useEffect(() => {
+    if (tab === "scout") {
+      const tt = scoutFilter === 0 ? [1, 2, 3, 4, 5, 6].map((p) => picks[p]).filter(Boolean) : POT_TEAMS[scoutFilter] || [];
+      fetchNewsFor(tt);
+    }
+  }, [tab, scoutFilter, live.matches]);
   return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("style", null, CSS), /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("div", { className: "bg-glow" }), /* @__PURE__ */ React.createElement("header", { className: "top" }, /* @__PURE__ */ React.createElement("div", { className: "brand" }, /* @__PURE__ */ React.createElement("div", { className: "mark" }, /* @__PURE__ */ React.createElement(WCTrophy, { className: "mark-tro" })), /* @__PURE__ */ React.createElement("div", { className: "brand-tx" }, /* @__PURE__ */ React.createElement("div", { className: "brand-t" }, "DALY SPORT CO."), /* @__PURE__ */ React.createElement("div", { className: "brand-s" }, "World Cup 2026 \xB7 the lads' sweepstake"))), /* @__PURE__ */ React.createElement("nav", { className: "tabs" }, /* @__PURE__ */ React.createElement("button", { className: tab === "standings" ? "on" : "", onClick: () => setTab("standings") }, /* @__PURE__ */ React.createElement(Users, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Standings")), /* @__PURE__ */ React.createElement("button", { className: tab === "scout" ? "on" : "", onClick: () => setTab("scout") }, /* @__PURE__ */ React.createElement(BookOpen, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Scout")), /* @__PURE__ */ React.createElement("button", { className: tab === "sim" ? "on" : "", onClick: () => setTab("sim") }, /* @__PURE__ */ React.createElement(Zap, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Simulate")), /* @__PURE__ */ React.createElement("button", { className: tab === "bookie" ? "on" : "", onClick: () => setTab("bookie") }, /* @__PURE__ */ React.createElement(Coins, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Bookie"))), /* @__PURE__ */ React.createElement("button", { className: "refresh" + (live.loading ? " spin" : "") + (live.ok ? " ok" : ""), onClick: refreshLive, title: live.ok ? "Live \xB7 updated " + (liveAgo === 0 ? "just now" : liveAgo + "m ago") : live.err ? "Tap to retry" : "Tap to load live scores" }, /* @__PURE__ */ React.createElement(RotateCcw, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, live.loading ? "Refreshing\u2026" : live.ok ? liveAgo === 0 ? "Live \xB7 now" : "Live \xB7 " + liveAgo + "m" : "Refresh"))), tab === "standings" && /* @__PURE__ */ React.createElement("div", { className: "lg" }, meIdx < 0 ? /* @__PURE__ */ React.createElement("div", { className: "me-pick" }, /* @__PURE__ */ React.createElement("div", { className: "me-pick-h" }, "\u{1F44B} Who are you?"), /* @__PURE__ */ React.createElement("div", { className: "me-pick-sub" }, "Tap your name to follow your six and see your teams' games. It's just for this phone \u2014 no password needed."), /* @__PURE__ */ React.createElement("div", { className: "me-pick-grid" }, PLAYERS.map((n) => /* @__PURE__ */ React.createElement("button", { key: n, onClick: () => setMe(n) }, n)))) : /* @__PURE__ */ React.createElement("div", { className: "me-today" }, /* @__PURE__ */ React.createElement("div", { className: "me-today-top" }, /* @__PURE__ */ React.createElement("span", { className: "me-today-who" }, "Following ", /* @__PURE__ */ React.createElement("b", null, me)), /* @__PURE__ */ React.createElement("button", { className: "me-switch", onClick: () => setMe("") }, "change")), !live.matches ? /* @__PURE__ */ React.createElement("div", { className: "me-today-none" }, "Tap Refresh up top to load today's games.") : todayMatches.length === 0 ? /* @__PURE__ */ React.createElement("div", { className: "me-today-none" }, "None of your six are out today \u2014 your games show here on match days.") : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "me-today-h" }, "Your teams today"), /* @__PURE__ */ React.createElement("div", { className: "me-today-list" }, todayMatches.map((m) => {
     const played = m.hs != null && m.as != null;
     const d = new Date(m.date);
@@ -2329,7 +2846,7 @@ function App() {
       localStorage.setItem("wc26help", "1");
     } catch (e) {
     }
-  } }, /* @__PURE__ */ React.createElement(X, { size: 14 })), /* @__PURE__ */ React.createElement("div", { className: "how-h" }, "How it works"), /* @__PURE__ */ React.createElement("p", { className: "how-p" }, "Everyone picks ", /* @__PURE__ */ React.createElement("b", null, "one team from each of the six pots"), ". You score ", /* @__PURE__ */ React.createElement("b", null, "3 points"), " every time a picked team wins a match and ", /* @__PURE__ */ React.createElement("b", null, "1"), " for a draw, right through to the final. Level on points? The player whose ", /* @__PURE__ */ React.createElement("b", null, "total-goals guess"), " is closest wins. ", /* @__PURE__ */ React.createElement("b", null, "Tap the Refresh button (top right) during and after games to pull in the latest scores and update the table"), " \u2014 it also refreshes each time you open the app.")), /* @__PURE__ */ React.createElement("div", { className: "lg-top" }, /* @__PURE__ */ React.createElement("div", { className: "lg-title" }, /* @__PURE__ */ React.createElement("span", { className: "lg-h" }, "THE LEAGUE"), /* @__PURE__ */ React.createElement("span", { className: "lg-meta" }, table.played, "/104 matches \xB7 ", totalGoals, " goals", live.ok ? /* @__PURE__ */ React.createElement("span", { className: "lg-live" }, " \xB7 live \u2713") : live.err ? /* @__PURE__ */ React.createElement("span", { className: "lg-live err" }, " \xB7 offline") : null)), /* @__PURE__ */ React.createElement("button", { className: "lg-manage" + (manage ? " on" : ""), onClick: () => setManage((m) => !m) }, manage ? /* @__PURE__ */ React.createElement(X, { size: 15 }) : /* @__PURE__ */ React.createElement(Settings, { size: 15 }), " ", manage ? "Close" : "Manage league")), /* @__PURE__ */ React.createElement("button", { className: "refresh-hint" + (live.loading ? " busy" : ""), onClick: refreshLive }, /* @__PURE__ */ React.createElement(RotateCcw, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Tap ", /* @__PURE__ */ React.createElement("b", null, "Refresh"), " to pull the latest scores & update the table"), /* @__PURE__ */ React.createElement("span", { className: "refresh-hint-go" }, live.loading ? "Updating\u2026" : "Refresh now")), table.rows.length > 0 && (() => {
+  } }, /* @__PURE__ */ React.createElement(X, { size: 14 })), /* @__PURE__ */ React.createElement("div", { className: "how-h" }, "How it works"), /* @__PURE__ */ React.createElement("p", { className: "how-p" }, "Everyone picks ", /* @__PURE__ */ React.createElement("b", null, "one team from each of the six pots"), ". You score ", /* @__PURE__ */ React.createElement("b", null, "3 points"), " every time a picked team wins a match and ", /* @__PURE__ */ React.createElement("b", null, "1"), " for a draw, right through to the final. Level on points? The player whose ", /* @__PURE__ */ React.createElement("b", null, "total-goals guess"), " is closest wins. ", /* @__PURE__ */ React.createElement("b", null, "Tap the Refresh button (top right) during and after games to pull in the latest scores and update the table"), " \u2014 it also refreshes each time you open the app.")), /* @__PURE__ */ React.createElement("div", { className: "lg-top" }, /* @__PURE__ */ React.createElement("div", { className: "lg-title" }, /* @__PURE__ */ React.createElement("span", { className: "lg-h" }, "THE LEAGUE"), /* @__PURE__ */ React.createElement("span", { className: "lg-meta" }, table.played, "/104 matches \xB7 ", totalGoals, " goals", live.ok ? /* @__PURE__ */ React.createElement("span", { className: "lg-live" }, " \xB7 live \u2713") : live.err ? /* @__PURE__ */ React.createElement("span", { className: "lg-live err" }, " \xB7 offline") : null)), /* @__PURE__ */ React.createElement("button", { className: "lg-manage" + (manage ? " on" : ""), onClick: () => setManage((m) => !m) }, manage ? /* @__PURE__ */ React.createElement(X, { size: 15 }) : /* @__PURE__ */ React.createElement(Settings, { size: 15 }), " ", manage ? "Close" : "Manage league")), /* @__PURE__ */ React.createElement("button", { className: "refresh-hint" + (live.loading ? " busy" : ""), onClick: refreshLive }, /* @__PURE__ */ React.createElement(RotateCcw, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Tap ", /* @__PURE__ */ React.createElement("b", null, "Refresh"), " to pull the latest scores & update the table"), /* @__PURE__ */ React.createElement("span", { className: "refresh-hint-go" }, live.loading ? "Updating\u2026" : "Refresh now")), /* @__PURE__ */ React.createElement("div", { className: "lg-sub" }, /* @__PURE__ */ React.createElement("button", { className: lgView === "table" ? "on" : "", onClick: () => setLgView("table") }, "Table"), /* @__PURE__ */ React.createElement("button", { className: lgView === "fixtures" ? "on" : "", onClick: () => setLgView("fixtures") }, "Fixtures"), /* @__PURE__ */ React.createElement("button", { className: lgView === "groups" ? "on" : "", onClick: () => setLgView("groups") }, "Groups"), /* @__PURE__ */ React.createElement("button", { className: lgView === "knockouts" ? "on" : "", onClick: () => setLgView("knockouts") }, "Knockouts")), lgView === "table" && /* @__PURE__ */ React.createElement(React.Fragment, null, table.rows.length > 0 && (() => {
     const L = table.rows[0];
     const pre = !(L.total > 0);
     return /* @__PURE__ */ React.createElement("div", { className: "lg-hero" + (pre ? " pre" : "") }, /* @__PURE__ */ React.createElement("div", { className: "lg-hero-glow" }), /* @__PURE__ */ React.createElement("div", { className: "lg-hero-tro" }, /* @__PURE__ */ React.createElement(WCTrophy, null)), /* @__PURE__ */ React.createElement("div", { className: "lg-hero-tx" }, /* @__PURE__ */ React.createElement("span", { className: "lg-hero-lab" }, pre ? "FRONT-RUNNER \xB7 placeholder picks" : "LEADING THE LEAGUE"), /* @__PURE__ */ React.createElement("div", { className: "lg-hero-name" }, L.name, L.i === meIdx && /* @__PURE__ */ React.createElement("i", { className: "lg-you" }, "you")), /* @__PURE__ */ React.createElement("div", { className: "lg-hero-flags" }, L.teams.map((t, k) => /* @__PURE__ */ React.createElement("span", { key: k, className: "lg-flag", title: t }, /* @__PURE__ */ React.createElement(Flag, { t }))))), /* @__PURE__ */ React.createElement("div", { className: "lg-hero-pts" }, L.total, /* @__PURE__ */ React.createElement("i", null, "pts")));
@@ -2353,20 +2870,47 @@ function App() {
   }))), mView === "picks" && /* @__PURE__ */ React.createElement("div", { className: "mng-body" }, /* @__PURE__ */ React.createElement("div", { className: "mng-note" }, "Set each person's six teams \u2014 one per pot \u2014 plus their ", /* @__PURE__ */ React.createElement("b", null, "total-goals prediction"), " (the box on the right), which decides ties at the end. These all travel with the share link, so you only set them once."), /* @__PURE__ */ React.createElement("div", { className: "pk-edit" }, PLAYERS.map((name, pi) => {
     var _a;
     return /* @__PURE__ */ React.createElement("div", { key: name, className: "pe-row" }, /* @__PURE__ */ React.createElement("div", { className: "pe-name" }, name, pi === meIdx && /* @__PURE__ */ React.createElement("i", { className: "lg-you" }, "you")), /* @__PURE__ */ React.createElement("div", { className: "pe-picks" }, [1, 2, 3, 4, 5, 6].map((p, potIdx) => /* @__PURE__ */ React.createElement("select", { key: p, className: "pe-sel", value: league.picks[pi][potIdx] || "", onChange: (e) => setPick(pi, potIdx, e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "P", p, " \u2014"), POT_TEAMS[p].map((t) => /* @__PURE__ */ React.createElement("option", { key: t, value: t }, CODES[t], " \xB7 ", t)))), /* @__PURE__ */ React.createElement("span", { className: "pe-glab" }, "goal total"), /* @__PURE__ */ React.createElement("input", { className: "pe-goals", type: "number", min: "0", placeholder: "\u2014", value: (_a = league.guesses[pi]) != null ? _a : "", onChange: (e) => setGuess(pi, e.target.value) })));
-  }))), mView === "share" && /* @__PURE__ */ React.createElement("div", { className: "mng-body" }, /* @__PURE__ */ React.createElement("div", { className: "share-card" }, /* @__PURE__ */ React.createElement("div", { className: "share-h" }, /* @__PURE__ */ React.createElement(Link2, { size: 16 }), " Share the live standings"), /* @__PURE__ */ React.createElement("p", { className: "share-tx" }, "Everything you enter is packed into the link below. After updating results, copy it and drop it in the group chat \u2014 whoever opens it sees the current table. To update later, just re-share the new link."), /* @__PURE__ */ React.createElement("button", { className: "share-btn", onClick: copyLink }, /* @__PURE__ */ React.createElement(Copy, { size: 15 }), " Copy live link"), /* @__PURE__ */ React.createElement("button", { className: "share-btn2", onClick: copyCode }, "Copy code instead")), /* @__PURE__ */ React.createElement("div", { className: "share-card" }, /* @__PURE__ */ React.createElement("div", { className: "share-h" }, "Load an update"), /* @__PURE__ */ React.createElement("p", { className: "share-tx" }, "Got a newer link or code from the scorekeeper? Paste it here to sync \u2014 or just open their link directly."), /* @__PURE__ */ React.createElement("textarea", { className: "share-in", placeholder: "Paste a link or code\u2026", value: importTxt, onChange: (e) => setImportTxt(e.target.value) }), /* @__PURE__ */ React.createElement("button", { className: "share-btn", onClick: doImport }, "Load it")), /* @__PURE__ */ React.createElement("div", { className: "share-card" }, /* @__PURE__ */ React.createElement("div", { className: "share-h" }, "Cloud sync ", /* @__PURE__ */ React.createElement("span", { className: "cloud-badge " + (cloud.state === "on" ? "on" : cloud.state === "off" ? "off" : "") }, cloud.state === "on" ? "on" : cloud.state === "off" ? "not set up" : "checking\u2026")), /* @__PURE__ */ React.createElement("p", { className: "share-tx" }, cloud.state === "on" ? "Your worker has a league store. Each lad can save his own six from the Scout tab and it lands here automatically \u2014 no link-passing. Tap below to push the whole league up at once." : "Optional upgrade: with a small store added to your worker, every lad saves his own six on his own phone and it all flows into one shared table. Until that's set up, the link/code above is how you share. Setup steps are in the chat."), /* @__PURE__ */ React.createElement("button", { className: "share-btn" + (cloud.busy ? " busy" : ""), onClick: pushLeague, disabled: cloud.busy }, cloud.busy ? "Syncing\u2026" : "Sync whole league to the cloud")), /* @__PURE__ */ React.createElement("button", { className: "share-reset", onClick: resetLeague }, /* @__PURE__ */ React.createElement(X, { size: 13 }), " Reset league")))), tab === "scout" && /* @__PURE__ */ React.createElement("div", { className: "scout" }, /* @__PURE__ */ React.createElement("div", { className: "scout-hd" }, /* @__PURE__ */ React.createElement("span", { className: "scout-eye" }, "\u25C6 SCOUTING DEPARTMENT"), /* @__PURE__ */ React.createElement("h2", { className: "scout-h" }, "Draft your six \u2014 one per pot."), /* @__PURE__ */ React.createElement("p", { className: "scout-sub" }, "Tap ", /* @__PURE__ */ React.createElement("b", null, "Draft"), " on any card to claim that nation for its pot. The crown is Daly's pick; the letter grade and bars are the model's read on the squad. Your coupon sits up top \u2014 add a total-goals guess to settle ties.")), /* @__PURE__ */ React.createElement("div", { className: "cpx" }, /* @__PURE__ */ React.createElement("div", { className: "cpx-h" }, /* @__PURE__ */ React.createElement("span", null, "YOUR COUPON"), /* @__PURE__ */ React.createElement("button", { className: "cpx-oracle", onClick: () => {
+  }))), mView === "share" && /* @__PURE__ */ React.createElement("div", { className: "mng-body" }, /* @__PURE__ */ React.createElement("div", { className: "share-card" }, /* @__PURE__ */ React.createElement("div", { className: "share-h" }, /* @__PURE__ */ React.createElement(Link2, { size: 16 }), " Share the live standings"), /* @__PURE__ */ React.createElement("p", { className: "share-tx" }, "Everything you enter is packed into the link below. After updating results, copy it and drop it in the group chat \u2014 whoever opens it sees the current table. To update later, just re-share the new link."), /* @__PURE__ */ React.createElement("button", { className: "share-btn", onClick: copyLink }, /* @__PURE__ */ React.createElement(Copy, { size: 15 }), " Copy live link"), /* @__PURE__ */ React.createElement("button", { className: "share-btn2", onClick: copyCode }, "Copy code instead")), /* @__PURE__ */ React.createElement("div", { className: "share-card" }, /* @__PURE__ */ React.createElement("div", { className: "share-h" }, "Load an update"), /* @__PURE__ */ React.createElement("p", { className: "share-tx" }, "Got a newer link or code from the scorekeeper? Paste it here to sync \u2014 or just open their link directly."), /* @__PURE__ */ React.createElement("textarea", { className: "share-in", placeholder: "Paste a link or code\u2026", value: importTxt, onChange: (e) => setImportTxt(e.target.value) }), /* @__PURE__ */ React.createElement("button", { className: "share-btn", onClick: doImport }, "Load it")), /* @__PURE__ */ React.createElement("div", { className: "share-card" }, /* @__PURE__ */ React.createElement("div", { className: "share-h" }, "Cloud sync ", /* @__PURE__ */ React.createElement("span", { className: "cloud-badge " + (cloud.state === "on" ? "on" : cloud.state === "off" ? "off" : "") }, cloud.state === "on" ? "on" : cloud.state === "off" ? "not set up" : "checking\u2026")), /* @__PURE__ */ React.createElement("p", { className: "share-tx" }, cloud.state === "on" ? "Your worker has a league store. Each lad can save his own six from the Scout tab and it lands here automatically \u2014 no link-passing. Tap below to push the whole league up at once." : "Optional upgrade: with a small store added to your worker, every lad saves his own six on his own phone and it all flows into one shared table. Until that's set up, the link/code above is how you share. Setup steps are in the chat."), /* @__PURE__ */ React.createElement("button", { className: "share-btn" + (cloud.busy ? " busy" : ""), onClick: pushLeague, disabled: cloud.busy }, cloud.busy ? "Syncing\u2026" : "Sync whole league to the cloud")), /* @__PURE__ */ React.createElement("button", { className: "share-reset", onClick: resetLeague }, /* @__PURE__ */ React.createElement(X, { size: 13 }), " Reset league")))), lgView === "fixtures" && /* @__PURE__ */ React.createElement("div", { className: "lg-pane" }, !live.matches ? /* @__PURE__ */ React.createElement("div", { className: "lg-empty" }, "Tap ", /* @__PURE__ */ React.createElement("b", null, "Refresh"), " up top to pull the full fixture list and live scores.") : (() => {
+    const grp = {};
+    [...live.matches].sort((x, y) => new Date(x.date) - new Date(y.date)).forEach((m) => {
+      const L = m.stage === "GROUP_STAGE" ? "Matchday " + (m.matchday || "?") : prettyStage(m.stage);
+      (grp[L] = grp[L] || []).push(m);
+    });
+    const keys = Object.keys(grp).sort((a, b) => new Date(grp[a][0].date) - new Date(grp[b][0].date));
+    return keys.map((k) => /* @__PURE__ */ React.createElement("div", { key: k, className: "fxv-block" }, /* @__PURE__ */ React.createElement("div", { className: "fxv-h" }, k), grp[k].map((m) => {
+      const played = m.hs != null && m.as != null;
+      const dt = new Date(m.date);
+      const valid = !isNaN(dt.getTime());
+      const day = valid ? dt.toLocaleDateString([], { weekday: "short", day: "numeric", month: "short" }) : "";
+      const ko = valid ? dt.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "";
+      const stat = played ? m.status === "FINISHED" ? "FT" : m.status === "IN_PLAY" || m.status === "PAUSED" ? "LIVE" : "" : "";
+      const H = normTeam(m.home), A = normTeam(m.away);
+      return /* @__PURE__ */ React.createElement("div", { key: m.id, className: "fxv" }, /* @__PURE__ */ React.createElement("span", { className: "fxv-day" }, day), /* @__PURE__ */ React.createElement("span", { className: "fxv-t fxv-a" }, CODES[H] || m.home, " ", /* @__PURE__ */ React.createElement(Flag, { t: H })), /* @__PURE__ */ React.createElement("span", { className: "fxv-mid" }, played ? /* @__PURE__ */ React.createElement("b", null, m.hs, "\u2013", m.as) : /* @__PURE__ */ React.createElement("span", { className: "fxv-ko" }, ko || "TBD"), stat && /* @__PURE__ */ React.createElement("i", { className: stat === "LIVE" ? "liveon" : "" }, stat)), /* @__PURE__ */ React.createElement("span", { className: "fxv-t fxv-b" }, /* @__PURE__ */ React.createElement(Flag, { t: A }), " ", CODES[A] || m.away));
+    })));
+  })()), lgView === "groups" && /* @__PURE__ */ React.createElement("div", { className: "lg-pane" }, /* @__PURE__ */ React.createElement("div", { className: "grpv-grid" }, Object.keys(GROUPS).map((g) => {
+    const T = gTables[g];
+    return /* @__PURE__ */ React.createElement("div", { key: g, className: "grpv" }, /* @__PURE__ */ React.createElement("div", { className: "grpv-h" }, "Group ", g, T.complete && /* @__PURE__ */ React.createElement("i", { className: "grpv-done" }, "done")), /* @__PURE__ */ React.createElement("div", { className: "grpv-row grpv-head" }, /* @__PURE__ */ React.createElement("span", { className: "grpv-pos" }, "#"), /* @__PURE__ */ React.createElement("span", { className: "grpv-team" }, "Team"), /* @__PURE__ */ React.createElement("span", null, "P"), /* @__PURE__ */ React.createElement("span", null, "GD"), /* @__PURE__ */ React.createElement("span", null, "Pts")), T.order.map((t, i) => {
+      const s = T.stats[t];
+      return /* @__PURE__ */ React.createElement("div", { key: t, className: "grpv-row" + (i < 2 ? " q" : "") }, /* @__PURE__ */ React.createElement("span", { className: "grpv-pos" }, i + 1), /* @__PURE__ */ React.createElement("span", { className: "grpv-team" }, /* @__PURE__ */ React.createElement(Flag, { t }), " ", CODES[t] || t), /* @__PURE__ */ React.createElement("span", null, s.pld), /* @__PURE__ */ React.createElement("span", null, s.gd > 0 ? "+" + s.gd : s.gd), /* @__PURE__ */ React.createElement("span", { className: "grpv-pts" }, s.pts));
+    }));
+  })), /* @__PURE__ */ React.createElement("p", { className: "grpv-note" }, "Top two of each group (highlighted) plus the best third-placed teams go through. Tables fill in as group results land \u2014 tap ", /* @__PURE__ */ React.createElement("b", null, "Refresh"), ".")), lgView === "knockouts" && /* @__PURE__ */ React.createElement("div", { className: "lg-pane" }, !bracket.anyLive && /* @__PURE__ */ React.createElement("div", { className: "lg-empty" }, "The bracket fills in automatically once the group stage ends and knockout results come in \u2014 tap ", /* @__PURE__ */ React.createElement("b", null, "Refresh"), ". Until then it shows matchups as they're confirmed."), /* @__PURE__ */ React.createElement("div", { className: "kov" }, KO_ROUNDS.map((rd) => {
+    const ms = bracket.rounds[rd] || [];
+    if (!ms.length) return null;
+    return /* @__PURE__ */ React.createElement("div", { key: rd, className: "kov-round" }, /* @__PURE__ */ React.createElement("div", { className: "kov-rh" }, rd), /* @__PURE__ */ React.createElement("div", { className: "kov-matches" }, ms.map((m, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: "kov-m" }, /* @__PURE__ */ React.createElement("div", { className: "kov-side" + (m.win === "a" ? " win" : m.win === "b" ? " lose" : "") }, /* @__PURE__ */ React.createElement("span", { className: "kov-fl" }, m.a ? /* @__PURE__ */ React.createElement(Flag, { t: m.a }) : /* @__PURE__ */ React.createElement("span", { className: "kov-tbd-fl" })), /* @__PURE__ */ React.createElement("span", { className: "kov-nm" }, m.a ? CODES[m.a] || m.a : "TBD"), /* @__PURE__ */ React.createElement("span", { className: "kov-sc" }, m.sa != null ? m.sa : "")), /* @__PURE__ */ React.createElement("div", { className: "kov-side" + (m.win === "b" ? " win" : m.win === "a" ? " lose" : "") }, /* @__PURE__ */ React.createElement("span", { className: "kov-fl" }, m.b ? /* @__PURE__ */ React.createElement(Flag, { t: m.b }) : /* @__PURE__ */ React.createElement("span", { className: "kov-tbd-fl" })), /* @__PURE__ */ React.createElement("span", { className: "kov-nm" }, m.b ? CODES[m.b] || m.b : "TBD"), /* @__PURE__ */ React.createElement("span", { className: "kov-sc" }, m.sb != null ? m.sb : ""))))));
+  })))), tab === "scout" && /* @__PURE__ */ React.createElement("div", { className: "scout" }, /* @__PURE__ */ React.createElement("div", { className: "scout-hd" }, /* @__PURE__ */ React.createElement("span", { className: "scout-eye" }, "\u25C6 SCOUTING DEPARTMENT"), /* @__PURE__ */ React.createElement("h2", { className: "scout-h" }, "Pick your six \u2014 one per pot."), /* @__PURE__ */ React.createElement("p", { className: "scout-sub" }, "Tap ", /* @__PURE__ */ React.createElement("b", null, "Pick"), " on any card to claim that nation for its pot. The letter grade and bars are the model's read on the squad. Your buster sits up top \u2014 add a total-goals guess to settle ties.")), /* @__PURE__ */ React.createElement("div", { className: "cpx" }, /* @__PURE__ */ React.createElement("div", { className: "cpx-h" }, /* @__PURE__ */ React.createElement("span", null, "YOUR BUSTER"), /* @__PURE__ */ React.createElement("button", { className: "cpx-oracle", onClick: () => {
     setPicks(__spreadValues({}, RECO));
-    setToast("Loaded Daly's six");
-  } }, /* @__PURE__ */ React.createElement(RotateCcw, { size: 12 }), " Daly's six")), /* @__PURE__ */ React.createElement("div", { className: "cpx-slots" }, Object.keys(POTS).map((p) => {
+    setToast("Loaded the suggested six");
+  } }, /* @__PURE__ */ React.createElement(RotateCcw, { size: 12 }), " Suggested six")), /* @__PURE__ */ React.createElement("div", { className: "cpx-slots" }, Object.keys(POTS).map((p) => {
     const tm = picks[p], off = RECO[p] !== tm, here = scoutFilter === +p;
     return /* @__PURE__ */ React.createElement("button", { key: p, className: "cpx-slot" + (here ? " here" : ""), style: here ? { borderColor: POTS[p].hue } : {}, onClick: () => setScoutFilter(+p) }, /* @__PURE__ */ React.createElement("span", { className: "cpx-dot", style: { background: POTS[p].hue } }), /* @__PURE__ */ React.createElement("span", { className: "cpx-p" }, "P", p), /* @__PURE__ */ React.createElement("span", { className: "cpx-fl" }, /* @__PURE__ */ React.createElement(Flag, { t: tm })), /* @__PURE__ */ React.createElement("span", { className: "cpx-nm" }, tm || "\u2014", off && /* @__PURE__ */ React.createElement("i", { className: "cp-off" }, "off")));
   })), /* @__PURE__ */ React.createElement("div", { className: "cpx-foot" }, /* @__PURE__ */ React.createElement("div", { className: "cpx-goals" }, /* @__PURE__ */ React.createElement("span", { className: "cpx-glab" }, "Total goals guess"), /* @__PURE__ */ React.createElement("div", { className: "cpx-gstep" }, /* @__PURE__ */ React.createElement("button", { onClick: () => setGoals((g) => Math.max(0, g - 1)) }, /* @__PURE__ */ React.createElement(Minus, { size: 14 })), /* @__PURE__ */ React.createElement("input", { type: "number", value: goals, onChange: (e) => setGoals(Math.max(0, parseInt(e.target.value || "0", 10))) }), /* @__PURE__ */ React.createElement("button", { onClick: () => setGoals((g) => g + 1) }, /* @__PURE__ */ React.createElement(Plus, { size: 14 }))), /* @__PURE__ */ React.createElement("span", { className: "cpx-model" }, "model ", MODEL_GOALS)), /* @__PURE__ */ React.createElement("div", { className: "cpx-proj" }, /* @__PURE__ */ React.createElement("span", { className: "cpx-plab" }, "Projected"), /* @__PURE__ */ React.createElement("b", null, dispTotal.toFixed(1)), /* @__PURE__ */ React.createElement("span", { className: "cpx-punit" }, "pts")), /* @__PURE__ */ React.createElement("button", { className: "cpx-copy", onClick: copyCoupon }, /* @__PURE__ */ React.createElement(Copy, { size: 13 }), " Copy")), conflicts.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "cpx-warn" }, /* @__PURE__ */ React.createElement(TriangleAlert, { size: 13 }), /* @__PURE__ */ React.createElement("span", null, conflicts.map(([g, a]) => a.join(" & ") + " (Grp " + g + ")").join(" \xB7 "), " \u2014 fine for points, already priced in.")), /* @__PURE__ */ React.createElement("div", { className: "cpx-save" }, /* @__PURE__ */ React.createElement("button", { className: "cpx-savebtn" + (cloud.busy ? " busy" : ""), onClick: saveMine, disabled: cloud.busy }, cloud.busy ? "Saving\u2026" : meIdx >= 0 ? "Save my six to the league" : "Pick your name first"), /* @__PURE__ */ React.createElement("span", { className: "cpx-sync " + (cloud.state === "on" ? "on" : cloud.state === "off" ? "off" : "") }, cloud.state === "on" ? "\u25CF Cloud sync on" : cloud.state === "off" ? "\u25CB Saved on this phone" : "checking\u2026")), /* @__PURE__ */ React.createElement("p", { className: "cpx-savehint" }, meIdx >= 0 ? "This sends your six to the shared league so everyone sees them. Cloud sync needs the one-time setup below \u2014 until then it just saves here." : "Tap your name on the Standings tab, then come back to save your six.")), /* @__PURE__ */ React.createElement("div", { className: "sc-filter" }, /* @__PURE__ */ React.createElement("button", { className: scoutFilter === 0 ? "on" : "", onClick: () => setScoutFilter(0) }, "All 48"), Object.keys(POTS).map((p) => /* @__PURE__ */ React.createElement("button", { key: p, className: scoutFilter === +p ? "on" : "", style: scoutFilter === +p ? { borderColor: POTS[p].hue, color: "#fff" } : {}, onClick: () => setScoutFilter(+p) }, /* @__PURE__ */ React.createElement("span", { className: "sc-dot", style: { background: POTS[p].hue } }), "Pot ", p))), /* @__PURE__ */ React.createElement("div", { className: "dos-key" }, /* @__PURE__ */ React.createElement("span", { className: "dos-key-h" }, "What the bars mean"), /* @__PURE__ */ React.createElement("span", { className: "dos-key-i" }, /* @__PURE__ */ React.createElement("b", null, "PWR"), " squad power rating (0\u201399)"), /* @__PURE__ */ React.createElement("span", { className: "dos-key-i" }, /* @__PURE__ */ React.createElement("b", null, "RUN"), " chance to get out of the group"), /* @__PURE__ */ React.createElement("span", { className: "dos-key-i" }, /* @__PURE__ */ React.createElement("b", null, "CUP"), " chance to win the whole thing"), /* @__PURE__ */ React.createElement("span", { className: "dos-key-i" }, /* @__PURE__ */ React.createElement("b", null, "proj pts"), " expected sweepstake points \u2014 sets the grade")), /* @__PURE__ */ React.createElement("div", { className: "dossier", key: scoutFilter }, scoutTeams.map((name, idx) => {
     const t = TEAMS[name], isReco = RECO[t.pot] === name, c = CAPSULES[name];
     const picked = picks[t.pot] === name, gr = gradeOf(t.ep), pwr = clampi(Math.round((t.rating - 58) / 0.42), 5, 99);
-    return /* @__PURE__ */ React.createElement("div", { key: name, className: "dos" + (picked ? " drafted" : ""), style: { animationDelay: idx * 16 + "ms" } }, /* @__PURE__ */ React.createElement("span", { className: "dos-grade g" + gr.replace("+", "p") }, gr), /* @__PURE__ */ React.createElement("div", { className: "dos-top" }, /* @__PURE__ */ React.createElement("span", { className: "dos-flag" }, /* @__PURE__ */ React.createElement(Flag, { t: name })), /* @__PURE__ */ React.createElement("span", { className: "dos-name" }, name, isReco && /* @__PURE__ */ React.createElement(Crown, { size: 12, style: { color: POTS[t.pot].hue } })), /* @__PURE__ */ React.createElement("span", { className: "dos-grp" }, CODES[name], " \xB7 Grp ", t.group, " \xB7 Pot ", t.pot)), /* @__PURE__ */ React.createElement("div", { className: "dos-bars" }, /* @__PURE__ */ React.createElement("div", { className: "dos-bar" }, /* @__PURE__ */ React.createElement("span", null, "PWR"), /* @__PURE__ */ React.createElement("i", null, /* @__PURE__ */ React.createElement("b", { style: { width: pwr + "%" } })), /* @__PURE__ */ React.createElement("em", null, pwr)), /* @__PURE__ */ React.createElement("div", { className: "dos-bar" }, /* @__PURE__ */ React.createElement("span", null, "RUN"), /* @__PURE__ */ React.createElement("i", null, /* @__PURE__ */ React.createElement("b", { style: { width: Math.round(t.adv) + "%" } })), /* @__PURE__ */ React.createElement("em", null, Math.round(t.adv))), /* @__PURE__ */ React.createElement("div", { className: "dos-bar" }, /* @__PURE__ */ React.createElement("span", null, "CUP"), /* @__PURE__ */ React.createElement("i", null, /* @__PURE__ */ React.createElement("b", { style: { width: Math.min(100, Math.round(t.win)) + "%" } })), /* @__PURE__ */ React.createElement("em", null, t.win < 1 && t.win > 0 ? "<1" : Math.round(t.win)))), /* @__PURE__ */ React.createElement("p", { className: "dos-verdict" }, c.verdict), /* @__PURE__ */ React.createElement("div", { className: "dos-weak" }, /* @__PURE__ */ React.createElement(TriangleAlert, { size: 12 }), /* @__PURE__ */ React.createElement("span", null, c.weak)), /* @__PURE__ */ React.createElement("div", { className: "dos-foot" }, /* @__PURE__ */ React.createElement("span", { className: "dos-ep" }, /* @__PURE__ */ React.createElement("b", null, t.ep.toFixed(1)), " proj pts"), /* @__PURE__ */ React.createElement("button", { className: "dos-draft" + (picked ? " on" : ""), onClick: () => {
+    return /* @__PURE__ */ React.createElement("div", { key: name, className: "dos" + (picked ? " drafted" : ""), style: { animationDelay: idx * 16 + "ms" } }, /* @__PURE__ */ React.createElement("span", { className: "dos-grade g" + gr.replace("+", "p") }, gr), /* @__PURE__ */ React.createElement("div", { className: "dos-top" }, /* @__PURE__ */ React.createElement("span", { className: "dos-flag" }, /* @__PURE__ */ React.createElement(Flag, { t: name })), /* @__PURE__ */ React.createElement("span", { className: "dos-name" }, name), /* @__PURE__ */ React.createElement("span", { className: "dos-grp" }, CODES[name], " \xB7 Grp ", t.group, " \xB7 Pot ", t.pot)), /* @__PURE__ */ React.createElement("div", { className: "dos-bars" }, /* @__PURE__ */ React.createElement("div", { className: "dos-bar" }, /* @__PURE__ */ React.createElement("span", null, "PWR"), /* @__PURE__ */ React.createElement("i", null, /* @__PURE__ */ React.createElement("b", { style: { width: pwr + "%" } })), /* @__PURE__ */ React.createElement("em", null, pwr)), /* @__PURE__ */ React.createElement("div", { className: "dos-bar" }, /* @__PURE__ */ React.createElement("span", null, "RUN"), /* @__PURE__ */ React.createElement("i", null, /* @__PURE__ */ React.createElement("b", { style: { width: Math.round(t.adv) + "%" } })), /* @__PURE__ */ React.createElement("em", null, Math.round(t.adv))), /* @__PURE__ */ React.createElement("div", { className: "dos-bar" }, /* @__PURE__ */ React.createElement("span", null, "CUP"), /* @__PURE__ */ React.createElement("i", null, /* @__PURE__ */ React.createElement("b", { style: { width: Math.min(100, Math.round(t.win)) + "%" } })), /* @__PURE__ */ React.createElement("em", null, t.win < 1 && t.win > 0 ? "<1" : Math.round(t.win)))), /* @__PURE__ */ React.createElement("p", { className: "dos-verdict" }, c.verdict), /* @__PURE__ */ React.createElement("div", { className: "dos-weak" }, /* @__PURE__ */ React.createElement(TriangleAlert, { size: 12 }), /* @__PURE__ */ React.createElement("span", null, c.weak)), live.news[name] && live.news[name].title && /* @__PURE__ */ React.createElement("a", { className: "dos-news", href: live.news[name].url || "#", target: "_blank", rel: "noopener noreferrer" }, /* @__PURE__ */ React.createElement("span", { className: "dos-news-k" }, "\u{1F4F0} latest"), /* @__PURE__ */ React.createElement("span", { className: "dos-news-t" }, live.news[name].title), live.news[name].source && /* @__PURE__ */ React.createElement("span", { className: "dos-news-s" }, live.news[name].source)), /* @__PURE__ */ React.createElement("div", { className: "dos-foot" }, /* @__PURE__ */ React.createElement("span", { className: "dos-ep" }, /* @__PURE__ */ React.createElement("b", null, t.ep.toFixed(1)), " proj pts"), /* @__PURE__ */ React.createElement("button", { className: "dos-draft" + (picked ? " on" : ""), onClick: () => {
       setPicks((q) => __spreadProps(__spreadValues({}, q), { [t.pot]: name }));
-      setToast((picked ? "Already drafted " : "Drafted ") + name + " \xB7 Pot " + t.pot);
-    } }, picked ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Check, { size: 13, strokeWidth: 3 }), " Drafted") : /* @__PURE__ */ React.createElement(React.Fragment, null, "Draft \xB7 Pot ", t.pot))));
-  }))), tab === "sim" && /* @__PURE__ */ React.createElement("div", { className: "sm" }, /* @__PURE__ */ React.createElement("div", { className: "sm-mode" }, /* @__PURE__ */ React.createElement("button", { className: simMode === "match" ? "on" : "", onClick: () => setSimMode("match") }, "\u26BD Watch a match"), /* @__PURE__ */ React.createElement("button", { className: simMode === "tournament" ? "on" : "", onClick: () => setSimMode("tournament") }, "\u{1F3C6} Whole tournament")), simMode === "match" && /* @__PURE__ */ React.createElement(Simcast, null), simMode === "tournament" && /* @__PURE__ */ React.createElement(React.Fragment, null, !sim && !simming && /* @__PURE__ */ React.createElement("div", { className: "sm-hero" }, /* @__PURE__ */ React.createElement("div", { className: "sm-ball" }, "\u26BD"), /* @__PURE__ */ React.createElement("h2", { className: "sm-title" }, "Play out the entire World Cup"), /* @__PURE__ */ React.createElement("p", { className: "sm-sub" }, "One simulation runs all 104 matches \u2014 group stage to the final \u2014 using the same model behind every number in this app. See who lifts the trophy, and exactly how your coupon scores."), /* @__PURE__ */ React.createElement("button", { className: "kick", onClick: runSim }, /* @__PURE__ */ React.createElement(Zap, { size: 18 }), " Kick off simulation"), /* @__PURE__ */ React.createElement("div", { className: "sm-note" }, "Every run is different. Favourites win most often \u2014 but upsets happen.")), simming && /* @__PURE__ */ React.createElement("div", { className: "sm-load" }, /* @__PURE__ */ React.createElement("div", { className: "sm-ball spin" }, "\u26BD"), /* @__PURE__ */ React.createElement("div", { className: "sm-load-t" }, "Simulating 104 matches\u2026"), /* @__PURE__ */ React.createElement("div", { className: "sm-load-s" }, "Group stage \xB7 Round of 32 \xB7 knockouts \xB7 the final")), sim && !simming && /* @__PURE__ */ React.createElement("div", { className: "sm-res", key: runs }, /* @__PURE__ */ React.createElement("div", { className: "champ" }, /* @__PURE__ */ React.createElement("div", { className: "confetti" }, Array.from({ length: 24 }).map((_, k) => {
+      setToast((picked ? "Already picked " : "Picked ") + name + " \xB7 Pot " + t.pot);
+    } }, picked ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Check, { size: 13, strokeWidth: 3 }), " Picked") : /* @__PURE__ */ React.createElement(React.Fragment, null, "Pick \xB7 Pot ", t.pot))));
+  }))), tab === "sim" && /* @__PURE__ */ React.createElement("div", { className: "sm" }, /* @__PURE__ */ React.createElement("div", { className: "sm-mode" }, /* @__PURE__ */ React.createElement("button", { className: simMode === "match" ? "on" : "", onClick: () => setSimMode("match") }, "\u26BD Watch a match"), /* @__PURE__ */ React.createElement("button", { className: simMode === "tournament" ? "on" : "", onClick: () => setSimMode("tournament") }, "\u{1F3C6} Whole tournament")), simMode === "match" && /* @__PURE__ */ React.createElement(Simcast, null), simMode === "tournament" && /* @__PURE__ */ React.createElement(React.Fragment, null, !sim && !simming && /* @__PURE__ */ React.createElement("div", { className: "sm-hero" }, /* @__PURE__ */ React.createElement("div", { className: "sm-ball" }, "\u26BD"), /* @__PURE__ */ React.createElement("h2", { className: "sm-title" }, "Play out the entire World Cup"), /* @__PURE__ */ React.createElement("p", { className: "sm-sub" }, "One simulation runs all 104 matches \u2014 group stage to the final \u2014 using the same model behind every number in this app. See who lifts the trophy, and exactly how your buster scores."), /* @__PURE__ */ React.createElement("button", { className: "kick", onClick: runSim }, /* @__PURE__ */ React.createElement(Zap, { size: 18 }), " Kick off simulation"), /* @__PURE__ */ React.createElement("div", { className: "sm-note" }, "Every run is different. Favourites win most often \u2014 but upsets happen.")), simming && /* @__PURE__ */ React.createElement("div", { className: "sm-load" }, /* @__PURE__ */ React.createElement("div", { className: "sm-ball spin" }, "\u26BD"), /* @__PURE__ */ React.createElement("div", { className: "sm-load-t" }, "Simulating 104 matches\u2026"), /* @__PURE__ */ React.createElement("div", { className: "sm-load-s" }, "Group stage \xB7 Round of 32 \xB7 knockouts \xB7 the final")), sim && !simming && /* @__PURE__ */ React.createElement("div", { className: "sm-res", key: runs }, /* @__PURE__ */ React.createElement("div", { className: "champ" }, /* @__PURE__ */ React.createElement("div", { className: "confetti" }, Array.from({ length: 24 }).map((_, k) => {
     const cols = ["#E9B23C", "#5EC8F0", "#F472B6", "#34D3BE", "#ffffff", "#F4A259"];
     return /* @__PURE__ */ React.createElement("i", { key: k, style: {
       left: k * 4.1 + Math.random() * 3 + "%",
@@ -2379,18 +2923,22 @@ function App() {
     const f = sim.ko.final;
     const cf = f.win === f.i ? [f.hg, f.ag] : [f.ag, f.hg];
     return cf[0] + "\u2013" + cf[1] + (f.pens ? " (pens)" : f.aet ? " (aet)" : "");
-  })()), /* @__PURE__ */ React.createElement("div", { className: "champ-meta" }, "\u{1F949} ", /* @__PURE__ */ React.createElement(Flag, { t: sim.thirdPlace }), " ", sim.thirdPlace, " took third \xB7 ", sim.goals, " goals scored across the tournament")), /* @__PURE__ */ React.createElement("div", { className: "run-coupon" }, /* @__PURE__ */ React.createElement("div", { className: "rc-head" }, /* @__PURE__ */ React.createElement("span", null, "YOUR COUPON THIS RUN"), /* @__PURE__ */ React.createElement("span", { className: "rc-best" }, "Best: ", /* @__PURE__ */ React.createElement("b", null, best), " pts")), /* @__PURE__ */ React.createElement("div", { className: "rc-grid" }, couponRun.map((x) => /* @__PURE__ */ React.createElement("div", { key: x.pot, className: "rc-card" + (x.stage === "WIN" ? " champ-pick" : "") }, /* @__PURE__ */ React.createElement("div", { className: "rc-top" }, /* @__PURE__ */ React.createElement("span", { className: "rc-flag" }, /* @__PURE__ */ React.createElement(Flag, { t: x.team })), /* @__PURE__ */ React.createElement("span", { className: "rc-name" }, x.team), /* @__PURE__ */ React.createElement("span", { className: "rc-pts" }, x.pts)), /* @__PURE__ */ React.createElement("div", { className: "rc-stage" }, x.stage === "WIN" ? "\u{1F3C6} " : "", STAGE_LABEL[x.stage])))), /* @__PURE__ */ React.createElement("div", { className: "rc-total" }, /* @__PURE__ */ React.createElement("span", null, "Coupon total this run"), /* @__PURE__ */ React.createElement("b", null, couponRunTotal, " pts"))), /* @__PURE__ */ React.createElement("button", { className: "resim", onClick: runSim }, /* @__PURE__ */ React.createElement(RotateCcw, { size: 16 }), " Simulate again"), /* @__PURE__ */ React.createElement("div", { className: "sec-lab" }, "The road to the final"), /* @__PURE__ */ React.createElement("div", { className: "bracket" }, /* @__PURE__ */ React.createElement("div", { className: "br-col" }, /* @__PURE__ */ React.createElement("span", { className: "br-lab" }, "Quarter-finals"), /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.qf[0] }), /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.qf[1] }), /* @__PURE__ */ React.createElement("div", { className: "br-spacer" }), /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.qf[2] }), /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.qf[3] })), /* @__PURE__ */ React.createElement("div", { className: "br-col br-mid" }, /* @__PURE__ */ React.createElement("span", { className: "br-lab" }, "Semi-finals"), /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.sf[0] }), /* @__PURE__ */ React.createElement("div", { className: "br-spacer big" }), /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.sf[1] })), /* @__PURE__ */ React.createElement("div", { className: "br-col br-mid" }, /* @__PURE__ */ React.createElement("span", { className: "br-lab" }, "Final"), /* @__PURE__ */ React.createElement("div", { className: "br-final" }, /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.final }), /* @__PURE__ */ React.createElement("div", { className: "br-champ" }, /* @__PURE__ */ React.createElement(Crown, { size: 14 }), " ", CODES[sim.champion])))), /* @__PURE__ */ React.createElement(Collapsible, { title: "Full knockout results" }, /* @__PURE__ */ React.createElement("div", { className: "ko-grid" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ko-rlab" }, "Round of 32"), sim.ko.r32.map((r, k) => /* @__PURE__ */ React.createElement(MatchCard, { key: k, r }))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ko-rlab" }, "Round of 16"), sim.ko.r16.map((r, k) => /* @__PURE__ */ React.createElement(MatchCard, { key: k, r }))))), /* @__PURE__ */ React.createElement(Collapsible, { title: "Group stage \u2014 final tables" }, /* @__PURE__ */ React.createElement("div", { className: "groups-grid" }, Object.keys(sim.groupResults).map((g) => /* @__PURE__ */ React.createElement(GroupMini, { key: g, g, rows: sim.groupResults[g], adv: advSet }))))))), tab === "bookie" && /* @__PURE__ */ React.createElement("div", { className: "bk" }, /* @__PURE__ */ React.createElement("div", { className: "bk-head" }, /* @__PURE__ */ React.createElement("div", { className: "bk-head-l" }, /* @__PURE__ */ React.createElement(Rosette, { className: "bk-rose" }), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "bk-head-t" }, "DADDY DALY BOOKIE"), /* @__PURE__ */ React.createElement("div", { className: "bk-head-s" }, "play-money bookmaker \xB7 odds from the model"))), /* @__PURE__ */ React.createElement("div", { className: "bk-bal" }, /* @__PURE__ */ React.createElement("span", { className: "bk-bal-l" }, "Your balance"), /* @__PURE__ */ React.createElement("span", { className: "bk-bal-v" }, "\u20AC", bets.balance.toFixed(2)))), /* @__PURE__ */ React.createElement("div", { className: "bk-grid" }, /* @__PURE__ */ React.createElement("div", { className: "bk-main" }, slip.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "bk-slip" }, /* @__PURE__ */ React.createElement("div", { className: "bk-slip-h" }, /* @__PURE__ */ React.createElement("span", null, "BET SLIP"), /* @__PURE__ */ React.createElement("button", { onClick: () => setSlip([]) }, /* @__PURE__ */ React.createElement(X, { size: 13 }))), slip.map((s) => {
+  })()), /* @__PURE__ */ React.createElement("div", { className: "champ-meta" }, "\u{1F949} ", /* @__PURE__ */ React.createElement(Flag, { t: sim.thirdPlace }), " ", sim.thirdPlace, " took third \xB7 ", sim.goals, " goals scored across the tournament")), /* @__PURE__ */ React.createElement("div", { className: "run-coupon" }, /* @__PURE__ */ React.createElement("div", { className: "rc-head" }, /* @__PURE__ */ React.createElement("span", null, "YOUR BUSTER THIS RUN"), /* @__PURE__ */ React.createElement("span", { className: "rc-best" }, "Best: ", /* @__PURE__ */ React.createElement("b", null, best), " pts")), /* @__PURE__ */ React.createElement("div", { className: "rc-grid" }, couponRun.map((x) => /* @__PURE__ */ React.createElement("div", { key: x.pot, className: "rc-card" + (x.stage === "WIN" ? " champ-pick" : "") }, /* @__PURE__ */ React.createElement("div", { className: "rc-top" }, /* @__PURE__ */ React.createElement("span", { className: "rc-flag" }, /* @__PURE__ */ React.createElement(Flag, { t: x.team })), /* @__PURE__ */ React.createElement("span", { className: "rc-name" }, x.team), /* @__PURE__ */ React.createElement("span", { className: "rc-pts" }, x.pts)), /* @__PURE__ */ React.createElement("div", { className: "rc-stage" }, x.stage === "WIN" ? "\u{1F3C6} " : "", STAGE_LABEL[x.stage])))), /* @__PURE__ */ React.createElement("div", { className: "rc-total" }, /* @__PURE__ */ React.createElement("span", null, "Buster total this run"), /* @__PURE__ */ React.createElement("b", null, couponRunTotal, " pts"))), /* @__PURE__ */ React.createElement("button", { className: "resim", onClick: runSim }, /* @__PURE__ */ React.createElement(RotateCcw, { size: 16 }), " Simulate again"), /* @__PURE__ */ React.createElement("div", { className: "sec-lab" }, "The road to the final"), /* @__PURE__ */ React.createElement("div", { className: "bracket" }, /* @__PURE__ */ React.createElement("div", { className: "br-col" }, /* @__PURE__ */ React.createElement("span", { className: "br-lab" }, "Quarter-finals"), /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.qf[0] }), /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.qf[1] }), /* @__PURE__ */ React.createElement("div", { className: "br-spacer" }), /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.qf[2] }), /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.qf[3] })), /* @__PURE__ */ React.createElement("div", { className: "br-col br-mid" }, /* @__PURE__ */ React.createElement("span", { className: "br-lab" }, "Semi-finals"), /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.sf[0] }), /* @__PURE__ */ React.createElement("div", { className: "br-spacer big" }), /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.sf[1] })), /* @__PURE__ */ React.createElement("div", { className: "br-col br-mid" }, /* @__PURE__ */ React.createElement("span", { className: "br-lab" }, "Final"), /* @__PURE__ */ React.createElement("div", { className: "br-final" }, /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.final }), /* @__PURE__ */ React.createElement("div", { className: "br-champ" }, /* @__PURE__ */ React.createElement(Crown, { size: 14 }), " ", CODES[sim.champion])))), /* @__PURE__ */ React.createElement(Collapsible, { title: "Full knockout results" }, /* @__PURE__ */ React.createElement("div", { className: "ko-grid" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ko-rlab" }, "Round of 32"), sim.ko.r32.map((r, k) => /* @__PURE__ */ React.createElement(MatchCard, { key: k, r }))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ko-rlab" }, "Round of 16"), sim.ko.r16.map((r, k) => /* @__PURE__ */ React.createElement(MatchCard, { key: k, r }))))), /* @__PURE__ */ React.createElement(Collapsible, { title: "Group stage \u2014 final tables" }, /* @__PURE__ */ React.createElement("div", { className: "groups-grid" }, Object.keys(sim.groupResults).map((g) => /* @__PURE__ */ React.createElement(GroupMini, { key: g, g, rows: sim.groupResults[g], adv: advSet }))))))), tab === "bookie" && /* @__PURE__ */ React.createElement("div", { className: "bk" }, /* @__PURE__ */ React.createElement("div", { className: "bk-head" }, /* @__PURE__ */ React.createElement("div", { className: "bk-head-l" }, /* @__PURE__ */ React.createElement(Rosette, { className: "bk-rose" }), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "bk-head-t" }, "DALY & McMANUS BOOKMAKERS LTD."), /* @__PURE__ */ React.createElement("div", { className: "bk-head-s" }, "play-money bookmaker \xB7 odds from the model"))), /* @__PURE__ */ React.createElement("div", { className: "bk-bal" }, /* @__PURE__ */ React.createElement("span", { className: "bk-bal-l" }, "Your balance"), /* @__PURE__ */ React.createElement("span", { className: "bk-bal-v" }, "\u20AC", bets.balance.toFixed(2)))), /* @__PURE__ */ React.createElement("div", { className: "bk-sub" }, /* @__PURE__ */ React.createElement("button", { className: bkView === "book" ? "on" : "", onClick: () => setBkView("book") }, "Bookmaker"), /* @__PURE__ */ React.createElement("button", { className: bkView === "alex" ? "on" : "", onClick: () => setBkView("alex") }, "\u{1F3C7} Alex's Corner")), bkView === "alex" ? /* @__PURE__ */ React.createElement(AlexsCorner, { bets, setBets, setToast }) : /* @__PURE__ */ React.createElement("div", { className: "bk-grid" }, /* @__PURE__ */ React.createElement("div", { className: "bk-main" }, slip.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "bk-slip" }, /* @__PURE__ */ React.createElement("div", { className: "bk-slip-h" }, /* @__PURE__ */ React.createElement("span", null, "BET SLIP"), /* @__PURE__ */ React.createElement("button", { onClick: () => setSlip([]) }, /* @__PURE__ */ React.createElement(X, { size: 13 }))), slip.map((s) => {
     const fl = flagOf(s);
     return /* @__PURE__ */ React.createElement("div", { key: s.key, className: "bk-sel" }, fl && /* @__PURE__ */ React.createElement("span", { className: "bk-sel-fl" }, /* @__PURE__ */ React.createElement(Flag, { t: fl })), /* @__PURE__ */ React.createElement("span", { className: "bk-sel-l" }, s.label), /* @__PURE__ */ React.createElement("span", { className: "bk-sel-o" }, fmtOdds(s.odds)), /* @__PURE__ */ React.createElement("button", { className: "bk-sel-x", onClick: () => toggleSel(s.key, s.label, s.odds) }, /* @__PURE__ */ React.createElement(X, { size: 12 })));
   }), /* @__PURE__ */ React.createElement("div", { className: "bk-stk" }, /* @__PURE__ */ React.createElement("span", null, slip.length > 1 ? "Acca \xB7 " + slip.length + " picks @ " + fmtOdds(Math.round(slipOdds * 100) / 100) : "Stake (\u20AC)"), /* @__PURE__ */ React.createElement("input", { type: "number", min: "1", value: stake, onChange: (e) => setStake(e.target.value) })), /* @__PURE__ */ React.createElement("div", { className: "bk-ret" }, "Potential return ", /* @__PURE__ */ React.createElement("b", null, "\u20AC", (Math.max(0, +stake || 0) * slipOdds).toFixed(2))), /* @__PURE__ */ React.createElement("button", { className: "bk-place", onClick: placeBet, disabled: !(+stake > 0) || +stake > bets.balance }, "Place bet \xB7 \u20AC", (+stake || 0).toFixed(2)), +stake > bets.balance && /* @__PURE__ */ React.createElement("div", { className: "bk-warn" }, "Not enough funds")), /* @__PURE__ */ React.createElement("div", { className: "bk-sec" }, "To lift the trophy ", oddsLive ? /* @__PURE__ */ React.createElement("span", { className: "bk-livetag" }, "live odds") : null), oddsLive && /* @__PURE__ */ React.createElement("div", { className: "bk-oddsnote" }, "Prices shift as results land \u2014 beaten teams drop off the board."), /* @__PURE__ */ React.createElement("div", { className: "bk-out" }, (showAllOut ? outright : outright.slice(0, 16)).map((o) => {
     const key = "W:" + o.t;
     if (o.out) return /* @__PURE__ */ React.createElement("div", { key: o.t, className: "bk-orow out", "aria-disabled": "true" }, /* @__PURE__ */ React.createElement("span", { className: "bk-oflag" }, /* @__PURE__ */ React.createElement(Flag, { t: o.t })), /* @__PURE__ */ React.createElement("span", { className: "bk-oname" }, o.t), /* @__PURE__ */ React.createElement("span", { className: "bk-oout" }, "OUT"));
     return /* @__PURE__ */ React.createElement("button", { key: o.t, className: "bk-orow" + (inSlip(key) ? " sel" : ""), onClick: () => toggleSel(key, o.t + " to win the World Cup", o.odds, o.t) }, /* @__PURE__ */ React.createElement("span", { className: "bk-oflag" }, /* @__PURE__ */ React.createElement(Flag, { t: o.t })), /* @__PURE__ */ React.createElement("span", { className: "bk-oname" }, o.t), /* @__PURE__ */ React.createElement("span", { className: "bk-odds" }, fmtOdds(o.odds)));
-  }), /* @__PURE__ */ React.createElement("button", { className: "bk-more", onClick: () => setShowAllOut((v) => !v) }, showAllOut ? "Show top 16" : "Show all 48")), /* @__PURE__ */ React.createElement("div", { className: "bk-sec" }, "Match odds \u2014 group stage ", oddsLive ? /* @__PURE__ */ React.createElement("span", { className: "bk-livetag" }, "live odds") : liveGroups && liveGroups.length ? /* @__PURE__ */ React.createElement("span", { className: "bk-livetag" }, "live fixtures") : null), /* @__PURE__ */ React.createElement("div", { className: "bk-md" }, [1, 2, 3].map((m) => /* @__PURE__ */ React.createElement("button", { key: m, className: mdTab === m ? "on" : "", onClick: () => setMdTab(m) }, "Matchday ", m))), /* @__PURE__ */ React.createElement("div", { className: "bk-fix" }, bkFixtures.map((f) => {
+  }), /* @__PURE__ */ React.createElement("button", { className: "bk-more", onClick: () => setShowAllOut((v) => !v) }, showAllOut ? "Show top 16" : "Show all 48")), /* @__PURE__ */ React.createElement("div", { className: "bk-sec" }, "Match odds ", oddsLive ? /* @__PURE__ */ React.createElement("span", { className: "bk-livetag" }, "live odds") : schedule ? /* @__PURE__ */ React.createElement("span", { className: "bk-livetag" }, "live fixtures") : null), !schedule ? /* @__PURE__ */ React.createElement("div", { className: "bk-wire-empty" }, "Tap ", /* @__PURE__ */ React.createElement("b", null, "Refresh"), " up top to load the full schedule and live prices.") : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "bk-md" }, schedule.dates.map((d) => {
+    const dt = d === "TBD" ? null : new Date(d);
+    const lab = dt ? dt.toLocaleDateString([], { weekday: "short", day: "numeric", month: "short" }) : "TBD";
+    return /* @__PURE__ */ React.createElement("button", { key: d, className: selDate === d ? "on" : "", onClick: () => setDayTab(d) }, lab);
+  })), /* @__PURE__ */ React.createElement("div", { className: "bk-fix" }, dayMatches.length === 0 && /* @__PURE__ */ React.createElement("div", { className: "bk-wire-empty" }, "No games scheduled this day."), dayMatches.map((f) => {
     const kH = "H:" + f.id, kD = "D:" + f.id, kA = "A:" + f.id;
-    const played = f.hs != null && f.as != null;
-    return /* @__PURE__ */ React.createElement("div", { key: f.id, className: "bk-game" }, /* @__PURE__ */ React.createElement("div", { className: "bk-grow" }, /* @__PURE__ */ React.createElement("span", { className: "bk-grp" }, "Group ", f.group), f.live && played && /* @__PURE__ */ React.createElement("span", { className: "bk-score" + (f.status === "IN_PLAY" || f.status === "PAUSED" ? " liveon" : "") }, f.hs, "\u2013", f.as, f.status === "FINISHED" ? " FT" : f.status === "IN_PLAY" || f.status === "PAUSED" ? " \xB7 LIVE" : "")), /* @__PURE__ */ React.createElement("div", { className: "bk-picks" }, /* @__PURE__ */ React.createElement("button", { className: "bk-pick" + (inSlip(kH) ? " sel" : ""), disabled: f.oH == null, onClick: () => f.oH != null && toggleSel(kH, CODES[f.a] + " to beat " + CODES[f.b], f.oH, f.a) }, /* @__PURE__ */ React.createElement("span", { className: "bk-pf" }, /* @__PURE__ */ React.createElement(Flag, { t: f.a }), " ", CODES[f.a]), /* @__PURE__ */ React.createElement("span", { className: "bk-po" }, f.oH != null ? fmtOdds(f.oH) : "\u2014")), /* @__PURE__ */ React.createElement("button", { className: "bk-pick bk-draw" + (inSlip(kD) ? " sel" : ""), disabled: f.oD == null, onClick: () => f.oD != null && toggleSel(kD, CODES[f.a] + " v " + CODES[f.b] + " \u2014 draw", f.oD) }, /* @__PURE__ */ React.createElement("span", { className: "bk-pf" }, "Draw"), /* @__PURE__ */ React.createElement("span", { className: "bk-po" }, f.oD != null ? fmtOdds(f.oD) : "\u2014")), /* @__PURE__ */ React.createElement("button", { className: "bk-pick" + (inSlip(kA) ? " sel" : ""), disabled: f.oA == null, onClick: () => f.oA != null && toggleSel(kA, CODES[f.b] + " to beat " + CODES[f.a], f.oA, f.b) }, /* @__PURE__ */ React.createElement("span", { className: "bk-pf" }, /* @__PURE__ */ React.createElement(Flag, { t: f.b }), " ", CODES[f.b]), /* @__PURE__ */ React.createElement("span", { className: "bk-po" }, f.oA != null ? fmtOdds(f.oA) : "\u2014"))));
-  })), bets.open.length > 0 && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "bk-sec" }, "Open bets"), /* @__PURE__ */ React.createElement("div", { className: "bk-bets" }, bets.open.map((b) => /* @__PURE__ */ React.createElement("div", { key: b.id, className: "bk-bet" }, /* @__PURE__ */ React.createElement("div", { className: "bk-bet-top" }, /* @__PURE__ */ React.createElement("span", { className: "bk-bet-name" }, b.sels.length === 1 && flagOf(b.sels[0]) && /* @__PURE__ */ React.createElement(Flag, { t: flagOf(b.sels[0]) }), b.sels.length > 1 ? "Acca \xB7 " + b.sels.length + " picks" : b.sels[0].label), /* @__PURE__ */ React.createElement("span", { className: "bk-bet-o" }, "@ ", fmtOdds(Math.round(b.odds * 100) / 100))), b.sels.length > 1 && /* @__PURE__ */ React.createElement("div", { className: "bk-bet-sels" }, b.sels.map((s) => s.label).join(" \xB7 ")), /* @__PURE__ */ React.createElement("div", { className: "bk-bet-fig" }, /* @__PURE__ */ React.createElement("span", null, "\u20AC", b.stake.toFixed(2), " \u2192 ", /* @__PURE__ */ React.createElement("b", null, "\u20AC", b.ret.toFixed(2))), /* @__PURE__ */ React.createElement("span", { className: "bk-settle" }, /* @__PURE__ */ React.createElement("button", { onClick: () => settleBet(b.id, "won") }, "Won"), /* @__PURE__ */ React.createElement("button", { onClick: () => settleBet(b.id, "lost") }, "Lost"), /* @__PURE__ */ React.createElement("button", { onClick: () => settleBet(b.id, "void") }, "Void"))))))), bets.settled.length > 0 && /* @__PURE__ */ React.createElement(Collapsible, { title: "Settled bets (" + bets.settled.length + ")" }, /* @__PURE__ */ React.createElement("div", { className: "bk-bets" }, bets.settled.map((b) => /* @__PURE__ */ React.createElement("div", { key: b.id, className: "bk-bet bk-" + b.result }, /* @__PURE__ */ React.createElement("div", { className: "bk-bet-top" }, /* @__PURE__ */ React.createElement("span", { className: "bk-bet-name" }, b.sels.length === 1 && flagOf(b.sels[0]) && /* @__PURE__ */ React.createElement(Flag, { t: flagOf(b.sels[0]) }), b.sels.length > 1 ? "Acca \xB7 " + b.sels.length + " picks" : b.sels[0].label), /* @__PURE__ */ React.createElement("span", { className: "bk-res" }, b.result === "won" ? "WON +\u20AC" + b.ret.toFixed(2) : b.result === "void" ? "VOID" : "LOST")))))), /* @__PURE__ */ React.createElement("button", { className: "bk-reset", onClick: resetBank }, /* @__PURE__ */ React.createElement(RotateCcw, { size: 13 }), " Reset bank")), /* @__PURE__ */ React.createElement("aside", { className: "bk-rail" }, /* @__PURE__ */ React.createElement("div", { className: "bk-rail-h" }, "\u{1F4F0} News wire"), /* @__PURE__ */ React.createElement("div", { className: "bk-wire" }, (() => {
+    const qA = "QA:" + f.id, qB = "QB:" + f.id;
+    return /* @__PURE__ */ React.createElement("div", { key: f.id, className: "bk-game" }, /* @__PURE__ */ React.createElement("div", { className: "bk-grow" }, /* @__PURE__ */ React.createElement("span", { className: "bk-grp" }, f.label), f.played && /* @__PURE__ */ React.createElement("span", { className: "bk-score" + (f.status === "IN_PLAY" || f.status === "PAUSED" ? " liveon" : "") }, f.hs, "\u2013", f.as, f.status === "FINISHED" ? " FT" : f.status === "IN_PLAY" || f.status === "PAUSED" ? " \xB7 LIVE" : "")), f.isKO ? /* @__PURE__ */ React.createElement("div", { className: "bk-picks bk-picks2" }, /* @__PURE__ */ React.createElement("button", { className: "bk-pick" + (inSlip(qA) ? " sel" : ""), disabled: f.advA == null, onClick: () => f.advA != null && toggleSel(qA, CODES[f.a] + " to go through v " + CODES[f.b], f.advA, f.a) }, /* @__PURE__ */ React.createElement("span", { className: "bk-pf" }, /* @__PURE__ */ React.createElement(Flag, { t: f.a }), " ", CODES[f.a] || f.a || "TBD"), /* @__PURE__ */ React.createElement("span", { className: "bk-po" }, f.advA != null ? fmtOdds(f.advA) : "\u2014")), /* @__PURE__ */ React.createElement("button", { className: "bk-pick" + (inSlip(qB) ? " sel" : ""), disabled: f.advB == null, onClick: () => f.advB != null && toggleSel(qB, CODES[f.b] + " to go through v " + CODES[f.a], f.advB, f.b) }, /* @__PURE__ */ React.createElement("span", { className: "bk-pf" }, /* @__PURE__ */ React.createElement(Flag, { t: f.b }), " ", CODES[f.b] || f.b || "TBD"), /* @__PURE__ */ React.createElement("span", { className: "bk-po" }, f.advB != null ? fmtOdds(f.advB) : "\u2014"))) : /* @__PURE__ */ React.createElement("div", { className: "bk-picks" }, /* @__PURE__ */ React.createElement("button", { className: "bk-pick" + (inSlip(kH) ? " sel" : ""), disabled: f.oH == null, onClick: () => f.oH != null && toggleSel(kH, CODES[f.a] + " to beat " + CODES[f.b], f.oH, f.a) }, /* @__PURE__ */ React.createElement("span", { className: "bk-pf" }, /* @__PURE__ */ React.createElement(Flag, { t: f.a }), " ", CODES[f.a]), /* @__PURE__ */ React.createElement("span", { className: "bk-po" }, f.oH != null ? fmtOdds(f.oH) : "\u2014")), /* @__PURE__ */ React.createElement("button", { className: "bk-pick bk-draw" + (inSlip(kD) ? " sel" : ""), disabled: f.oD == null, onClick: () => f.oD != null && toggleSel(kD, CODES[f.a] + " v " + CODES[f.b] + " \u2014 draw", f.oD) }, /* @__PURE__ */ React.createElement("span", { className: "bk-pf" }, "Draw"), /* @__PURE__ */ React.createElement("span", { className: "bk-po" }, f.oD != null ? fmtOdds(f.oD) : "\u2014")), /* @__PURE__ */ React.createElement("button", { className: "bk-pick" + (inSlip(kA) ? " sel" : ""), disabled: f.oA == null, onClick: () => f.oA != null && toggleSel(kA, CODES[f.b] + " to beat " + CODES[f.a], f.oA, f.b) }, /* @__PURE__ */ React.createElement("span", { className: "bk-pf" }, /* @__PURE__ */ React.createElement(Flag, { t: f.b }), " ", CODES[f.b]), /* @__PURE__ */ React.createElement("span", { className: "bk-po" }, f.oA != null ? fmtOdds(f.oA) : "\u2014"))));
+  }))), bets.open.length > 0 && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "bk-sec" }, "Open bets"), /* @__PURE__ */ React.createElement("div", { className: "bk-bets" }, bets.open.map((b) => /* @__PURE__ */ React.createElement("div", { key: b.id, className: "bk-bet" }, /* @__PURE__ */ React.createElement("div", { className: "bk-bet-top" }, /* @__PURE__ */ React.createElement("span", { className: "bk-bet-name" }, b.sels.length === 1 && flagOf(b.sels[0]) && /* @__PURE__ */ React.createElement(Flag, { t: flagOf(b.sels[0]) }), b.sels.length > 1 ? "Acca \xB7 " + b.sels.length + " picks" : b.sels[0].label), /* @__PURE__ */ React.createElement("span", { className: "bk-bet-o" }, "@ ", fmtOdds(Math.round(b.odds * 100) / 100))), b.sels.length > 1 && /* @__PURE__ */ React.createElement("div", { className: "bk-bet-sels" }, b.sels.map((s) => s.label).join(" \xB7 ")), /* @__PURE__ */ React.createElement("div", { className: "bk-bet-fig" }, /* @__PURE__ */ React.createElement("span", null, "\u20AC", b.stake.toFixed(2), " \u2192 ", /* @__PURE__ */ React.createElement("b", null, "\u20AC", b.ret.toFixed(2))), /* @__PURE__ */ React.createElement("span", { className: "bk-settle" }, /* @__PURE__ */ React.createElement("button", { onClick: () => settleBet(b.id, "won") }, "Won"), /* @__PURE__ */ React.createElement("button", { onClick: () => settleBet(b.id, "lost") }, "Lost"), /* @__PURE__ */ React.createElement("button", { onClick: () => settleBet(b.id, "void") }, "Void"))))))), bets.settled.length > 0 && /* @__PURE__ */ React.createElement(Collapsible, { title: "Settled bets (" + bets.settled.length + ")" }, /* @__PURE__ */ React.createElement("div", { className: "bk-bets" }, bets.settled.map((b) => /* @__PURE__ */ React.createElement("div", { key: b.id, className: "bk-bet bk-" + b.result }, /* @__PURE__ */ React.createElement("div", { className: "bk-bet-top" }, /* @__PURE__ */ React.createElement("span", { className: "bk-bet-name" }, b.sels.length === 1 && flagOf(b.sels[0]) && /* @__PURE__ */ React.createElement(Flag, { t: flagOf(b.sels[0]) }), b.sels.length > 1 ? "Acca \xB7 " + b.sels.length + " picks" : b.sels[0].label), /* @__PURE__ */ React.createElement("span", { className: "bk-res" }, b.result === "won" ? "WON +\u20AC" + b.ret.toFixed(2) : b.result === "void" ? "VOID" : "LOST")))))), /* @__PURE__ */ React.createElement("button", { className: "bk-reset", onClick: resetBank }, /* @__PURE__ */ React.createElement(RotateCcw, { size: 13 }), " Reset bank")), /* @__PURE__ */ React.createElement("aside", { className: "bk-rail" }, /* @__PURE__ */ React.createElement("div", { className: "bk-rail-h" }, "\u{1F4F0} News wire"), /* @__PURE__ */ React.createElement("div", { className: "bk-wire" }, (() => {
     const items = Object.keys(live.news).map((t) => __spreadValues({ t }, live.news[t])).filter((x) => x && x.title);
     if (!items.length) return /* @__PURE__ */ React.createElement("div", { className: "bk-wire-empty" }, live.ok ? "No headlines yet \u2014 they'll appear here as the day's teams make news. It's a free feed, so it can be quiet between games." : "Tap Refresh up top to connect, and the day's headlines will appear here.");
     return items.slice(0, 14).map((x) => /* @__PURE__ */ React.createElement("a", { key: x.t, className: "bk-wire-item", href: x.url || "#", target: "_blank", rel: "noopener noreferrer" }, /* @__PURE__ */ React.createElement("span", { className: "bk-wire-fl" }, /* @__PURE__ */ React.createElement(Flag, { t: x.t })), /* @__PURE__ */ React.createElement("span", { className: "bk-wire-tx" }, /* @__PURE__ */ React.createElement("span", { className: "bk-wire-team" }, x.t), /* @__PURE__ */ React.createElement("span", { className: "bk-wire-title" }, x.title)), x.source && /* @__PURE__ */ React.createElement("span", { className: "bk-wire-src" }, x.source)));
@@ -2663,9 +3211,44 @@ const CSS = `
 .bk-odds{font-family:'Space Mono',monospace;font-weight:700;font-size:15px;color:var(--gold);min-width:52px;text-align:center;background:rgba(233,178,60,.1);border-radius:7px;padding:5px 8px}
 .bk-orow.sel .bk-odds{background:var(--gold);color:#0a1326}
 .bk-more{margin-top:4px;font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:9px;padding:9px;cursor:pointer}
-.bk-md{display:flex;gap:6px;margin-bottom:11px}
-.bk-md button{flex:1;font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:9px;padding:9px;cursor:pointer}
+.bk-sub{display:flex;gap:6px;margin-bottom:16px;background:#0b1f15;border:1px solid rgba(233,178,60,.25);border-radius:12px;padding:5px}
+.bk-sub button{flex:1;padding:10px 6px;border:none;border-radius:8px;cursor:pointer;background:transparent;color:#9fc4ad;font-family:'Archivo';font-weight:800;font-size:13px;transition:.15s}
+.bk-sub button.on{background:linear-gradient(135deg,#f3c34b,#d99a2b);color:#0a1326}
+.bk-md{display:flex;gap:6px;margin-bottom:11px;overflow-x:auto;padding-bottom:5px;-webkit-overflow-scrolling:touch}
+.bk-md button{flex:none;white-space:nowrap;font-family:'Space Mono',monospace;font-size:11.5px;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:9px;padding:8px 12px;cursor:pointer}
 .bk-md button.on{color:#fff;background:linear-gradient(180deg,#16294a,#0f1d39);border-color:var(--ice)}
+.bk-picks2{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}
+/* Alex's Corner */
+.ac{animation:fadeUp .35s ease both}
+.ac-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.ac-t{font-family:'Archivo';font-weight:900;font-size:18px;color:#FCE49A;letter-spacing:.02em}
+.ac-s{font-size:11px;color:#9fc4ad;margin-top:2px}
+.ac-bal{text-align:right;font-family:'Space Mono',monospace}.ac-bal span{display:block;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#9fc4ad}.ac-bal b{font-size:17px;color:#fff}
+.ac-canvas{width:100%;height:300px;display:block;border-radius:14px;border:1px solid rgba(233,178,60,.25);background:#0a1f14;box-shadow:inset 0 0 60px rgba(0,0,0,.4)}
+.ac-live{display:flex;align-items:center;gap:8px;margin-top:9px;font-size:12.5px;color:#cdd9ee}
+.ac-dot{width:9px;height:9px;border-radius:50%;background:#34d399;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.ac-result{margin-top:11px;padding:13px 15px;border-radius:12px;font-size:13.5px;line-height:1.45}
+.ac-result.win{background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.5);color:#d6ffe9}
+.ac-result.lose{background:rgba(255,90,110,.1);border:1px solid rgba(255,90,110,.4);color:#ffd9df}
+.ac-card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-top:14px}
+.ac-runner{display:flex;align-items:center;gap:9px;text-align:left;padding:9px 11px;border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.02);cursor:pointer;transition:.13s}
+.ac-runner.on{border-color:#f3c34b;background:rgba(233,178,60,.1);box-shadow:0 0 0 1px rgba(233,178,60,.5)}
+.ac-runner:disabled{opacity:.6;cursor:default}
+.ac-num{flex:none;width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Archivo';font-weight:900;font-size:12px;color:#0a1326}
+.ac-rn{flex:1;display:flex;flex-direction:column;min-width:0}
+.ac-rname{font-family:'Archivo';font-weight:700;font-size:12.5px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ac-tip{font-style:normal;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.06em;text-transform:uppercase;background:#e0a52b;color:#3a2600;padding:1px 5px;border-radius:5px;margin-left:6px;vertical-align:middle}
+.ac-rodds{font-family:'Space Mono',monospace;font-size:11px;color:#FCE49A;margin-top:1px}
+.ac-silk{flex:none;width:7px;height:24px;border-radius:3px}
+.ac-bet{display:flex;gap:9px;margin-top:14px}
+.ac-stake{display:flex;align-items:center;gap:5px;padding:0 12px;border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.03);font-family:'Space Mono',monospace;color:#FCE49A}
+.ac-stake input{width:72px;background:transparent;border:none;color:#fff;font-family:'Archivo';font-weight:700;font-size:15px;padding:11px 0;outline:none}
+.ac-go{flex:1;padding:13px;border:none;border-radius:11px;cursor:pointer;font-family:'Archivo';font-weight:800;font-size:14px;color:#0a1326;background:linear-gradient(135deg,#f3c34b,#d99a2b);box-shadow:0 12px 26px -14px rgba(233,178,60,.9);transition:.15s}
+.ac-go:disabled{opacity:.55;cursor:default;box-shadow:none}
+.ac-again{background:linear-gradient(135deg,#7BD8F5,#3E9FD0)}
+.ac-tobet{margin-top:10px;font-size:11.5px;color:var(--muted);line-height:1.45}.ac-tobet b{color:#fff}
+.ac-foot{margin-top:12px;font-size:10.5px;color:var(--faint);line-height:1.5}
 .bk-fix{display:flex;flex-direction:column;gap:9px}
 .bk-game{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:rgba(255,255,255,.015)}
 .bk-grp{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.08em;color:var(--faint)}
@@ -2774,7 +3357,13 @@ const CSS = `
 
 /* ===== flags ===== */
 .fimg{display:inline-block;height:.92em;width:auto;vertical-align:-.12em;border-radius:2.5px;box-shadow:0 0 0 .6px rgba(0,0,0,.4),0 1px 2px rgba(0,0,0,.3);object-fit:cover;background:rgba(255,255,255,.04)}
-.femoji{display:inline-block;font-style:normal}
+.femoji{display:inline-block;font-style:normal;line-height:1}
+.fcode{display:inline-flex;align-items:center;justify-content:center;font-family:'Archivo',sans-serif;font-weight:800;font-size:.56em;letter-spacing:.02em;line-height:1;height:1.55em;min-width:2.4em;padding:0 .32em;vertical-align:-.18em;border-radius:3px;color:#0a1326;background:linear-gradient(180deg,#e4e9f1,#c2cbd9);box-shadow:0 0 0 .6px rgba(0,0,0,.45),0 1px 2px rgba(0,0,0,.3)}
+.lg-hero-flags .fcode,.cpx-fl .fcode{font-size:11px}
+.bk-wire-fl .fcode{font-size:11.5px}.me-team .fcode{font-size:9.5px}
+.lg-hero-flags .femoji,.cpx-fl .femoji{font-size:17px}
+.bk-wire-fl .femoji{font-size:19px}.me-team .femoji{font-size:15px}.bk-sel-fl .femoji{font-size:13px}
+.lg-flag .femoji,.champ-flag .femoji,.bk-pf .femoji{font-size:1.05em}
 .champ-flag .fimg{height:1em;border-radius:4px}
 .lg-flag .fimg{height:1.05em}
 
@@ -2786,6 +3375,60 @@ const CSS = `
 .lg-manage{display:flex;align-items:center;gap:8px;font-family:'Archivo';font-weight:700;font-size:13px;color:var(--fg);background:linear-gradient(180deg,#16294a,#0f1d39);border:1px solid var(--line);border-radius:11px;padding:10px 16px;cursor:pointer;transition:.15s}
 .lg-manage:hover{border-color:var(--ice)}.lg-manage.on{border-color:var(--rose)}
 .lg-empty{font-size:12.5px;color:var(--muted);line-height:1.55;padding:13px 15px;border:1px dashed var(--line);border-radius:12px;background:rgba(255,255,255,.02);margin-bottom:14px}
+/* standings sub-tabs + panes */
+.lg-sub{display:flex;gap:6px;margin-bottom:16px;background:var(--ink2);border:1px solid var(--line);border-radius:12px;padding:5px}
+.lg-sub button{flex:1;padding:9px 6px;border:none;border-radius:8px;cursor:pointer;background:transparent;color:var(--muted);font-family:'Archivo';font-weight:700;font-size:12.5px;transition:.15s}
+.lg-sub button.on{background:linear-gradient(135deg,#7BD8F5,#3E9FD0);color:#0a1326}
+.lg-pane{animation:fadeUp .35s ease both}
+/* fixtures view */
+.fxv-block{margin-bottom:16px}
+.fxv-h{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#7BD8F5;margin:0 0 8px;padding-left:2px}
+.fxv{display:grid;grid-template-columns:64px 1fr auto 1fr;align-items:center;gap:8px;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:linear-gradient(180deg,var(--card),var(--ink));margin-bottom:6px}
+.fxv-day{font-family:'Space Mono',monospace;font-size:9.5px;color:var(--faint);line-height:1.25}
+.fxv-t{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--text)}
+.fxv-t svg,.fxv-t img{width:18px;height:13px;border-radius:2px}
+.fxv-a{justify-content:flex-end;text-align:right}.fxv-b{justify-content:flex-start}
+.fxv-mid{display:flex;flex-direction:column;align-items:center;min-width:42px}
+.fxv-mid b{font-family:'Archivo';font-weight:800;font-size:14px;color:#fff}
+.fxv-ko{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted)}
+.fxv-mid i{font-style:normal;font-family:'Space Mono',monospace;font-size:8.5px;letter-spacing:.05em;color:var(--faint)}
+.fxv-mid i.liveon{color:#34d399}
+/* group tables view */
+.grpv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:11px}
+.grpv{border:1px solid var(--line);border-radius:13px;padding:12px 13px;background:linear-gradient(180deg,var(--card),var(--ink))}
+.grpv-h{font-family:'Archivo';font-weight:800;font-size:13px;color:#fff;margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.grpv-done{font-style:normal;font-family:'Space Mono',monospace;font-size:8.5px;letter-spacing:.05em;text-transform:uppercase;background:#34d399;color:#06281c;padding:1px 6px;border-radius:5px}
+.grpv-row{display:grid;grid-template-columns:18px 1fr 22px 30px 28px;align-items:center;gap:6px;padding:5px 4px;font-size:12px;color:var(--text);border-radius:6px}
+.grpv-row>span:nth-child(n+3){text-align:center;font-variant-numeric:tabular-nums;color:var(--muted)}
+.grpv-head{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);border-bottom:1px solid var(--line);border-radius:0;padding-bottom:6px;margin-bottom:3px}
+.grpv-head>span{color:var(--faint)!important}
+.grpv-pos{color:var(--faint);font-family:'Space Mono',monospace;font-size:11px;text-align:center}
+.grpv-team{display:flex;align-items:center;gap:7px;font-weight:600;text-align:left!important}
+.grpv-team svg,.grpv-team img{width:18px;height:13px;border-radius:2px;flex:none}
+.grpv-pts{color:#fff!important;font-weight:800}
+.grpv-row.q{background:rgba(123,216,245,.08)}
+.grpv-row.q .grpv-pos{color:#7BD8F5}
+.grpv-note{font-size:11px;color:var(--muted);line-height:1.5;margin:13px 0 0}
+/* knockout bracket view */
+.kov{display:flex;gap:14px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch}
+.kov-round{flex:none;min-width:184px;display:flex;flex-direction:column}
+.kov-rh{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#7BD8F5;margin-bottom:9px}
+.kov-matches{display:flex;flex-direction:column;gap:8px;justify-content:space-around;flex:1}
+.kov-m{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
+.kov-side{display:flex;align-items:center;gap:7px;padding:7px 9px;font-size:12px;color:var(--text)}
+.kov-side+.kov-side{border-top:1px solid var(--line)}
+.kov-fl{width:18px;height:13px;flex:none;display:flex}
+.kov-fl svg,.kov-fl img{width:18px;height:13px;border-radius:2px}
+.kov-tbd-fl{width:18px;height:13px;border-radius:2px;background:rgba(255,255,255,.06)}
+.kov-nm{flex:1;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kov-sc{font-family:'Archivo';font-weight:800;font-size:13px;color:var(--muted);min-width:14px;text-align:right}
+.kov-side.win{background:rgba(52,211,153,.1)}.kov-side.win .kov-nm{color:#fff}.kov-side.win .kov-sc{color:#34d399}
+.kov-side.lose{opacity:.55}
+/* dossier live news */
+.dos-news{display:flex;flex-wrap:wrap;align-items:center;gap:6px;text-decoration:none;padding:8px 10px;margin-top:1px;border:1px solid var(--line);border-radius:9px;background:rgba(123,216,245,.05)}
+.dos-news-k{font-family:'Space Mono',monospace;font-size:8.5px;letter-spacing:.04em;text-transform:uppercase;color:#7BD8F5;flex:none}
+.dos-news-t{font-size:11.5px;color:var(--text);line-height:1.35;flex:1;min-width:60%}
+.dos-news-s{font-family:'Space Mono',monospace;font-size:9px;color:var(--faint)}
 .lg-empty b{color:var(--fg)}
 
 .lg-table{display:flex;flex-direction:column;gap:7px}
