@@ -2168,6 +2168,769 @@ function AlexsCorner({ bets, setBets, setToast }) {
   };
   return /* @__PURE__ */ React.createElement("div", { className: "ac" }, /* @__PURE__ */ React.createElement("div", { className: "ac-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ac-t" }, "\u{1F3C7} Alex's Corner"), /* @__PURE__ */ React.createElement("div", { className: "ac-s" }, "the 20-second dash \xB7 pick a runner, lump on, hold your breath")), /* @__PURE__ */ React.createElement("div", { className: "ac-bal" }, /* @__PURE__ */ React.createElement("span", null, "Wallet"), /* @__PURE__ */ React.createElement("b", null, "\u20AC", bets.balance.toFixed(2)))), /* @__PURE__ */ React.createElement("canvas", { ref: cv, className: "ac-canvas" }), phase === "running" && /* @__PURE__ */ React.createElement("div", { className: "ac-live" }, /* @__PURE__ */ React.createElement("span", { className: "ac-dot" }), "They're off! Leader: ", /* @__PURE__ */ React.createElement("b", null, lead)), result && /* @__PURE__ */ React.createElement("div", { className: "ac-result" + (result.won ? " win" : " lose") }, result.won ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("b", null, "Get in!"), " ", result.mine, " romped home \u2014 ", /* @__PURE__ */ React.createElement("b", null, "\u20AC", result.pay.toFixed(2)), " back in your wallet.") : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("b", null, "Ah here."), " ", result.winner, " won it. ", result.mine, " let you down.")), /* @__PURE__ */ React.createElement("div", { className: "ac-card-grid" }, horses.map((h, i) => /* @__PURE__ */ React.createElement("button", { key: i, className: "ac-runner" + (pick === i ? " on" : ""), onClick: () => phase !== "running" && setPick(i), disabled: phase === "running" }, /* @__PURE__ */ React.createElement("span", { className: "ac-num", style: { background: h.silk } }, h.num), /* @__PURE__ */ React.createElement("span", { className: "ac-rn" }, /* @__PURE__ */ React.createElement("span", { className: "ac-rname" }, h.name, h.isBanker && /* @__PURE__ */ React.createElement("i", { className: "ac-tip" }, "banker")), /* @__PURE__ */ React.createElement("span", { className: "ac-rodds" }, toFrac(h.odds))), /* @__PURE__ */ React.createElement("span", { className: "ac-silk", style: { background: h.silk } })))), /* @__PURE__ */ React.createElement("div", { className: "ac-bet" }, /* @__PURE__ */ React.createElement("div", { className: "ac-stake" }, /* @__PURE__ */ React.createElement("span", null, "\u20AC"), /* @__PURE__ */ React.createElement("input", { type: "number", min: "1", value: stake, onChange: (e) => setStake(e.target.value), disabled: phase === "running" })), phase !== "done" ? /* @__PURE__ */ React.createElement("button", { className: "ac-go", onClick: startRace, disabled: phase === "running" || pick == null || !(+stake > 0) || +stake > bets.balance }, phase === "running" ? "Racing\u2026" : pick == null ? "Pick a horse" : "Place \u20AC" + (+stake || 0).toFixed(2) + " & race") : /* @__PURE__ */ React.createElement("button", { className: "ac-go ac-again", onClick: newRace }, "New race \u2192")), pick != null && phase !== "running" && /* @__PURE__ */ React.createElement("div", { className: "ac-tobet" }, "Backing ", /* @__PURE__ */ React.createElement("b", null, "#", horses[pick].num, " ", horses[pick].name), " at ", toFrac(horses[pick].odds), " \u2014 returns ", /* @__PURE__ */ React.createElement("b", null, "\u20AC", ((+stake || 0) * horses[pick].odds).toFixed(2)), " if it wins."), +stake > bets.balance && /* @__PURE__ */ React.createElement("div", { className: "bk-warn" }, "Not enough funds"), /* @__PURE__ */ React.createElement("div", { className: "ac-foot" }, "Play money only. Odds set in-house. One runner always fancies himself and never quite stays on his feet \u2014 you'll spot him."));
 }
+const BOXER_FIRST = ["Tommy", "Rico", "Dmitri", "Kasey", "Bobby", "Eddie", "Marco", "Liam", "Sonny", "Vince", "Otis", "Hank", "Cole", "Reggie", "Gus", "Frankie", "Dex", "Ray"];
+const BOXER_LAST = ["Doyle", "Vega", "Petrov", "Stone", "Maguire", "Calhoun", "Bruno", "Okafor", "Tanaka", "Mercer", "Kowalski", "Idris", "Briggs", "Santos", "Volkov", "Quinn", "Boyle", "Cassidy"];
+const BOXER_NICK = ["The Tank", "Lights Out", "Hurricane", "The Hammer", "Cold Steel", "The Surgeon", "Bad News", "The Wall", "Thunder", "One-Punch", "The Phantom", "Iron", "The Beast", "Sandman", "Hands of Stone", "The Kid", "Nightmare", "The Machine"];
+function BoxingNight({ bets, setBets, setToast }) {
+  const buildFight = () => {
+    const pk = (a) => a[Math.floor(Math.random() * a.length)];
+    const mk = (corner) => {
+      const power = 3 + Math.random() * 7, chin = 3 + Math.random() * 7, speed = 3 + Math.random() * 7, sta = 3 + Math.random() * 7;
+      return {
+        name: pk(BOXER_FIRST) + " " + pk(BOXER_LAST),
+        nick: pk(BOXER_NICK),
+        power,
+        chin,
+        speed,
+        sta,
+        rating: power * 1.1 + chin * 0.9 + speed + sta * 0.6,
+        corner
+      };
+    };
+    let A2 = mk("red"), B2 = mk("blue");
+    if (A2.name === B2.name) B2 = mk("blue");
+    const pA = 1 / (1 + Math.pow(10, (B2.rating - A2.rating) / 9));
+    A2.odds = Math.max(1.15, Math.round(1 / pA * 0.92 * 100) / 100);
+    B2.odds = Math.max(1.15, Math.round(1 / (1 - pA) * 0.92 * 100) / 100);
+    const recOf = (f) => {
+      const norm = Math.max(0, Math.min(1, (f.rating - 11) / 24));
+      const wr = 0.5 + norm * 0.45;
+      const fights = 14 + Math.floor(Math.random() * 18);
+      const wins = Math.max(8, Math.min(fights, Math.round(fights * wr)));
+      return { wins, losses: fights - wins, kos: Math.round(wins * (0.35 + norm * 0.4)) };
+    };
+    const ra = recOf(A2), rb = recOf(B2);
+    A2.rec = ra.wins + "-" + ra.losses;
+    A2.kos = ra.kos;
+    B2.rec = rb.wins + "-" + rb.losses;
+    B2.kos = rb.kos;
+    return { A: A2, B: B2 };
+  };
+  const [fight, setFight] = useState(buildFight);
+  const [pick, setPick] = useState(null);
+  const [stake, setStake] = useState(10);
+  const [phase, setPhase] = useState("idle");
+  const [result, setResult] = useState(null);
+  const [hud, setHud] = useState({ round: 1, hpA: 100, hpB: 100, msg: "" });
+  const cv = useRef(null), raf = useRef(0), sim = useRef(null);
+  function drawBar(ctx, x, y, w, hp, col, label, leftAlign) {
+    ctx.fillStyle = "rgba(255,255,255,.12)";
+    ctx.fillRect(x, y, w, 9);
+    const fw = Math.max(0, Math.min(1, hp / 100)) * w;
+    ctx.fillStyle = col;
+    ctx.fillRect(leftAlign ? x : x + (w - fw), y, fw, 9);
+    ctx.fillStyle = "#e7ecf5";
+    ctx.font = "bold 10px Archivo,sans-serif";
+    ctx.textAlign = leftAlign ? "left" : "right";
+    ctx.textBaseline = "alphabetic";
+    ctx.fillText(label, leftAlign ? x : x + w, y - 3);
+    ctx.textAlign = "left";
+  }
+  function shadeCol(hex) {
+    return hex === "#e23b3b" ? "#a82626" : hex === "#2f7de1" ? "#1f59a8" : "#555";
+  }
+  function drawGlove(ctx, x, y, col, hi, face) {
+    const g = ctx.createRadialGradient(x - 2, y - 2, 1, x, y, 9);
+    g.addColorStop(0, hi);
+    g.addColorStop(1, col);
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(x, y, 8.5, 0, 7);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(x - face * 5, y + 3, 3.4, 0, 7);
+    ctx.fill();
+    ctx.fillStyle = "rgba(255,255,255,.35)";
+    ctx.beginPath();
+    ctx.arc(x - 2.4, y - 2.6, 2.1, 0, 7);
+    ctx.fill();
+  }
+  function drawBoxer(ctx, x, baseY, face, col, S, who) {
+    const isA = who === "A";
+    const down = isA ? S.downA : S.downB, punch = isA ? S.punchA : S.punchB, flinch = isA ? S.flinchA : S.flinchB;
+    const bob = Math.sin((S.t || 0) * 5 + (isA ? 0 : 1.6)) * 1.5;
+    const skin = "#d8a373", skinSh = "#b07f50", hi = isA ? "#ff6b6b" : "#6ba0ff";
+    ctx.save();
+    ctx.translate(x, baseY);
+    ctx.fillStyle = "rgba(0,0,0,.28)";
+    ctx.beginPath();
+    ctx.ellipse(0, 1, 24, 5.5, 0, 0, 7);
+    ctx.fill();
+    if (down) {
+      const d = Math.min(1, down);
+      ctx.rotate(face * 1.05 * d);
+      ctx.translate(face * 8 * d, 28 * d);
+    } else if (flinch) {
+      ctx.translate(-face * 5 * flinch, 0);
+    }
+    if (punch) ctx.translate(face * punch * 6, 0);
+    ctx.lineCap = "round";
+    ctx.strokeStyle = "#2a3346";
+    ctx.lineWidth = 11;
+    ctx.beginPath();
+    ctx.moveTo(-9, -2);
+    ctx.lineTo(-11, -46);
+    ctx.moveTo(10, -2);
+    ctx.lineTo(12, -46);
+    ctx.stroke();
+    ctx.strokeStyle = "#eaeff7";
+    ctx.lineWidth = 11;
+    ctx.beginPath();
+    ctx.moveTo(-9, -2);
+    ctx.lineTo(-10, -12);
+    ctx.moveTo(10, -2);
+    ctx.lineTo(11, -12);
+    ctx.stroke();
+    const tg = ctx.createLinearGradient(0, -66, 0, -44);
+    tg.addColorStop(0, col);
+    tg.addColorStop(1, shadeCol(col));
+    ctx.fillStyle = tg;
+    ctx.beginPath();
+    ctx.moveTo(-15, -44);
+    ctx.lineTo(15, -44);
+    ctx.lineTo(13, -66);
+    ctx.lineTo(-13, -66);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = "rgba(255,255,255,.85)";
+    ctx.fillRect(-14, -69, 28, 4);
+    const bgr = ctx.createLinearGradient(-13, 0, 13, 0);
+    bgr.addColorStop(0, skinSh);
+    bgr.addColorStop(0.5, skin);
+    bgr.addColorStop(1, skinSh);
+    ctx.fillStyle = bgr;
+    ctx.beginPath();
+    ctx.moveTo(-13, -66);
+    ctx.lineTo(13, -66);
+    ctx.lineTo(15, -92);
+    ctx.quadraticCurveTo(15, -99, 8, -99);
+    ctx.lineTo(-8, -99);
+    ctx.quadraticCurveTo(-15, -99, -15, -92);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = "rgba(0,0,0,.12)";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(0, -70);
+    ctx.lineTo(0, -90);
+    ctx.stroke();
+    const hx = face * 2, hy = -110 + bob;
+    ctx.fillStyle = skin;
+    ctx.beginPath();
+    ctx.arc(hx, hy, 10, 0, 7);
+    ctx.fill();
+    ctx.fillStyle = "#2b2118";
+    ctx.beginPath();
+    ctx.arc(hx, hy - 1, 10, Math.PI * 1.04, Math.PI * 1.96);
+    ctx.fill();
+    ctx.fillStyle = "#15151a";
+    ctx.beginPath();
+    ctx.arc(hx + face * 3.5, hy - 1, 1.5, 0, 7);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(0,0,0,.4)";
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(hx + face * 1, hy + 5);
+    ctx.lineTo(hx + face * 5, hy + 5);
+    ctx.stroke();
+    const guardX = hx - face * 3, guardY = hy + 7, ext = punch ? punch * 26 : 0, fistX = face * (13 + ext), fistY = -89 + (punch ? -3 : 5);
+    ctx.strokeStyle = skin;
+    ctx.lineWidth = 8;
+    ctx.beginPath();
+    ctx.moveTo(-face * 10, -90);
+    ctx.lineTo(guardX, guardY);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(face * 10, -90);
+    ctx.lineTo(fistX, fistY);
+    ctx.stroke();
+    drawGlove(ctx, guardX, guardY, col, hi, face);
+    drawGlove(ctx, fistX, fistY, col, hi, face);
+    ctx.restore();
+  }
+  const draw = (S) => {
+    const c = cv.current;
+    if (!c) return;
+    const dpr = Math.min(2, (typeof window !== "undefined" ? window.devicePixelRatio : 1) || 1);
+    const W = c.clientWidth || 340, H = 300;
+    if (c.width !== Math.round(W * dpr) || c.height !== Math.round(H * dpr)) {
+      c.width = Math.round(W * dpr);
+      c.height = Math.round(H * dpr);
+    }
+    const ctx = c.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    const g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, "#171a2e");
+    g.addColorStop(1, "#0c0e1c");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+    const ringTop = H * 0.46, ringBot = H - 26, ringL = 24, ringR = W - 24;
+    const floor = ctx.createLinearGradient(0, ringTop, 0, ringBot);
+    floor.addColorStop(0, "#2a6ea0");
+    floor.addColorStop(1, "#173f5c");
+    ctx.fillStyle = floor;
+    ctx.beginPath();
+    ctx.moveTo(ringL, ringTop);
+    ctx.lineTo(ringR, ringTop);
+    ctx.lineTo(ringR + 10, ringBot);
+    ctx.lineTo(ringL - 10, ringBot);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = "rgba(255,255,255,.12)";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(ringL + 6, ringTop + 6, ringR - ringL - 12, ringBot - ringTop - 12);
+    [ringL, W / 2, ringR].forEach((px) => {
+      ctx.fillStyle = "#cbd5e1";
+      ctx.fillRect(px - 2, ringTop - 32, 4, 32);
+    });
+    ["#e23b3b", "#e8e8e8", "#2f7de1"].forEach((col, ri) => {
+      const y = ringTop - 8 - ri * 9;
+      ctx.strokeStyle = col;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(ringL, y);
+      ctx.lineTo(ringR, y);
+      ctx.stroke();
+    });
+    const baseY = ringBot - 10, ax = W * 0.34 + (S.lungeA || 0), bx = W * 0.66 - (S.lungeB || 0);
+    drawBoxer(ctx, ax, baseY, 1, "#e23b3b", S, "A");
+    drawBoxer(ctx, bx, baseY, -1, "#2f7de1", S, "B");
+    const barW = (W - 48) / 2 - 8;
+    drawBar(ctx, 24, 16, barW, S.hpA, "#e23b3b", fight.A.name, true);
+    drawBar(ctx, 24 + barW + 16, 16, barW, S.hpB, "#2f7de1", fight.B.name, false);
+    ctx.fillStyle = "rgba(0,0,0,.5)";
+    ctx.fillRect(W / 2 - 26, 40, 52, 22);
+    ctx.fillStyle = "#ffd34d";
+    ctx.font = "bold 12px Archivo,sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(S.done ? S.method === "KO" ? "KO" : "DEC" : "R" + S.round, W / 2, 52);
+    ctx.textAlign = "left";
+    ctx.textBaseline = "alphabetic";
+  };
+  useEffect(() => {
+    if (phase !== "boxing") draw({ t: 0, round: hud.round, hpA: hud.hpA, hpB: hud.hpB, done: phase === "done", method: result ? result.method : "" });
+  }, [fight, phase]);
+  useEffect(() => () => cancelAnimationFrame(raf.current), []);
+  const startFight = () => {
+    if (phase === "boxing" || pick == null) return;
+    const st = +stake;
+    if (!(st > 0)) {
+      setToast("Enter a stake first");
+      return;
+    }
+    if (st > bets.balance) {
+      setToast("Not enough funds");
+      return;
+    }
+    setBets((b) => __spreadProps(__spreadValues({}, b), { balance: Math.round((b.balance - st) * 100) / 100 }));
+    setResult(null);
+    const S = { t: 0, last: 0, t0: 0, round: 1, roundClock: 0, exchClock: 0, between: false, hpA: 100, hpB: 100, lungeA: 0, lungeB: 0, punchA: 0, punchB: 0, flinchA: 0, flinchB: 0, downA: 0, downB: 0, done: false, winner: -1, method: "" };
+    sim.current = S;
+    setPhase("boxing");
+    setHud({ round: 1, hpA: 100, hpB: 100, msg: "Ding ding!" });
+    const A2 = fight.A, B2 = fight.B, MAXR = 6, ROUNDLEN = 1.8, REST = 0.7;
+    const step = (ts) => {
+      const S2 = sim.current;
+      if (!S2) return;
+      if (!S2.t0) S2.t0 = ts;
+      const t = (ts - S2.t0) / 1e3;
+      const dt = Math.min(0.05, S2.last ? (ts - S2.last) / 1e3 : 0.016);
+      S2.last = ts;
+      S2.t = t;
+      S2.punchA = Math.max(0, S2.punchA - dt * 5);
+      S2.punchB = Math.max(0, S2.punchB - dt * 5);
+      S2.flinchA = Math.max(0, S2.flinchA - dt * 4);
+      S2.flinchB = Math.max(0, S2.flinchB - dt * 4);
+      S2.lungeA = S2.punchA * 10;
+      S2.lungeB = S2.punchB * 10;
+      if (!S2.done) {
+        if (S2.between) {
+          S2.roundClock += dt;
+          if (S2.roundClock > REST) {
+            S2.between = false;
+            S2.roundClock = 0;
+            S2.round++;
+            setHud((h) => __spreadProps(__spreadValues({}, h), { round: S2.round, msg: "Round " + S2.round }));
+          }
+        } else {
+          S2.roundClock += dt;
+          S2.exchClock += dt;
+          if (S2.exchClock > 0.32) {
+            S2.exchClock = 0;
+            const aggressorA = A2.speed * (0.7 + Math.random() * 0.6) >= B2.speed * (0.7 + Math.random() * 0.6);
+            const att = aggressorA ? A2 : B2, def = aggressorA ? B2 : A2;
+            if (Math.random() < 0.45 + (att.speed - def.speed) * 0.02) {
+              const dmg = Math.max(2, att.power * 2.2 / (def.chin * 0.5 + 3) * (0.6 + Math.random() * 0.9));
+              if (aggressorA) {
+                S2.hpB = Math.max(0, S2.hpB - dmg);
+                S2.punchA = 1;
+                S2.flinchB = 1;
+              } else {
+                S2.hpA = Math.max(0, S2.hpA - dmg);
+                S2.punchB = 1;
+                S2.flinchA = 1;
+              }
+              setHud((h) => __spreadProps(__spreadValues({}, h), { hpA: Math.round(S2.hpA), hpB: Math.round(S2.hpB) }));
+              if (S2.hpA <= 0 || S2.hpB <= 0) {
+                S2.done = true;
+                S2.method = "KO";
+                S2.winner = S2.hpA <= 0 ? 1 : 0;
+                if (S2.winner === 0) S2.downB = 0.01;
+                else S2.downA = 0.01;
+              }
+            }
+          }
+          if (!S2.done && S2.roundClock > ROUNDLEN) {
+            if (S2.round >= MAXR) {
+              S2.done = true;
+              S2.method = "decision";
+              S2.winner = S2.hpA === S2.hpB ? A2.rating >= B2.rating ? 0 : 1 : S2.hpA > S2.hpB ? 0 : 1;
+            } else {
+              S2.between = true;
+              S2.roundClock = 0;
+              setHud((h) => __spreadProps(__spreadValues({}, h), { msg: "End of round " + S2.round }));
+            }
+          }
+        }
+      }
+      if (S2.done && S2.method === "KO") {
+        if (S2.winner === 0) S2.downB = Math.min(1, (S2.downB || 0.01) + dt * 2.2);
+        else S2.downA = Math.min(1, (S2.downA || 0.01) + dt * 2.2);
+      }
+      draw(S2);
+      if (S2.done) {
+        S2.endT = S2.endT || t;
+        if (t > S2.endT + 1.8) {
+          const won = pick === S2.winner, od = pick === 0 ? A2.odds : B2.odds, pay = won ? Math.round(st * od * 100) / 100 : 0;
+          if (won) setBets((b) => __spreadProps(__spreadValues({}, b), { balance: Math.round((b.balance + pay) * 100) / 100 }));
+          const wname = S2.winner === 0 ? A2.name : B2.name, mname = pick === 0 ? A2.name : B2.name;
+          setResult({ winner: wname, method: S2.method, round: S2.round, won, pay, mine: mname });
+          setToast(won ? "\u{1F94A} " + wname + " wins by " + (S2.method === "KO" ? "KO" : "decision") + " \u2014 \u20AC" + pay.toFixed(2) + " in your wallet!" : wname + " gets the win. Hard luck.");
+          setPhase("done");
+          sim.current = null;
+          return;
+        }
+      }
+      raf.current = requestAnimationFrame(step);
+    };
+    raf.current = requestAnimationFrame(step);
+  };
+  const newFight = () => {
+    if (phase === "boxing") return;
+    setFight(buildFight());
+    setPick(null);
+    setResult(null);
+    setPhase("idle");
+    setHud({ round: 1, hpA: 100, hpB: 100, msg: "" });
+  };
+  const A = fight.A, B = fight.B;
+  return /* @__PURE__ */ React.createElement("div", { className: "ac bx" }, /* @__PURE__ */ React.createElement("div", { className: "ac-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ac-t" }, "\u{1F94A} Fight Night"), /* @__PURE__ */ React.createElement("div", { className: "ac-s" }, "two no-marks, one ring \xB7 back a fighter, lump on, watch it play out")), /* @__PURE__ */ React.createElement("div", { className: "ac-bal" }, /* @__PURE__ */ React.createElement("span", null, "Wallet"), /* @__PURE__ */ React.createElement("b", null, "\u20AC", bets.balance.toFixed(2)))), /* @__PURE__ */ React.createElement("canvas", { ref: cv, className: "ac-canvas bx-canvas" }), phase === "boxing" && /* @__PURE__ */ React.createElement("div", { className: "ac-live" }, /* @__PURE__ */ React.createElement("span", { className: "ac-dot" }), hud.msg || "Round " + hud.round, " \xB7 ", Math.round(hud.hpA), "\u2013", Math.round(hud.hpB)), result && /* @__PURE__ */ React.createElement("div", { className: "ac-result" + (result.won ? " win" : " lose") }, result.won ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("b", null, "Get in!"), " ", result.mine, " won by ", result.method === "KO" ? "KO, round " + result.round : "decision", " \u2014 ", /* @__PURE__ */ React.createElement("b", null, "\u20AC", result.pay.toFixed(2)), " in your wallet.") : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("b", null, "Ah here."), " ", result.winner, " won by ", result.method === "KO" ? "KO, round " + result.round : "decision", ". ", result.mine, " let you down.")), /* @__PURE__ */ React.createElement("div", { className: "bx-card-grid" }, [{ f: A, i: 0 }, { f: B, i: 1 }].map(({ f, i }) => /* @__PURE__ */ React.createElement("button", { key: i, className: "bx-fighter " + (i === 0 ? "red" : "blue") + (pick === i ? " on" : ""), onClick: () => phase !== "boxing" && setPick(i), disabled: phase === "boxing" }, /* @__PURE__ */ React.createElement("span", { className: "bx-corner" }), /* @__PURE__ */ React.createElement("span", { className: "bx-fn" }, f.name), /* @__PURE__ */ React.createElement("span", { className: "bx-nick" }, '"', f.nick, '"'), /* @__PURE__ */ React.createElement("span", { className: "bx-meta" }, f.rec, " \xB7 ", f.kos, " KO \xB7 ", toFrac(f.odds))))), /* @__PURE__ */ React.createElement("div", { className: "ac-bet" }, /* @__PURE__ */ React.createElement("div", { className: "ac-stake" }, /* @__PURE__ */ React.createElement("span", null, "\u20AC"), /* @__PURE__ */ React.createElement("input", { type: "number", min: "1", value: stake, onChange: (e) => setStake(e.target.value), disabled: phase === "boxing" })), phase !== "done" ? /* @__PURE__ */ React.createElement("button", { className: "ac-go", onClick: startFight, disabled: phase === "boxing" || pick == null || !(+stake > 0) || +stake > bets.balance }, phase === "boxing" ? "Fighting\u2026" : pick == null ? "Back a fighter" : "Place \u20AC" + (+stake || 0).toFixed(2) + " & fight") : /* @__PURE__ */ React.createElement("button", { className: "ac-go ac-again", onClick: newFight }, "New fight \u2192")), pick != null && phase !== "boxing" && /* @__PURE__ */ React.createElement("div", { className: "ac-tobet" }, "Backing ", /* @__PURE__ */ React.createElement("b", null, (pick === 0 ? A : B).name), " at ", toFrac(pick === 0 ? A.odds : B.odds), " \u2014 returns ", /* @__PURE__ */ React.createElement("b", null, "\u20AC", ((+stake || 0) * (pick === 0 ? A.odds : B.odds)).toFixed(2)), " if he wins."), +stake > bets.balance && /* @__PURE__ */ React.createElement("div", { className: "bk-warn" }, "Not enough funds"), /* @__PURE__ */ React.createElement("div", { className: "ac-foot" }, "Play money only \xB7 fighters and odds are made up in-house. Styles make fights \u2014 a banger can end it early, a slick mover nicks it late."));
+}
+function CrashGame({ bets, setBets, setToast }) {
+  const [stake, setStake] = useState(10);
+  const [phase, setPhase] = useState("idle");
+  const [mult, setMult] = useState(1);
+  const [msg, setMsg] = useState(null);
+  const cv = useRef(null), raf = useRef(0), run = useRef(null);
+  const draw = (m, crashed, pts) => {
+    const c = cv.current;
+    if (!c) return;
+    const dpr = Math.min(2, (typeof window !== "undefined" ? window.devicePixelRatio : 1) || 1);
+    const W = c.clientWidth || 340, H = 220;
+    if (c.width !== Math.round(W * dpr) || c.height !== Math.round(H * dpr)) {
+      c.width = Math.round(W * dpr);
+      c.height = Math.round(H * dpr);
+    }
+    const ctx = c.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = "#0c1020";
+    ctx.fillRect(0, 0, W, H);
+    const maxM = Math.max(2, m), maxT = Math.max(2, pts.length ? pts[pts.length - 1][0] : 2);
+    ctx.strokeStyle = crashed ? "#ff5a5a" : "#34d399";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    pts.forEach((pt, i) => {
+      const x = 20 + pt[0] / maxT * (W - 40);
+      const y = H - 20 - (pt[1] - 1) / (maxM - 1) * (H - 44);
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    ctx.fillStyle = crashed ? "#ff5a5a" : "#e7ecf5";
+    ctx.font = "bold 42px Archivo,sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(m.toFixed(2) + "x", W / 2, H / 2 - 6);
+    if (crashed) {
+      ctx.font = "bold 14px Archivo,sans-serif";
+      ctx.fillText("CRASHED", W / 2, H / 2 + 26);
+    }
+    ctx.textAlign = "left";
+    ctx.textBaseline = "alphabetic";
+  };
+  useEffect(() => {
+    if (phase === "idle") draw(1, false, [[0, 1]]);
+  }, [phase]);
+  useEffect(() => () => cancelAnimationFrame(raf.current), []);
+  const start = () => {
+    if (phase === "rising") return;
+    const st = +stake;
+    if (!(st > 0)) {
+      setToast("Enter a stake first");
+      return;
+    }
+    if (st > bets.balance) {
+      setToast("Not enough funds");
+      return;
+    }
+    setBets((b) => __spreadProps(__spreadValues({}, b), { balance: Math.round((b.balance - st) * 100) / 100 }));
+    setMsg(null);
+    setPhase("rising");
+    setMult(1);
+    const crashAt = Math.max(1.01, Math.floor(0.96 / Math.max(1e-4, 1 - Math.random()) * 100) / 100);
+    const R = { t0: 0, m: 1, pts: [[0, 1]] };
+    run.current = R;
+    const step = (ts) => {
+      const R2 = run.current;
+      if (!R2) return;
+      if (!R2.t0) R2.t0 = ts;
+      const t = (ts - R2.t0) / 1e3;
+      R2.m = Math.pow(1.0718, t * 6);
+      R2.pts.push([t, R2.m]);
+      if (R2.pts.length > 240) R2.pts.shift();
+      if (R2.m >= crashAt) {
+        setMult(crashAt);
+        draw(crashAt, true, R2.pts);
+        setMsg({ t: "Crashed at " + crashAt.toFixed(2) + "x \u2014 down \u20AC" + (+stake).toFixed(2), win: false });
+        setToast("\u{1F4A5} Crashed at " + crashAt.toFixed(2) + "x");
+        setPhase("crashed");
+        run.current = null;
+        return;
+      }
+      setMult(R2.m);
+      draw(R2.m, false, R2.pts);
+      raf.current = requestAnimationFrame(step);
+    };
+    raf.current = requestAnimationFrame(step);
+  };
+  const cashOut = () => {
+    if (phase !== "rising") return;
+    const R = run.current;
+    const m = R ? R.m : mult;
+    cancelAnimationFrame(raf.current);
+    run.current = null;
+    const pay = Math.round(+stake * m * 100) / 100;
+    setBets((b) => __spreadProps(__spreadValues({}, b), { balance: Math.round((b.balance + pay) * 100) / 100 }));
+    setMsg({ t: "Cashed out at " + m.toFixed(2) + "x \u2014 \u20AC" + pay.toFixed(2) + "!", win: true });
+    setToast("\u2705 Cashed at " + m.toFixed(2) + "x \u2014 \u20AC" + pay.toFixed(2));
+    setPhase("cashed");
+    draw(m, false, R ? R.pts : [[0, 1]]);
+  };
+  const reset = () => {
+    setPhase("idle");
+    setMult(1);
+    setMsg(null);
+  };
+  return /* @__PURE__ */ React.createElement("div", { className: "cz-game" }, /* @__PURE__ */ React.createElement("canvas", { ref: cv, className: "cz-canvas" }), msg && /* @__PURE__ */ React.createElement("div", { className: "ac-result " + (msg.win ? "win" : "lose") }, msg.t), phase === "rising" ? /* @__PURE__ */ React.createElement("button", { className: "ac-go cz-cash", onClick: cashOut }, "Cash out @ ", mult.toFixed(2), "x \xB7 \u20AC", ((+stake || 0) * mult).toFixed(2)) : phase === "idle" ? /* @__PURE__ */ React.createElement("div", { className: "ac-bet" }, /* @__PURE__ */ React.createElement("div", { className: "ac-stake" }, /* @__PURE__ */ React.createElement("span", null, "\u20AC"), /* @__PURE__ */ React.createElement("input", { type: "number", min: "1", value: stake, onChange: (e) => setStake(e.target.value) })), /* @__PURE__ */ React.createElement("button", { className: "ac-go", onClick: start, disabled: !(+stake > 0) || +stake > bets.balance }, "Bet \u20AC", (+stake || 0).toFixed(2))) : /* @__PURE__ */ React.createElement("button", { className: "ac-go ac-again", onClick: reset }, "Again \u2192"), /* @__PURE__ */ React.createElement("div", { className: "ac-foot" }, "The longer you hold, the higher it climbs \u2014 but cash out before it crashes or you lose the lot. Play money only."));
+}
+function SlotsGame({ bets, setBets, setToast }) {
+  const SYM = ["\u26BD", "\u{1F3C6}", "\u{1F945}", "\u{1F9E4}", "\u{1F45F}", "\u{1F514}", "\u{1F4B0}"];
+  const PAY = { "\u{1F4B0}": 40, "\u{1F3C6}": 18, "\u26BD": 10, "\u{1F945}": 8, "\u{1F9E4}": 8, "\u{1F45F}": 6, "\u{1F514}": 6 };
+  const [reels, setReels] = useState(["\u26BD", "\u{1F3C6}", "\u{1F945}"]);
+  const [stake, setStake] = useState(10);
+  const [spinning, setSpinning] = useState(false);
+  const [msg, setMsg] = useState(null);
+  const r3 = () => [SYM[Math.floor(Math.random() * SYM.length)], SYM[Math.floor(Math.random() * SYM.length)], SYM[Math.floor(Math.random() * SYM.length)]];
+  const spin = () => {
+    if (spinning) return;
+    const st = +stake;
+    if (!(st > 0)) {
+      setToast("Enter a stake first");
+      return;
+    }
+    if (st > bets.balance) {
+      setToast("Not enough funds");
+      return;
+    }
+    setBets((b) => __spreadProps(__spreadValues({}, b), { balance: Math.round((b.balance - st) * 100) / 100 }));
+    setSpinning(true);
+    setMsg(null);
+    let ticks = 0;
+    const iv = setInterval(() => {
+      setReels(r3());
+      ticks++;
+      if (ticks >= 14) {
+        clearInterval(iv);
+        const f = r3();
+        setReels(f);
+        let mult = 0;
+        if (f[0] === f[1] && f[1] === f[2]) mult = PAY[f[0]] || 8;
+        else if (f[0] === f[1] || f[1] === f[2] || f[0] === f[2]) mult = 1.5;
+        const pay = Math.round(st * mult * 100) / 100;
+        if (pay > 0) setBets((b) => __spreadProps(__spreadValues({}, b), { balance: Math.round((b.balance + pay) * 100) / 100 }));
+        setMsg(mult >= 8 ? { t: "JACKPOT! \u20AC" + pay.toFixed(2) + " \u{1F389}", win: true } : mult > 0 ? { t: "Pair \u2014 \u20AC" + pay.toFixed(2), win: true } : { t: "No match. Spin again.", win: false });
+        if (mult > 0) setToast("\u{1F3B0} " + (mult >= 8 ? "Jackpot" : "Winner") + " \u2014 \u20AC" + pay.toFixed(2) + "!");
+        setSpinning(false);
+      }
+    }, 80);
+  };
+  return /* @__PURE__ */ React.createElement("div", { className: "cz-game" }, /* @__PURE__ */ React.createElement("div", { className: "cz-slots" }, reels.map((x, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: "cz-reel" + (spinning ? " spin" : "") }, x))), msg && /* @__PURE__ */ React.createElement("div", { className: "ac-result " + (msg.win ? "win" : "lose") }, msg.t), /* @__PURE__ */ React.createElement("div", { className: "ac-bet" }, /* @__PURE__ */ React.createElement("div", { className: "ac-stake" }, /* @__PURE__ */ React.createElement("span", null, "\u20AC"), /* @__PURE__ */ React.createElement("input", { type: "number", min: "1", value: stake, onChange: (e) => setStake(e.target.value), disabled: spinning })), /* @__PURE__ */ React.createElement("button", { className: "ac-go", onClick: spin, disabled: spinning || !(+stake > 0) || +stake > bets.balance }, spinning ? "Spinning\u2026" : "Spin \u20AC" + (+stake || 0).toFixed(2))), /* @__PURE__ */ React.createElement("div", { className: "ac-foot" }, "Three of a kind pays big \u2014 \u{1F4B0}\u{1F4B0}\u{1F4B0} lands 40\xD7. Any pair pays 1.5\xD7. Play money only."));
+}
+function PlinkoGame({ bets, setBets, setToast }) {
+  const ROWS = 8;
+  const SLOTS = [8, 3, 1.4, 0.6, 0.3, 0.6, 1.4, 3, 8];
+  const [stake, setStake] = useState(10);
+  const [phase, setPhase] = useState("idle");
+  const [msg, setMsg] = useState(null);
+  const cv = useRef(null), raf = useRef(0), ball = useRef(null);
+  const draw = (b) => {
+    const c = cv.current;
+    if (!c) return;
+    const dpr = Math.min(2, (typeof window !== "undefined" ? window.devicePixelRatio : 1) || 1);
+    const W = c.clientWidth || 340, H = 300;
+    if (c.width !== Math.round(W * dpr) || c.height !== Math.round(H * dpr)) {
+      c.width = Math.round(W * dpr);
+      c.height = Math.round(H * dpr);
+    }
+    const ctx = c.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = "#0c1020";
+    ctx.fillRect(0, 0, W, H);
+    const top = 22, rowH = 24;
+    ctx.fillStyle = "rgba(255,255,255,.4)";
+    for (let r = 0; r < ROWS; r++) {
+      const n = r + 2, y = top + r * rowH;
+      for (let i = 0; i < n; i++) {
+        const x = W / 2 + (i - (n - 1) / 2) * 26;
+        ctx.beginPath();
+        ctx.arc(x, y, 3.5, 0, 7);
+        ctx.fill();
+      }
+    }
+    const sy = top + ROWS * rowH + 8, sw = W / SLOTS.length;
+    SLOTS.forEach((m, i) => {
+      const x = i * sw;
+      ctx.fillStyle = m >= 3 ? "rgba(52,211,153,.25)" : m >= 1 ? "rgba(56,189,248,.18)" : "rgba(255,90,90,.18)";
+      ctx.fillRect(x + 2, sy, sw - 4, 42);
+      ctx.fillStyle = "#e7ecf5";
+      ctx.font = "bold 11px Archivo,sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText(m + "x", x + sw / 2, sy + 25);
+    });
+    ctx.textAlign = "left";
+    if (b) {
+      ctx.fillStyle = "#ffd34d";
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, 6, 0, 7);
+      ctx.fill();
+    }
+  };
+  useEffect(() => {
+    if (phase === "idle") draw(null);
+  }, [phase]);
+  useEffect(() => () => cancelAnimationFrame(raf.current), []);
+  const drop = () => {
+    if (phase === "dropping") return;
+    const st = +stake;
+    if (!(st > 0)) {
+      setToast("Enter a stake first");
+      return;
+    }
+    if (st > bets.balance) {
+      setToast("Not enough funds");
+      return;
+    }
+    setBets((b) => __spreadProps(__spreadValues({}, b), { balance: Math.round((b.balance - st) * 100) / 100 }));
+    setMsg(null);
+    setPhase("dropping");
+    const c = cv.current;
+    const W = c ? c.clientWidth || 340 : 340;
+    const top = 22, rowH = 24, sw = W / SLOTS.length;
+    let idx = 0;
+    const dirs = [];
+    for (let r = 0; r < ROWS; r++) {
+      const right = Math.random() < 0.5;
+      dirs.push(right);
+      if (right) idx++;
+    }
+    const slot = idx, targetX = slot * sw + sw / 2;
+    const B = { x: W / 2, y: 4, row: 0 };
+    ball.current = B;
+    let last = 0;
+    const step = (ts) => {
+      const B2 = ball.current;
+      if (!B2) return;
+      if (!last) last = ts;
+      const dt = Math.min(0.05, (ts - last) / 1e3);
+      last = ts;
+      B2.y += 170 * dt;
+      if (B2.row < ROWS && B2.y >= top + B2.row * rowH) {
+        B2.x += dirs[B2.row] ? 13 : -13;
+        B2.row++;
+      }
+      if (B2.row >= ROWS) {
+        B2.x += (targetX - B2.x) * Math.min(1, dt * 7);
+        if (B2.y >= top + ROWS * rowH + 28) {
+          const mult = SLOTS[slot], pay = Math.round(st * mult * 100) / 100;
+          if (pay > 0) setBets((b) => __spreadProps(__spreadValues({}, b), { balance: Math.round((b.balance + pay) * 100) / 100 }));
+          setMsg({ t: mult + "x \u2014 \u20AC" + pay.toFixed(2) + (mult >= 3 ? " \u{1F389}" : ""), win: mult >= 1 });
+          setToast("\u{1F7E1} Landed " + mult + "x \u2014 \u20AC" + pay.toFixed(2));
+          B2.y = top + ROWS * rowH + 22;
+          draw(B2);
+          setPhase("done");
+          ball.current = null;
+          return;
+        }
+      }
+      draw(B2);
+      raf.current = requestAnimationFrame(step);
+    };
+    raf.current = requestAnimationFrame(step);
+  };
+  const reset = () => {
+    setPhase("idle");
+    setMsg(null);
+  };
+  return /* @__PURE__ */ React.createElement("div", { className: "cz-game" }, /* @__PURE__ */ React.createElement("canvas", { ref: cv, className: "cz-canvas cz-plinko" }), msg && /* @__PURE__ */ React.createElement("div", { className: "ac-result " + (msg.win ? "win" : "lose") }, msg.t), phase !== "done" ? /* @__PURE__ */ React.createElement("div", { className: "ac-bet" }, /* @__PURE__ */ React.createElement("div", { className: "ac-stake" }, /* @__PURE__ */ React.createElement("span", null, "\u20AC"), /* @__PURE__ */ React.createElement("input", { type: "number", min: "1", value: stake, onChange: (e) => setStake(e.target.value), disabled: phase === "dropping" })), /* @__PURE__ */ React.createElement("button", { className: "ac-go", onClick: drop, disabled: phase === "dropping" || !(+stake > 0) || +stake > bets.balance }, phase === "dropping" ? "Dropping\u2026" : "Drop \u20AC" + (+stake || 0).toFixed(2))) : /* @__PURE__ */ React.createElement("button", { className: "ac-go ac-again", onClick: reset }, "Drop again \u2192"), /* @__PURE__ */ React.createElement("div", { className: "ac-foot" }, "Edges pay 8\xD7; the middle is where balls go to die (0.3\xD7). Pure luck. Play money only."));
+}
+function BlackjackGame({ bets, setBets, setToast }) {
+  const SUITS = ["\u2660", "\u2665", "\u2666", "\u2663"], RANKS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+  const draw1 = () => ({ r: RANKS[Math.floor(Math.random() * 13)], s: SUITS[Math.floor(Math.random() * 4)] });
+  const val = (hand) => {
+    let t = 0, aces = 0;
+    hand.forEach((c) => {
+      if (c.r === "A") {
+        t += 11;
+        aces++;
+      } else if (c.r === "K" || c.r === "Q" || c.r === "J") t += 10;
+      else t += +c.r;
+    });
+    while (t > 21 && aces > 0) {
+      t -= 10;
+      aces--;
+    }
+    return t;
+  };
+  const [stake, setStake] = useState(10);
+  const [phase, setPhase] = useState("idle");
+  const [player, setPlayer] = useState([]);
+  const [dealer, setDealer] = useState([]);
+  const [msg, setMsg] = useState(null);
+  const deal = () => {
+    if (phase === "player") return;
+    const st = +stake;
+    if (!(st > 0)) {
+      setToast("Enter a stake first");
+      return;
+    }
+    if (st > bets.balance) {
+      setToast("Not enough funds");
+      return;
+    }
+    setBets((b) => __spreadProps(__spreadValues({}, b), { balance: Math.round((b.balance - st) * 100) / 100 }));
+    setMsg(null);
+    const pp = [draw1(), draw1()], dd = [draw1(), draw1()];
+    setPlayer(pp);
+    setDealer(dd);
+    if (val(pp) === 21) {
+      const pay = Math.round(st * 2.5 * 100) / 100;
+      setBets((b) => __spreadProps(__spreadValues({}, b), { balance: Math.round((b.balance + pay) * 100) / 100 }));
+      setMsg({ t: "Blackjack! \u20AC" + pay.toFixed(2) + " \u{1F389}", win: true });
+      setToast("\u{1F0CF} Blackjack \u2014 \u20AC" + pay.toFixed(2) + "!");
+      setPhase("done");
+      return;
+    }
+    setPhase("player");
+  };
+  const hit = () => {
+    if (phase !== "player") return;
+    const pp = [...player, draw1()];
+    setPlayer(pp);
+    if (val(pp) > 21) {
+      setMsg({ t: "Bust on " + val(pp) + ". Hard luck.", win: false });
+      setToast("\u{1F4A5} Bust on " + val(pp));
+      setPhase("done");
+    }
+  };
+  const stand = () => {
+    if (phase !== "player") return;
+    const st = +stake;
+    let dd = [...dealer];
+    while (val(dd) < 17) dd.push(draw1());
+    setDealer(dd);
+    const pv = val(player), dv = val(dd);
+    let res, win = false, pay = 0;
+    if (dv > 21) {
+      res = "Dealer busts on " + dv + " \u2014 you win!";
+      win = true;
+      pay = st * 2;
+    } else if (pv > dv) {
+      res = "You win, " + pv + " to " + dv + "!";
+      win = true;
+      pay = st * 2;
+    } else if (pv === dv) {
+      res = "Push on " + pv + " \u2014 stake back.";
+      pay = st;
+    } else {
+      res = "Dealer wins " + dv + " to " + pv + ".";
+    }
+    if (pay > 0) setBets((b) => __spreadProps(__spreadValues({}, b), { balance: Math.round((b.balance + pay) * 100) / 100 }));
+    setMsg({ t: res, win });
+    if (win) setToast("\u{1F0CF} \u20AC" + (Math.round(st * 2 * 100) / 100).toFixed(2) + " \u2014 winner!");
+    setPhase("done");
+  };
+  const next = () => {
+    setPhase("idle");
+    setPlayer([]);
+    setDealer([]);
+    setMsg(null);
+  };
+  const showDealer = phase === "done";
+  const Card = ({ c, hidden }) => /* @__PURE__ */ React.createElement("span", { className: "bj-card" + (c && (c.s === "\u2665" || c.s === "\u2666") ? " red" : "") + (hidden ? " back" : "") }, hidden || !c ? null : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("b", null, c.r), /* @__PURE__ */ React.createElement("i", null, c.s)));
+  return /* @__PURE__ */ React.createElement("div", { className: "cz-game bj" }, /* @__PURE__ */ React.createElement("div", { className: "bj-felt" }, /* @__PURE__ */ React.createElement("div", { className: "bj-row" }, /* @__PURE__ */ React.createElement("span", { className: "bj-lbl" }, "Dealer", showDealer ? " \xB7 " + val(dealer) : ""), /* @__PURE__ */ React.createElement("div", { className: "bj-hand" }, dealer.length ? dealer.map((c, i) => /* @__PURE__ */ React.createElement(Card, { key: i, c, hidden: !showDealer && i === 1 })) : /* @__PURE__ */ React.createElement("span", { className: "bj-empty" }, "\u2014"))), /* @__PURE__ */ React.createElement("div", { className: "bj-row" }, /* @__PURE__ */ React.createElement("span", { className: "bj-lbl" }, "You", player.length ? " \xB7 " + val(player) : ""), /* @__PURE__ */ React.createElement("div", { className: "bj-hand" }, player.length ? player.map((c, i) => /* @__PURE__ */ React.createElement(Card, { key: i, c })) : /* @__PURE__ */ React.createElement("span", { className: "bj-empty" }, "\u2014")))), msg && /* @__PURE__ */ React.createElement("div", { className: "ac-result " + (msg.win ? "win" : "lose") }, msg.t), phase === "player" ? /* @__PURE__ */ React.createElement("div", { className: "bj-actions" }, /* @__PURE__ */ React.createElement("button", { className: "ac-go", onClick: hit }, "Hit"), /* @__PURE__ */ React.createElement("button", { className: "ac-go ac-again", onClick: stand }, "Stand")) : phase === "done" ? /* @__PURE__ */ React.createElement("button", { className: "ac-go ac-again", onClick: next }, "New hand \u2192") : /* @__PURE__ */ React.createElement("div", { className: "ac-bet" }, /* @__PURE__ */ React.createElement("div", { className: "ac-stake" }, /* @__PURE__ */ React.createElement("span", null, "\u20AC"), /* @__PURE__ */ React.createElement("input", { type: "number", min: "1", value: stake, onChange: (e) => setStake(e.target.value) })), /* @__PURE__ */ React.createElement("button", { className: "ac-go", onClick: deal, disabled: !(+stake > 0) || +stake > bets.balance }, "Deal \u20AC", (+stake || 0).toFixed(2))), /* @__PURE__ */ React.createElement("div", { className: "ac-foot" }, "Dealer stands on 17 \xB7 blackjack pays 3:2 \xB7 play money only."));
+}
+function Casino({ bets, setBets, setToast }) {
+  const [game, setGame] = useState("crash");
+  return /* @__PURE__ */ React.createElement("div", { className: "ac cz" }, /* @__PURE__ */ React.createElement("div", { className: "ac-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ac-t" }, "\u{1F3B0} The Casino"), /* @__PURE__ */ React.createElement("div", { className: "ac-s" }, "house games \xB7 all play money \xB7 all into your side-pot wallet")), /* @__PURE__ */ React.createElement("div", { className: "ac-bal" }, /* @__PURE__ */ React.createElement("span", null, "Wallet"), /* @__PURE__ */ React.createElement("b", null, "\u20AC", bets.balance.toFixed(2)))), /* @__PURE__ */ React.createElement("div", { className: "cz-tabs" }, /* @__PURE__ */ React.createElement("button", { className: game === "crash" ? "on" : "", onClick: () => setGame("crash") }, "\u{1F4C8} Crash"), /* @__PURE__ */ React.createElement("button", { className: game === "slots" ? "on" : "", onClick: () => setGame("slots") }, "\u{1F3B0} Slots"), /* @__PURE__ */ React.createElement("button", { className: game === "plinko" ? "on" : "", onClick: () => setGame("plinko") }, "\u{1F53B} Plinko"), /* @__PURE__ */ React.createElement("button", { className: game === "blackjack" ? "on" : "", onClick: () => setGame("blackjack") }, "\u{1F0CF} Blackjack")), game === "crash" ? /* @__PURE__ */ React.createElement(CrashGame, { bets, setBets, setToast }) : game === "slots" ? /* @__PURE__ */ React.createElement(SlotsGame, { bets, setBets, setToast }) : game === "plinko" ? /* @__PURE__ */ React.createElement(PlinkoGame, { bets, setBets, setToast }) : /* @__PURE__ */ React.createElement(BlackjackGame, { bets, setBets, setToast }));
+}
+function ord(n) {
+  const s = ["th", "st", "nd", "rd"], v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+function gafferLines(f, seed) {
+  const pick = (n, arr) => arr[Math.abs(seed * 9 + n * 31 + (f.name ? f.name.charCodeAt(0) : 0)) % arr.length];
+  const L = [];
+  L.push(pick(1, ["Right, sit down and listen.", "In ya come, shut the door.", "Team talk \u2014 phones away.", "Gather round, ye shower of chancers."]));
+  if (f.best) L.push(pick(2, [
+    f.best + " is your meal ticket at " + f.bestOdds + "% to win the thing. They go out, you go with them.",
+    "You're leaning on " + f.best + " \u2014 and rightly so, they're the class act in your six.",
+    "If " + f.best + " deliver you're laughing. If they don't, well, I did warn ye."
+  ]));
+  if (f.worst && f.worst !== f.best) L.push(pick(3, [
+    f.worst + "? Brave. That's a coupon-filler and you know it.",
+    "I see " + f.worst + " in there. Hope springs eternal, eh?",
+    "Backing " + f.worst + " takes some neck. I'll give ye that."
+  ]));
+  L.push(f.outCount > 0 ? pick(4, [f.outList + " already out \u2014 we don't say their names in this dressing room.", f.outCount + " of your lot on the plane home already. Sloppy.", "Down to " + (6 - f.outCount) + " runners after " + f.outList + " bottled it."]) : pick(4, ["All six still standing. Enjoy it while it lasts.", "Not one of them out yet \u2014 miracles do happen.", "Six runners, none fallen. For now, anyway."]));
+  L.push(f.rank === 1 ? pick(5, ["And you're top of the pile. Don't let it go to your head.", "Leading the league \u2014 somebody pinch me.", "First place. Now do the hard part and stay there."]) : f.rank >= f.n ? pick(5, ["Rock bottom of " + f.n + ". A marathon not a sprint, is what the desperate say.", "Dead last. Somewhere your six are laughing at you.", "Bottom of the table. Chin up \u2014 nowhere to go but up."]) : pick(5, [ord(f.rank) + " of " + f.n + ". Textbook mid-table mediocrity.", "Sitting " + ord(f.rank) + " \u2014 neither here nor there, like your picks.", ord(f.rank) + " place. Do something about it."]));
+  L.push(f.profit > 0 ? pick(6, ["And you're \u20AC" + f.profit.toFixed(0) + " up in the side pot \u2014 first round's on you.", "\u20AC" + f.profit.toFixed(0) + " in profit at the bookies. Don't get cocky.", "Up \u20AC" + f.profit.toFixed(0) + " \u2014 you'd want to quit while you're ahead. You won't."]) : f.profit < 0 ? pick(6, ["Down \u20AC" + Math.abs(f.profit).toFixed(0) + " at the bookies. Stick to watching, eh?", "\u20AC" + Math.abs(f.profit).toFixed(0) + " lighter after your punts. The house always wins.", "Bleeding \u20AC" + Math.abs(f.profit).toFixed(0) + " in the side pot. Have a word with yourself."]) : pick(6, ["Wallet bang on \u20AC1,000 \u2014 not had a bet yet? Coward.", "Side pot untouched. Where's the fun in that?", "Not a single punt placed. Get involved or get out."]));
+  L.push(pick(7, ["Now get out of my sight.", "That's all. Don't embarrass me out there.", "Right \u2014 I've a bus to catch.", "Off ye go. Make me proud, or don't."]));
+  return L;
+}
+function Gaffer({ facts }) {
+  const [seed, setSeed] = useState(1);
+  if (!facts.hasProfile) return /* @__PURE__ */ React.createElement("div", { className: "gaf" }, /* @__PURE__ */ React.createElement("div", { className: "gaf-head" }, /* @__PURE__ */ React.createElement("div", { className: "gaf-av" }, "\u{1F399}\uFE0F"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "gaf-t" }, "The Gaffer"), /* @__PURE__ */ React.createElement("div", { className: "gaf-s" }, "your no-nonsense manager"))), /* @__PURE__ */ React.createElement("div", { className: "gaf-bubble" }, "And who are you supposed to be? Go to the ", /* @__PURE__ */ React.createElement("b", null, "Standings"), " tab, tap your name, then come back and I'll tear your picks to shreds."));
+  const lines = gafferLines(facts, seed);
+  return /* @__PURE__ */ React.createElement("div", { className: "gaf" }, /* @__PURE__ */ React.createElement("div", { className: "gaf-head" }, /* @__PURE__ */ React.createElement("div", { className: "gaf-av" }, "\u{1F399}\uFE0F"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "gaf-t" }, "The Gaffer"), /* @__PURE__ */ React.createElement("div", { className: "gaf-s" }, "team talk for ", facts.name))), /* @__PURE__ */ React.createElement("div", { className: "gaf-talk" }, lines.map((l, i) => /* @__PURE__ */ React.createElement("p", { key: i, className: "gaf-line" }, l))), /* @__PURE__ */ React.createElement("button", { className: "gaf-btn", onClick: () => setSeed((s) => s + 1) }, "Give me another \u2192"));
+}
+function SidePotPanel({ potBoard, balance, loan, achievements, shareCard, takeLoan, repayLoan }) {
+  const net = Math.round((balance - (loan || 0)) * 100) / 100;
+  return /* @__PURE__ */ React.createElement("div", { className: "bk-pot" }, /* @__PURE__ */ React.createElement("div", { className: "bk-pot-hd" }, /* @__PURE__ */ React.createElement("h3", null, "\u{1F4B0} The Side Pot"), /* @__PURE__ */ React.createElement("p", null, "Everyone started on ", /* @__PURE__ */ React.createElement("b", null, "\u20AC1,000"), ". Biggest pot at the final whistle is the ", /* @__PURE__ */ React.createElement("b", null, "Buster Champion"), " \u2014 bets, accas, the Derby, the lot. Run dry? Take a loan to stay in, but it's docked off your total.")), /* @__PURE__ */ React.createElement("div", { className: "bk-pot-me" }, /* @__PURE__ */ React.createElement("span", null, "Your wallet"), /* @__PURE__ */ React.createElement("b", null, "\u20AC", balance.toFixed(2)), /* @__PURE__ */ React.createElement("i", { className: net >= 1e3 ? "up" : "down" }, net >= 1e3 ? "+" : "", "\u20AC", (net - 1e3).toFixed(2))), (loan || 0) > 0 && /* @__PURE__ */ React.createElement("div", { className: "bk-loan" }, /* @__PURE__ */ React.createElement("span", null, "\u{1F4B3} On loan \xB7 docked off your total"), /* @__PURE__ */ React.createElement("b", null, "\u20AC", (loan || 0).toFixed(2)), /* @__PURE__ */ React.createElement("button", { className: "bk-loan-repay", onClick: repayLoan }, "Repay")), balance < 200 && /* @__PURE__ */ React.createElement("button", { className: "bk-loan-take", onClick: takeLoan }, (loan || 0) > 0 ? "Borrow another \u20AC500" : "Out of cash? Borrow \u20AC500 to stay in"), /* @__PURE__ */ React.createElement("ol", { className: "bk-pot-list" }, potBoard.map((r, i) => /* @__PURE__ */ React.createElement("li", { key: r.name, className: (r.me ? "me " : "") + (i === 0 && r.bal != null ? "lead" : "") }, /* @__PURE__ */ React.createElement("span", { className: "bk-pot-rk" }, i === 0 && r.bal != null ? "\u{1F451}" : i + 1), /* @__PURE__ */ React.createElement("span", { className: "bk-pot-nm" }, r.name, r.me && /* @__PURE__ */ React.createElement("i", null, "you")), /* @__PURE__ */ React.createElement("span", { className: "bk-pot-bl" }, r.bal != null ? "\u20AC" + r.bal.toFixed(2) : "\u2014"), /* @__PURE__ */ React.createElement("span", { className: "bk-pot-pl " + (r.bal == null ? "" : r.bal >= 1e3 ? "up" : "down") }, r.bal == null ? "not in yet" : (r.bal >= 1e3 ? "+" : "") + "\u20AC" + (r.bal - 1e3).toFixed(2))))), /* @__PURE__ */ React.createElement("div", { className: "bk-ach" }, /* @__PURE__ */ React.createElement("div", { className: "bk-ach-h" }, "\u{1F3C5} Achievements ", /* @__PURE__ */ React.createElement("span", null, achievements.filter((a) => a.got).length, "/", achievements.length)), /* @__PURE__ */ React.createElement("div", { className: "bk-ach-grid" }, achievements.map((a, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: "bk-ach-b" + (a.got ? " got" : "") }, /* @__PURE__ */ React.createElement("span", { className: "bk-ach-ic" }, a.ic), /* @__PURE__ */ React.createElement("span", { className: "bk-ach-t" }, a.t), /* @__PURE__ */ React.createElement("span", { className: "bk-ach-d" }, a.got ? a.d : "Locked"))))), /* @__PURE__ */ React.createElement("button", { className: "bk-share", onClick: shareCard }, "\u{1F4F8} Share my card"), /* @__PURE__ */ React.createElement("div", { className: "bk-pot-foot" }, "The board updates when the lads open the app \u2014 it rides on a free backend, so other wallets catch up on refresh rather than instantly. Your own wallet is always bang up to date."));
+}
 function App() {
   const [tab, setTab] = useState("standings");
   const [pot, setPot] = useState(1);
@@ -2585,23 +3348,44 @@ function App() {
   }, [lgRes, live.matches]);
   const [bets, setBets] = useState(() => {
     try {
-      const s = localStorage.getItem("wc26bets");
-      if (s) return JSON.parse(s);
+      const s = localStorage.getItem("wc26bets_s2");
+      if (s) {
+        const j = JSON.parse(s);
+        if (j && typeof j.balance === "number") return { balance: j.balance, open: Array.isArray(j.open) ? j.open : [], settled: Array.isArray(j.settled) ? j.settled : [], loan: typeof j.loan === "number" ? j.loan : 0 };
+      }
     } catch (e) {
     }
-    return { balance: 100, open: [], settled: [] };
+    return { balance: 1e3, open: [], settled: [], loan: 0 };
   });
   const [bkView, setBkView] = useState("book");
+  const [stView, setStView] = useState("table");
   const [slip, setSlip] = useState([]);
   const [stake, setStake] = useState(10);
   const [dayTab, setDayTab] = useState("");
   const [showAllOut, setShowAllOut] = useState(false);
   useEffect(() => {
     try {
-      localStorage.setItem("wc26bets", JSON.stringify(bets));
+      localStorage.setItem("wc26bets_s2", JSON.stringify(bets));
     } catch (e) {
     }
   }, [bets]);
+  const takeLoan = () => {
+    if ((bets.balance || 0) >= 200) {
+      setToast("You've still got cash \u2014 no loan needed yet");
+      return;
+    }
+    setBets((b) => __spreadProps(__spreadValues({}, b), { balance: Math.round((b.balance + 500) * 100) / 100, loan: Math.round(((b.loan || 0) + 500) * 100) / 100 }));
+    setToast("\u{1F4B3} \u20AC500 loan added \u2014 it's docked off your side-pot total");
+  };
+  const repayLoan = () => {
+    const r = Math.min(bets.balance || 0, bets.loan || 0);
+    if (r <= 0) {
+      setToast("Nothing to repay");
+      return;
+    }
+    setBets((b) => __spreadProps(__spreadValues({}, b), { balance: Math.round((b.balance - r) * 100) / 100, loan: Math.round(((b.loan || 0) - r) * 100) / 100 }));
+    setToast("Repaid \u20AC" + r.toFixed(2));
+  };
   const koWin = (m) => m.winner === "HOME_TEAM" ? m.home : m.winner === "AWAY_TEAM" ? m.away : m.penHome != null && m.penAway != null ? m.penHome > m.penAway ? m.home : m.away : +m.hs > +m.as ? m.home : +m.as > +m.hs ? m.away : null;
   const teamStats = useMemo(() => {
     const pts = {}, gp = {};
@@ -2697,16 +3481,243 @@ function App() {
     setSlip([]);
     setToast("Bet placed \u2014 good luck");
   };
-  const settleBet = (id, how) => setBets((b) => {
-    const bet = b.open.find((x) => x.id === id);
-    if (!bet) return b;
-    const add = how === "won" ? bet.ret : how === "void" ? bet.stake : 0;
-    return __spreadProps(__spreadValues({}, b), { balance: Math.round((b.balance + add) * 100) / 100, open: b.open.filter((x) => x.id !== id), settled: [__spreadProps(__spreadValues({}, bet), { result: how }), ...b.settled].slice(0, 30) });
+  const champion = useMemo(() => {
+    const fin = (live.matches || []).find((m) => m && m.stage === "FINAL" && m.status === "FINISHED");
+    if (!fin) return null;
+    const w = koWin(fin);
+    return w ? normTeam(w) : null;
+  }, [live.matches]);
+  useEffect(() => {
+    if (!bets.open.length) return;
+    const byId = {};
+    (live.matches || []).forEach((m) => {
+      if (m && m.id != null) byId[String(m.id)] = m;
+    });
+    const evalSel = (sel) => {
+      const k = sel && sel.key || "";
+      const ci = k.indexOf(":");
+      if (ci < 0) return "pending";
+      const tag = k.slice(0, ci), val = k.slice(ci + 1);
+      if (tag === "W") {
+        if (champion && champion === val) return "win";
+        if (eliminated.has(val)) return "lose";
+        return "pending";
+      }
+      const m = byId[val];
+      if (!m || m.status !== "FINISHED") return "pending";
+      if (tag === "H" || tag === "D" || tag === "A") {
+        if (m.hs == null || m.as == null) return "pending";
+        const o = +m.hs > +m.as ? "H" : +m.as > +m.hs ? "A" : "D";
+        return o === tag ? "win" : "lose";
+      }
+      if (tag === "QA" || tag === "QB") {
+        const w = koWin(m);
+        if (!w) return "pending";
+        const side = tag === "QA" ? m.home : m.away;
+        return w === side ? "win" : "lose";
+      }
+      return "pending";
+    };
+    let won = 0, lost = 0, delta = 0;
+    const open = [], settled = [];
+    bets.open.forEach((bet) => {
+      const outs = (bet.sels || []).map(evalSel);
+      if (outs.some((o) => o === "lose")) {
+        settled.push(__spreadProps(__spreadValues({}, bet), { result: "lost", ts: Date.now() }));
+        lost++;
+      } else if (outs.length && outs.every((o) => o === "win")) {
+        settled.push(__spreadProps(__spreadValues({}, bet), { result: "won", ts: Date.now() }));
+        delta += bet.ret || 0;
+        won++;
+      } else open.push(bet);
+    });
+    if (won || lost) {
+      setBets((b) => __spreadProps(__spreadValues({}, b), { balance: Math.round((b.balance + delta) * 100) / 100, open, settled: [...settled, ...b.settled].slice(0, 40) }));
+      if (won && lost) setToast(won + " landed \xB7 " + lost + " down");
+      else if (won) setToast(won > 1 ? won + " bets landed \u2014 \u20AC" + delta.toFixed(2) + " in" : "Bet landed \u2014 \u20AC" + delta.toFixed(2) + " in your wallet");
+      else setToast(lost > 1 ? lost + " bets went down" : "Bet went down");
+    }
+  }, [live.matches, eliminated, champion, bets.open]);
+  const [potCloud, setPotCloud] = useState({});
+  const potPulled = useRef(false);
+  const walletUrl = () => (workerUrl || DEFAULT_WORKER).replace(/\/+$/, "") + "/league?id=ladsbuster4_wallets";
+  const readPot = (d) => {
+    if (!d) return null;
+    const L = d.league !== void 0 ? d.league : d;
+    if (!L || typeof L !== "object") return null;
+    const map = L.players || L.wallets || L.blob || (L.picks ? null : L);
+    return map && typeof map === "object" && !Array.isArray(map) ? map : null;
+  };
+  const pullWallets = () => __async(this, null, function* () {
+    try {
+      const r = yield fetch(walletUrl());
+      const d = yield r.json();
+      const map = readPot(d);
+      if (map) setPotCloud(map);
+    } catch (e) {
+    }
   });
-  const resetBank = () => {
-    if (typeof window !== "undefined" && !window.confirm("Reset your balance and clear all bets?")) return;
-    setBets({ balance: 100, open: [], settled: [] });
-    setSlip([]);
+  const pushWallets = () => __async(this, null, function* () {
+    if (meIdx < 0) return;
+    try {
+      let cur = {};
+      try {
+        const r = yield fetch(walletUrl());
+        cur = readPot(yield r.json()) || {};
+      } catch (e) {
+      }
+      cur[me] = { bal: Math.round((bets.balance - (bets.loan || 0)) * 100) / 100, ts: Date.now() };
+      setPotCloud(cur);
+      yield fetch(walletUrl(), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ type: "wallets", players: cur, wallets: cur, blob: cur }) });
+    } catch (e) {
+    }
+  });
+  useEffect(() => {
+    if (potPulled.current) return;
+    potPulled.current = true;
+    pullWallets();
+  }, []);
+  useEffect(() => {
+    if (meIdx < 0) return;
+    const t = setTimeout(() => {
+      pushWallets();
+    }, 1500);
+    return () => clearTimeout(t);
+  }, [bets.balance, meIdx]);
+  const potBoard = useMemo(() => {
+    const map = __spreadValues({}, potCloud);
+    if (meIdx >= 0) map[me] = __spreadProps(__spreadValues({}, map[me] || {}), { bal: Math.round((bets.balance - (bets.loan || 0)) * 100) / 100 });
+    const rows2 = PLAYERS.map((n) => {
+      const e = map[n];
+      return { name: n, bal: e && typeof e.bal === "number" ? e.bal : null, me: n === me };
+    });
+    rows2.sort((a, b) => (a.bal == null ? 1 : 0) - (b.bal == null ? 1 : 0) || (b.bal || 0) - (a.bal || 0));
+    return rows2;
+  }, [potCloud, bets.balance, me, meIdx]);
+  const gafferFacts = useMemo(() => {
+    if (meIdx < 0) return { hasProfile: false };
+    const row = table.rows.find((r) => r.i === meIdx) || { teams: [], total: 0, rank: PLAYERS.length, tp: [] };
+    const teams = row.teams || [];
+    let best2 = null, bestW = -1, worst = null, worstW = 1e9;
+    teams.forEach((t) => {
+      const w = TEAMS[t] && TEAMS[t].win || 0;
+      if (w > bestW) {
+        bestW = w;
+        best2 = t;
+      }
+      if (w < worstW) {
+        worstW = w;
+        worst = t;
+      }
+    });
+    const out = teams.filter((t) => eliminated.has(t));
+    return { hasProfile: true, name: me, rank: row.rank || PLAYERS.length, n: PLAYERS.length, total: row.total || 0, best: best2, bestOdds: bestW.toFixed(1), worst, outCount: out.length, outList: out.join(", "), profit: Math.round((bets.balance - 1e3) * 100) / 100 };
+  }, [meIdx, me, table, eliminated, bets.balance]);
+  const achievements = useMemo(() => {
+    const all = [...bets.settled || [], ...bets.open || []];
+    const placed = all.length;
+    const won = (bets.settled || []).filter((b) => b.result === "won");
+    const lost = (bets.settled || []).filter((b) => b.result === "lost");
+    const anyAcca = all.some((b) => (b.sels || []).length > 1);
+    const wonAcca = won.some((b) => (b.sels || []).length > 1);
+    const wonOut = won.some((b) => (b.sels || []).some((x) => x && typeof x.key === "string" && x.key.indexOf("W:") === 0));
+    const maxStake = all.reduce((m, b) => Math.max(m, +b.stake || 0), 0);
+    const bigWin = won.reduce((m, b) => Math.max(m, +b.ret || 0), 0);
+    const leading = potBoard.length > 0 && potBoard[0].me && potBoard[0].bal != null;
+    const f = gafferFacts || {};
+    return [
+      { ic: "\u{1F39F}\uFE0F", t: "First Bet", d: "Placed your first bet", got: placed >= 1 },
+      { ic: "\u2705", t: "Winner", d: "Won a bet", got: won.length >= 1 },
+      { ic: "\u{1F9EE}", t: "Accumulator", d: "Placed a multi", got: anyAcca },
+      { ic: "\u{1F3B0}", t: "Acca Merchant", d: "Won a multi", got: wonAcca },
+      { ic: "\u{1F3C6}", t: "Backed a Winner", d: "Won an outright", got: wonOut },
+      { ic: "\u{1F3AF}", t: "Sharpshooter", d: "Won 5 bets", got: won.length >= 5 },
+      { ic: "\u{1F4B8}", t: "Big Spender", d: "Single bet of \u20AC100+", got: maxStake >= 100 },
+      { ic: "\u{1F4AF}", t: "Big Win", d: "A win of \u20AC100+", got: bigWin >= 100 },
+      { ic: "\u{1F3A2}", t: "Rollercoaster", d: "Won and lost a bet", got: won.length >= 1 && lost.length >= 1 },
+      { ic: "\u{1F525}", t: "Regular", d: "Placed 5+ bets", got: placed >= 5 },
+      { ic: "\u{1F3B2}", t: "Degenerate", d: "Placed 15+ bets", got: placed >= 15 },
+      { ic: "\u{1F4C8}", t: "In the Green", d: "Wallet above \u20AC1,000", got: bets.balance > 1e3 },
+      { ic: "\u{1F4B0}", t: "High Roller", d: "Wallet hit \u20AC2,000", got: bets.balance >= 2e3 },
+      { ic: "\u{1F911}", t: "Loaded", d: "Wallet hit \u20AC5,000", got: bets.balance >= 5e3 },
+      { ic: "\u{1F4C9}", t: "Down Bad", d: "Wallet under \u20AC500", got: bets.balance < 500 },
+      { ic: "\u{1F451}", t: "Top of the Pot", d: "Led the side pot", got: leading },
+      { ic: "\u{1F947}", t: "Pole Position", d: "Top of the league", got: !!f.hasProfile && f.rank === 1 },
+      { ic: "\u{1F9E4}", t: "Clean Sheet", d: "All six teams still in", got: !!f.hasProfile && f.outCount === 0 },
+      { ic: "\u2620\uFE0F", t: "Cursed", d: "Three of your teams out", got: (f.outCount || 0) >= 3 }
+    ];
+  }, [bets, potBoard, gafferFacts]);
+  const shareCard = () => {
+    try {
+      const row = table.rows.find((r) => r.i === meIdx);
+      const W = 1080, H = 1080;
+      const c = document.createElement("canvas");
+      c.width = W;
+      c.height = H;
+      const ctx = c.getContext("2d");
+      const g = ctx.createLinearGradient(0, 0, 0, H);
+      g.addColorStop(0, "#0c1424");
+      g.addColorStop(1, "#070d18");
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H);
+      ctx.textAlign = "left";
+      ctx.fillStyle = "#5ec8f0";
+      ctx.font = "bold 46px Archivo,sans-serif";
+      ctx.fillText("DALY SPORT CO.", 70, 112);
+      ctx.fillStyle = "#94a3b8";
+      ctx.font = "28px Archivo,sans-serif";
+      ctx.fillText("World Cup 2026 \xB7 the lads' sweepstake", 70, 158);
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 92px Archivo,sans-serif";
+      ctx.fillText(me || "\u2014", 70, 288);
+      ctx.fillStyle = "#cbd5e1";
+      ctx.font = "bold 32px Archivo,sans-serif";
+      ctx.fillText((row ? "#" + row.rank + " of " + PLAYERS.length : "\u2014") + "   \xB7   " + (row ? row.total : 0) + " pts   \xB7   \u20AC" + bets.balance.toFixed(0) + " pot", 70, 352);
+      const teams = row && row.teams || [];
+      const y0 = 440;
+      teams.forEach((t, i) => {
+        const yy = y0 + i * 104;
+        const out = eliminated.has(t);
+        ctx.fillStyle = out ? "rgba(148,163,184,.10)" : "rgba(94,200,240,.12)";
+        ctx.fillRect(70, yy, W - 140, 84);
+        ctx.fillStyle = out ? "#64748b" : "#5ec8f0";
+        ctx.font = "bold 30px 'Space Mono',monospace";
+        ctx.fillText(CODES[t] || (t || "").slice(0, 3).toUpperCase(), 96, yy + 53);
+        ctx.fillStyle = out ? "#94a3b8" : "#ffffff";
+        ctx.font = "bold 38px Archivo,sans-serif";
+        ctx.fillText(t + (out ? "  (out)" : ""), 210, yy + 54);
+        const tp = row && row.tp && row.tp[i] ? row.tp[i].p : 0;
+        ctx.textAlign = "right";
+        ctx.fillText(tp + " pts", W - 96, yy + 54);
+        ctx.textAlign = "left";
+      });
+      ctx.fillStyle = "#64748b";
+      ctx.font = "26px 'Space Mono',monospace";
+      ctx.fillText("jasonjd26.github.io/ladsbuster", 70, H - 58);
+      c.toBlob((blob) => {
+        if (!blob) {
+          setToast("Couldn't make the card");
+          return;
+        }
+        const file = new File([blob], "my-sweepstake-card.png", { type: "image/png" });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          navigator.share({ files: [file], title: "My World Cup sweepstake card" }).catch(() => {
+          });
+          return;
+        }
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "my-sweepstake-card.png";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 4e3);
+        setToast("Card saved \u2014 send it to the lads");
+      }, "image/png");
+    } catch (e) {
+      setToast("Couldn't make the card");
+    }
   };
   const fixtureIndex = useMemo(() => {
     const idx = {};
@@ -2807,8 +3818,9 @@ function App() {
     return (schedule.byDate[selDate] || []).map((m) => {
       const a = normTeam(m.home), b = normTeam(m.away);
       const isKO = m.stage !== "GROUP_STAGE";
+      const started = m.status === "FINISHED" || m.status === "IN_PLAY" || m.status === "PAUSED";
       let oH = null, oD = null, oA = null, advA = null, advB = null;
-      if (a && b && TEAMS[a] && TEAMS[b]) {
+      if (a && b && TEAMS[a] && TEAMS[b] && !started) {
         const [pH, pD, pA] = matchProbs(a, b, radj);
         oH = oddsDec(pH);
         oD = oddsDec(pD);
@@ -2846,7 +3858,7 @@ function App() {
       fetchNewsFor(tt);
     }
   }, [tab, selDate, live.matches]);
-  return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("style", null, CSS), /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("div", { className: "bg-glow" }), /* @__PURE__ */ React.createElement("header", { className: "top" }, /* @__PURE__ */ React.createElement("div", { className: "brand" }, /* @__PURE__ */ React.createElement("div", { className: "mark" }, /* @__PURE__ */ React.createElement(WCTrophy, { className: "mark-tro" })), /* @__PURE__ */ React.createElement("div", { className: "brand-tx" }, /* @__PURE__ */ React.createElement("div", { className: "brand-t" }, "DALY SPORT CO."), /* @__PURE__ */ React.createElement("div", { className: "brand-s" }, "World Cup 2026 \xB7 the lads' sweepstake"))), /* @__PURE__ */ React.createElement("nav", { className: "tabs" }, /* @__PURE__ */ React.createElement("button", { className: tab === "standings" ? "on" : "", onClick: () => setTab("standings") }, /* @__PURE__ */ React.createElement(Users, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Standings")), /* @__PURE__ */ React.createElement("button", { className: tab === "scout" ? "on" : "", onClick: () => setTab("scout") }, /* @__PURE__ */ React.createElement(BookOpen, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Scout")), /* @__PURE__ */ React.createElement("button", { className: tab === "sim" ? "on" : "", onClick: () => setTab("sim") }, /* @__PURE__ */ React.createElement(Zap, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Simulate")), /* @__PURE__ */ React.createElement("button", { className: tab === "bookie" ? "on" : "", onClick: () => setTab("bookie") }, /* @__PURE__ */ React.createElement(Coins, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Bookie"))), /* @__PURE__ */ React.createElement("button", { className: "refresh" + (live.loading ? " spin" : "") + (live.ok ? " ok" : ""), onClick: refreshLive, title: live.ok ? "Live \xB7 updated " + (liveAgo === 0 ? "just now" : liveAgo + "m ago") : live.err ? "Tap to retry" : "Tap to load live scores" }, /* @__PURE__ */ React.createElement(RotateCcw, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, live.loading ? "Refreshing\u2026" : live.ok ? liveAgo === 0 ? "Live \xB7 now" : "Live \xB7 " + liveAgo + "m" : "Refresh"))), tab === "standings" && /* @__PURE__ */ React.createElement("div", { className: "lg" }, meIdx < 0 ? /* @__PURE__ */ React.createElement("div", { className: "me-pick" }, /* @__PURE__ */ React.createElement("div", { className: "me-pick-h" }, "\u{1F44B} Who are you?"), /* @__PURE__ */ React.createElement("div", { className: "me-pick-sub" }, "Tap your name to follow your six and see your teams' games. It's just for this phone \u2014 no password needed."), /* @__PURE__ */ React.createElement("div", { className: "me-pick-grid" }, PLAYERS.map((n) => /* @__PURE__ */ React.createElement("button", { key: n, onClick: () => setMe(n) }, n)))) : /* @__PURE__ */ React.createElement("div", { className: "me-today" }, /* @__PURE__ */ React.createElement("div", { className: "me-today-top" }, /* @__PURE__ */ React.createElement("span", { className: "me-today-who" }, "Following ", /* @__PURE__ */ React.createElement("b", null, me)), /* @__PURE__ */ React.createElement("button", { className: "me-switch", onClick: () => setMe("") }, "change")), !live.matches ? /* @__PURE__ */ React.createElement("div", { className: "me-today-none" }, "Tap Refresh up top to load today's games.") : todayMatches.length === 0 ? /* @__PURE__ */ React.createElement("div", { className: "me-today-none" }, "None of your six are out today \u2014 your games show here on match days.") : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "me-today-h" }, "Your teams today"), /* @__PURE__ */ React.createElement("div", { className: "me-today-list" }, todayMatches.map((m) => {
+  return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("style", null, CSS), /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("div", { className: "bg-glow" }), /* @__PURE__ */ React.createElement("header", { className: "top" }, /* @__PURE__ */ React.createElement("div", { className: "brand" }, /* @__PURE__ */ React.createElement("div", { className: "mark" }, /* @__PURE__ */ React.createElement(WCTrophy, { className: "mark-tro" })), /* @__PURE__ */ React.createElement("div", { className: "brand-tx" }, /* @__PURE__ */ React.createElement("div", { className: "brand-t" }, "DALY SPORT CO."), /* @__PURE__ */ React.createElement("div", { className: "brand-s" }, "World Cup 2026 \xB7 the lads' sweepstake"))), /* @__PURE__ */ React.createElement("nav", { className: "tabs" }, /* @__PURE__ */ React.createElement("button", { className: tab === "standings" ? "on" : "", onClick: () => setTab("standings") }, /* @__PURE__ */ React.createElement(Users, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Standings")), /* @__PURE__ */ React.createElement("button", { className: tab === "scout" ? "on" : "", onClick: () => setTab("scout") }, /* @__PURE__ */ React.createElement(BookOpen, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Scout")), /* @__PURE__ */ React.createElement("button", { className: tab === "sim" ? "on" : "", onClick: () => setTab("sim") }, /* @__PURE__ */ React.createElement(Zap, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Simulate")), /* @__PURE__ */ React.createElement("button", { className: tab === "bookie" ? "on" : "", onClick: () => setTab("bookie") }, /* @__PURE__ */ React.createElement(Coins, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Bookie"))), /* @__PURE__ */ React.createElement("button", { className: "refresh" + (live.loading ? " spin" : "") + (live.ok ? " ok" : ""), onClick: refreshLive, title: live.ok ? "Live \xB7 updated " + (liveAgo === 0 ? "just now" : liveAgo + "m ago") : live.err ? "Tap to retry" : "Tap to load live scores" }, /* @__PURE__ */ React.createElement(RotateCcw, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, live.loading ? "Refreshing\u2026" : live.ok ? liveAgo === 0 ? "Live \xB7 now" : "Live \xB7 " + liveAgo + "m" : "Refresh"))), tab === "standings" && /* @__PURE__ */ React.createElement("div", { className: "lg" }, /* @__PURE__ */ React.createElement("div", { className: "st-sub" }, /* @__PURE__ */ React.createElement("button", { className: stView === "table" ? "on" : "", onClick: () => setStView("table") }, "Standings"), /* @__PURE__ */ React.createElement("button", { className: stView === "gaffer" ? "on" : "", onClick: () => setStView("gaffer") }, "\u{1F399}\uFE0F Gaffer"), /* @__PURE__ */ React.createElement("button", { className: stView === "pot" ? "on" : "", onClick: () => setStView("pot") }, "\u{1F4B0} Side Pot")), stView === "table" && /* @__PURE__ */ React.createElement(React.Fragment, null, meIdx < 0 ? /* @__PURE__ */ React.createElement("div", { className: "me-pick" }, /* @__PURE__ */ React.createElement("div", { className: "me-pick-h" }, "\u{1F44B} Who are you?"), /* @__PURE__ */ React.createElement("div", { className: "me-pick-sub" }, "Tap your name to follow your six and see your teams' games. It's just for this phone \u2014 no password needed."), /* @__PURE__ */ React.createElement("div", { className: "me-pick-grid" }, PLAYERS.map((n) => /* @__PURE__ */ React.createElement("button", { key: n, onClick: () => setMe(n) }, n)))) : /* @__PURE__ */ React.createElement("div", { className: "me-today" }, /* @__PURE__ */ React.createElement("div", { className: "me-today-top" }, /* @__PURE__ */ React.createElement("span", { className: "me-today-who" }, "Following ", /* @__PURE__ */ React.createElement("b", null, me)), /* @__PURE__ */ React.createElement("button", { className: "me-switch", onClick: () => setMe("") }, "change")), !live.matches ? /* @__PURE__ */ React.createElement("div", { className: "me-today-none" }, "Tap Refresh up top to load today's games.") : todayMatches.length === 0 ? /* @__PURE__ */ React.createElement("div", { className: "me-today-none" }, "None of your six are out today \u2014 your games show here on match days.") : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "me-today-h" }, "Your teams today"), /* @__PURE__ */ React.createElement("div", { className: "me-today-list" }, todayMatches.map((m) => {
     const played = m.hs != null && m.as != null;
     const d = new Date(m.date);
     const ko = isNaN(d.getTime()) ? "" : d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -2909,7 +3921,7 @@ function App() {
     const ms = bracket.rounds[rd] || [];
     if (!ms.length) return null;
     return /* @__PURE__ */ React.createElement("div", { key: rd, className: "kov-round" }, /* @__PURE__ */ React.createElement("div", { className: "kov-rh" }, rd), /* @__PURE__ */ React.createElement("div", { className: "kov-matches" }, ms.map((m, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: "kov-m" }, /* @__PURE__ */ React.createElement("div", { className: "kov-side" + (m.win === "a" ? " win" : m.win === "b" ? " lose" : "") }, /* @__PURE__ */ React.createElement("span", { className: "kov-fl" }, m.a ? /* @__PURE__ */ React.createElement(Flag, { t: m.a }) : /* @__PURE__ */ React.createElement("span", { className: "kov-tbd-fl" })), /* @__PURE__ */ React.createElement("span", { className: "kov-nm" }, m.a ? CODES[m.a] || m.a : "TBD"), /* @__PURE__ */ React.createElement("span", { className: "kov-sc" }, m.sa != null ? m.sa : "")), /* @__PURE__ */ React.createElement("div", { className: "kov-side" + (m.win === "b" ? " win" : m.win === "a" ? " lose" : "") }, /* @__PURE__ */ React.createElement("span", { className: "kov-fl" }, m.b ? /* @__PURE__ */ React.createElement(Flag, { t: m.b }) : /* @__PURE__ */ React.createElement("span", { className: "kov-tbd-fl" })), /* @__PURE__ */ React.createElement("span", { className: "kov-nm" }, m.b ? CODES[m.b] || m.b : "TBD"), /* @__PURE__ */ React.createElement("span", { className: "kov-sc" }, m.sb != null ? m.sb : ""))))));
-  })))), tab === "scout" && /* @__PURE__ */ React.createElement("div", { className: "scout" }, /* @__PURE__ */ React.createElement("div", { className: "scout-hd" }, /* @__PURE__ */ React.createElement("span", { className: "scout-eye" }, "\u25C6 SCOUTING DEPARTMENT"), /* @__PURE__ */ React.createElement("h2", { className: "scout-h" }, "Pick your six \u2014 one per pot."), /* @__PURE__ */ React.createElement("p", { className: "scout-sub" }, "Tap ", /* @__PURE__ */ React.createElement("b", null, "Pick"), " on any card to claim that nation for its pot. The letter grade and bars are the model's read on the squad. Your buster sits up top \u2014 add a total-goals guess to settle ties.")), /* @__PURE__ */ React.createElement("div", { className: "cpx" }, /* @__PURE__ */ React.createElement("div", { className: "cpx-h" }, /* @__PURE__ */ React.createElement("span", null, "YOUR BUSTER"), /* @__PURE__ */ React.createElement("button", { className: "cpx-oracle", onClick: () => {
+  })))), stView === "pot" && /* @__PURE__ */ React.createElement(SidePotPanel, { potBoard, balance: bets.balance, loan: bets.loan || 0, achievements, shareCard, takeLoan, repayLoan }), stView === "gaffer" && /* @__PURE__ */ React.createElement(Gaffer, { facts: gafferFacts })), tab === "scout" && /* @__PURE__ */ React.createElement("div", { className: "scout" }, /* @__PURE__ */ React.createElement("div", { className: "scout-hd" }, /* @__PURE__ */ React.createElement("span", { className: "scout-eye" }, "\u25C6 SCOUTING DEPARTMENT"), /* @__PURE__ */ React.createElement("h2", { className: "scout-h" }, "Pick your six \u2014 one per pot."), /* @__PURE__ */ React.createElement("p", { className: "scout-sub" }, "Tap ", /* @__PURE__ */ React.createElement("b", null, "Pick"), " on any card to claim that nation for its pot. The letter grade and bars are the model's read on the squad. Your buster sits up top \u2014 add a total-goals guess to settle ties.")), /* @__PURE__ */ React.createElement("div", { className: "cpx" }, /* @__PURE__ */ React.createElement("div", { className: "cpx-h" }, /* @__PURE__ */ React.createElement("span", null, "YOUR BUSTER"), /* @__PURE__ */ React.createElement("button", { className: "cpx-oracle", onClick: () => {
     setPicks(__spreadValues({}, RECO));
     setToast("Loaded the suggested six");
   } }, /* @__PURE__ */ React.createElement(RotateCcw, { size: 12 }), " Suggested six")), /* @__PURE__ */ React.createElement("div", { className: "cpx-slots" }, Object.keys(POTS).map((p) => {
@@ -2935,7 +3947,7 @@ function App() {
     const f = sim.ko.final;
     const cf = f.win === f.i ? [f.hg, f.ag] : [f.ag, f.hg];
     return cf[0] + "\u2013" + cf[1] + (f.pens ? " (pens)" : f.aet ? " (aet)" : "");
-  })()), /* @__PURE__ */ React.createElement("div", { className: "champ-meta" }, "\u{1F949} ", /* @__PURE__ */ React.createElement(Flag, { t: sim.thirdPlace }), " ", sim.thirdPlace, " took third \xB7 ", sim.goals, " goals scored across the tournament")), /* @__PURE__ */ React.createElement("div", { className: "run-coupon" }, /* @__PURE__ */ React.createElement("div", { className: "rc-head" }, /* @__PURE__ */ React.createElement("span", null, "YOUR BUSTER THIS RUN"), /* @__PURE__ */ React.createElement("span", { className: "rc-best" }, "Best: ", /* @__PURE__ */ React.createElement("b", null, best), " pts")), /* @__PURE__ */ React.createElement("div", { className: "rc-grid" }, couponRun.map((x) => /* @__PURE__ */ React.createElement("div", { key: x.pot, className: "rc-card" + (x.stage === "WIN" ? " champ-pick" : "") }, /* @__PURE__ */ React.createElement("div", { className: "rc-top" }, /* @__PURE__ */ React.createElement("span", { className: "rc-flag" }, /* @__PURE__ */ React.createElement(Flag, { t: x.team })), /* @__PURE__ */ React.createElement("span", { className: "rc-name" }, x.team), /* @__PURE__ */ React.createElement("span", { className: "rc-pts" }, x.pts)), /* @__PURE__ */ React.createElement("div", { className: "rc-stage" }, x.stage === "WIN" ? "\u{1F3C6} " : "", STAGE_LABEL[x.stage])))), /* @__PURE__ */ React.createElement("div", { className: "rc-total" }, /* @__PURE__ */ React.createElement("span", null, "Buster total this run"), /* @__PURE__ */ React.createElement("b", null, couponRunTotal, " pts"))), /* @__PURE__ */ React.createElement("button", { className: "resim", onClick: runSim }, /* @__PURE__ */ React.createElement(RotateCcw, { size: 16 }), " Simulate again"), /* @__PURE__ */ React.createElement("div", { className: "sec-lab" }, "The road to the final"), /* @__PURE__ */ React.createElement("div", { className: "bracket" }, /* @__PURE__ */ React.createElement("div", { className: "br-col" }, /* @__PURE__ */ React.createElement("span", { className: "br-lab" }, "Quarter-finals"), /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.qf[0] }), /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.qf[1] }), /* @__PURE__ */ React.createElement("div", { className: "br-spacer" }), /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.qf[2] }), /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.qf[3] })), /* @__PURE__ */ React.createElement("div", { className: "br-col br-mid" }, /* @__PURE__ */ React.createElement("span", { className: "br-lab" }, "Semi-finals"), /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.sf[0] }), /* @__PURE__ */ React.createElement("div", { className: "br-spacer big" }), /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.sf[1] })), /* @__PURE__ */ React.createElement("div", { className: "br-col br-mid" }, /* @__PURE__ */ React.createElement("span", { className: "br-lab" }, "Final"), /* @__PURE__ */ React.createElement("div", { className: "br-final" }, /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.final }), /* @__PURE__ */ React.createElement("div", { className: "br-champ" }, /* @__PURE__ */ React.createElement(Crown, { size: 14 }), " ", CODES[sim.champion])))), /* @__PURE__ */ React.createElement(Collapsible, { title: "Full knockout results" }, /* @__PURE__ */ React.createElement("div", { className: "ko-grid" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ko-rlab" }, "Round of 32"), sim.ko.r32.map((r, k) => /* @__PURE__ */ React.createElement(MatchCard, { key: k, r }))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ko-rlab" }, "Round of 16"), sim.ko.r16.map((r, k) => /* @__PURE__ */ React.createElement(MatchCard, { key: k, r }))))), /* @__PURE__ */ React.createElement(Collapsible, { title: "Group stage \u2014 final tables" }, /* @__PURE__ */ React.createElement("div", { className: "groups-grid" }, Object.keys(sim.groupResults).map((g) => /* @__PURE__ */ React.createElement(GroupMini, { key: g, g, rows: sim.groupResults[g], adv: advSet }))))))), tab === "bookie" && /* @__PURE__ */ React.createElement("div", { className: "bk" }, /* @__PURE__ */ React.createElement("div", { className: "bk-head" }, /* @__PURE__ */ React.createElement("div", { className: "bk-head-l" }, /* @__PURE__ */ React.createElement(Rosette, { className: "bk-rose" }), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "bk-head-t" }, "DALY & McMANUS BOOKMAKERS LTD."), /* @__PURE__ */ React.createElement("div", { className: "bk-head-s" }, "play-money bookmaker \xB7 odds from the model"))), /* @__PURE__ */ React.createElement("div", { className: "bk-bal" }, /* @__PURE__ */ React.createElement("span", { className: "bk-bal-l" }, "Your balance"), /* @__PURE__ */ React.createElement("span", { className: "bk-bal-v" }, "\u20AC", bets.balance.toFixed(2)))), /* @__PURE__ */ React.createElement("div", { className: "bk-sub" }, /* @__PURE__ */ React.createElement("button", { className: bkView === "book" ? "on" : "", onClick: () => setBkView("book") }, "Bookmaker"), /* @__PURE__ */ React.createElement("button", { className: bkView === "alex" ? "on" : "", onClick: () => setBkView("alex") }, "\u{1F3C7} Alex's Corner")), bkView === "alex" ? /* @__PURE__ */ React.createElement(AlexsCorner, { bets, setBets, setToast }) : /* @__PURE__ */ React.createElement("div", { className: "bk-grid" }, /* @__PURE__ */ React.createElement("div", { className: "bk-main" }, slip.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "bk-slip" }, /* @__PURE__ */ React.createElement("div", { className: "bk-slip-h" }, /* @__PURE__ */ React.createElement("span", null, "BET SLIP"), /* @__PURE__ */ React.createElement("button", { onClick: () => setSlip([]) }, /* @__PURE__ */ React.createElement(X, { size: 13 }))), slip.map((s) => {
+  })()), /* @__PURE__ */ React.createElement("div", { className: "champ-meta" }, "\u{1F949} ", /* @__PURE__ */ React.createElement(Flag, { t: sim.thirdPlace }), " ", sim.thirdPlace, " took third \xB7 ", sim.goals, " goals scored across the tournament")), /* @__PURE__ */ React.createElement("div", { className: "run-coupon" }, /* @__PURE__ */ React.createElement("div", { className: "rc-head" }, /* @__PURE__ */ React.createElement("span", null, "YOUR BUSTER THIS RUN"), /* @__PURE__ */ React.createElement("span", { className: "rc-best" }, "Best: ", /* @__PURE__ */ React.createElement("b", null, best), " pts")), /* @__PURE__ */ React.createElement("div", { className: "rc-grid" }, couponRun.map((x) => /* @__PURE__ */ React.createElement("div", { key: x.pot, className: "rc-card" + (x.stage === "WIN" ? " champ-pick" : "") }, /* @__PURE__ */ React.createElement("div", { className: "rc-top" }, /* @__PURE__ */ React.createElement("span", { className: "rc-flag" }, /* @__PURE__ */ React.createElement(Flag, { t: x.team })), /* @__PURE__ */ React.createElement("span", { className: "rc-name" }, x.team), /* @__PURE__ */ React.createElement("span", { className: "rc-pts" }, x.pts)), /* @__PURE__ */ React.createElement("div", { className: "rc-stage" }, x.stage === "WIN" ? "\u{1F3C6} " : "", STAGE_LABEL[x.stage])))), /* @__PURE__ */ React.createElement("div", { className: "rc-total" }, /* @__PURE__ */ React.createElement("span", null, "Buster total this run"), /* @__PURE__ */ React.createElement("b", null, couponRunTotal, " pts"))), /* @__PURE__ */ React.createElement("button", { className: "resim", onClick: runSim }, /* @__PURE__ */ React.createElement(RotateCcw, { size: 16 }), " Simulate again"), /* @__PURE__ */ React.createElement("div", { className: "sec-lab" }, "The road to the final"), /* @__PURE__ */ React.createElement("div", { className: "bracket" }, /* @__PURE__ */ React.createElement("div", { className: "br-col" }, /* @__PURE__ */ React.createElement("span", { className: "br-lab" }, "Quarter-finals"), /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.qf[0] }), /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.qf[1] }), /* @__PURE__ */ React.createElement("div", { className: "br-spacer" }), /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.qf[2] }), /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.qf[3] })), /* @__PURE__ */ React.createElement("div", { className: "br-col br-mid" }, /* @__PURE__ */ React.createElement("span", { className: "br-lab" }, "Semi-finals"), /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.sf[0] }), /* @__PURE__ */ React.createElement("div", { className: "br-spacer big" }), /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.sf[1] })), /* @__PURE__ */ React.createElement("div", { className: "br-col br-mid" }, /* @__PURE__ */ React.createElement("span", { className: "br-lab" }, "Final"), /* @__PURE__ */ React.createElement("div", { className: "br-final" }, /* @__PURE__ */ React.createElement(MatchCard, { r: sim.ko.final }), /* @__PURE__ */ React.createElement("div", { className: "br-champ" }, /* @__PURE__ */ React.createElement(Crown, { size: 14 }), " ", CODES[sim.champion])))), /* @__PURE__ */ React.createElement(Collapsible, { title: "Full knockout results" }, /* @__PURE__ */ React.createElement("div", { className: "ko-grid" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ko-rlab" }, "Round of 32"), sim.ko.r32.map((r, k) => /* @__PURE__ */ React.createElement(MatchCard, { key: k, r }))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ko-rlab" }, "Round of 16"), sim.ko.r16.map((r, k) => /* @__PURE__ */ React.createElement(MatchCard, { key: k, r }))))), /* @__PURE__ */ React.createElement(Collapsible, { title: "Group stage \u2014 final tables" }, /* @__PURE__ */ React.createElement("div", { className: "groups-grid" }, Object.keys(sim.groupResults).map((g) => /* @__PURE__ */ React.createElement(GroupMini, { key: g, g, rows: sim.groupResults[g], adv: advSet }))))))), tab === "bookie" && /* @__PURE__ */ React.createElement("div", { className: "bk" }, /* @__PURE__ */ React.createElement("div", { className: "bk-head" }, /* @__PURE__ */ React.createElement("div", { className: "bk-head-l" }, /* @__PURE__ */ React.createElement(Rosette, { className: "bk-rose" }), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "bk-head-t" }, "DALY & McMANUS BOOKMAKERS LTD."), /* @__PURE__ */ React.createElement("div", { className: "bk-head-s" }, "play-money bookmaker \xB7 odds from the model"))), /* @__PURE__ */ React.createElement("div", { className: "bk-bal" }, /* @__PURE__ */ React.createElement("span", { className: "bk-bal-l" }, "Your balance"), /* @__PURE__ */ React.createElement("span", { className: "bk-bal-v" }, "\u20AC", bets.balance.toFixed(2)))), /* @__PURE__ */ React.createElement("div", { className: "bk-sub" }, /* @__PURE__ */ React.createElement("button", { className: bkView === "book" ? "on" : "", onClick: () => setBkView("book") }, "Bookmaker"), /* @__PURE__ */ React.createElement("button", { className: bkView === "alex" ? "on" : "", onClick: () => setBkView("alex") }, "\u{1F3C7} Alex's Corner"), /* @__PURE__ */ React.createElement("button", { className: bkView === "pot" ? "on" : "", onClick: () => setBkView("pot") }, "\u{1F4B0} Side Pot"), /* @__PURE__ */ React.createElement("button", { className: bkView === "box" ? "on" : "", onClick: () => setBkView("box") }, "\u{1F94A} Fight Night"), /* @__PURE__ */ React.createElement("button", { className: bkView === "casino" ? "on" : "", onClick: () => setBkView("casino") }, "\u{1F3B0} Casino")), bkView === "casino" ? /* @__PURE__ */ React.createElement(Casino, { bets, setBets, setToast }) : bkView === "box" ? /* @__PURE__ */ React.createElement(BoxingNight, { bets, setBets, setToast }) : bkView === "alex" ? /* @__PURE__ */ React.createElement(AlexsCorner, { bets, setBets, setToast }) : bkView === "pot" ? /* @__PURE__ */ React.createElement(SidePotPanel, { potBoard, balance: bets.balance, loan: bets.loan || 0, achievements, shareCard, takeLoan, repayLoan }) : /* @__PURE__ */ React.createElement("div", { className: "bk-grid" }, /* @__PURE__ */ React.createElement("div", { className: "bk-main" }, slip.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "bk-slip" }, /* @__PURE__ */ React.createElement("div", { className: "bk-slip-h" }, /* @__PURE__ */ React.createElement("span", null, "BET SLIP"), /* @__PURE__ */ React.createElement("button", { onClick: () => setSlip([]) }, /* @__PURE__ */ React.createElement(X, { size: 13 }))), slip.map((s) => {
     const fl = flagOf(s);
     return /* @__PURE__ */ React.createElement("div", { key: s.key, className: "bk-sel" }, fl && /* @__PURE__ */ React.createElement("span", { className: "bk-sel-fl" }, /* @__PURE__ */ React.createElement(Flag, { t: fl })), /* @__PURE__ */ React.createElement("span", { className: "bk-sel-l" }, s.label), /* @__PURE__ */ React.createElement("span", { className: "bk-sel-o" }, fmtOdds(s.odds)), /* @__PURE__ */ React.createElement("button", { className: "bk-sel-x", onClick: () => toggleSel(s.key, s.label, s.odds) }, /* @__PURE__ */ React.createElement(X, { size: 12 })));
   }), /* @__PURE__ */ React.createElement("div", { className: "bk-stk" }, /* @__PURE__ */ React.createElement("span", null, slip.length > 1 ? "Acca \xB7 " + slip.length + " picks @ " + fmtOdds(Math.round(slipOdds * 100) / 100) : "Stake (\u20AC)"), /* @__PURE__ */ React.createElement("input", { type: "number", min: "1", value: stake, onChange: (e) => setStake(e.target.value) })), /* @__PURE__ */ React.createElement("div", { className: "bk-ret" }, "Potential return ", /* @__PURE__ */ React.createElement("b", null, "\u20AC", (Math.max(0, +stake || 0) * slipOdds).toFixed(2))), /* @__PURE__ */ React.createElement("button", { className: "bk-place", onClick: placeBet, disabled: !(+stake > 0) || +stake > bets.balance }, "Place bet \xB7 \u20AC", (+stake || 0).toFixed(2)), +stake > bets.balance && /* @__PURE__ */ React.createElement("div", { className: "bk-warn" }, "Not enough funds")), /* @__PURE__ */ React.createElement("div", { className: "bk-sec" }, "To lift the trophy ", oddsLive ? /* @__PURE__ */ React.createElement("span", { className: "bk-livetag" }, "live odds") : null), oddsLive && /* @__PURE__ */ React.createElement("div", { className: "bk-oddsnote" }, "Prices shift as results land \u2014 beaten teams drop off the board."), /* @__PURE__ */ React.createElement("div", { className: "bk-out" }, (showAllOut ? outright : outright.slice(0, 16)).map((o) => {
@@ -2950,7 +3962,7 @@ function App() {
     const kH = "H:" + f.id, kD = "D:" + f.id, kA = "A:" + f.id;
     const qA = "QA:" + f.id, qB = "QB:" + f.id;
     return /* @__PURE__ */ React.createElement("div", { key: f.id, className: "bk-game" }, /* @__PURE__ */ React.createElement("div", { className: "bk-grow" }, /* @__PURE__ */ React.createElement("span", { className: "bk-grp" }, f.label), f.played && /* @__PURE__ */ React.createElement("span", { className: "bk-score" + (f.status === "IN_PLAY" || f.status === "PAUSED" ? " liveon" : "") }, f.hs, "\u2013", f.as, f.status === "FINISHED" ? " FT" : f.status === "IN_PLAY" || f.status === "PAUSED" ? " \xB7 LIVE" : "")), f.isKO ? /* @__PURE__ */ React.createElement("div", { className: "bk-picks bk-picks2" }, /* @__PURE__ */ React.createElement("button", { className: "bk-pick" + (inSlip(qA) ? " sel" : ""), disabled: f.advA == null, onClick: () => f.advA != null && toggleSel(qA, CODES[f.a] + " to go through v " + CODES[f.b], f.advA, f.a) }, /* @__PURE__ */ React.createElement("span", { className: "bk-pf" }, /* @__PURE__ */ React.createElement(Flag, { t: f.a }), " ", CODES[f.a] || f.a || "TBD"), /* @__PURE__ */ React.createElement("span", { className: "bk-po" }, f.advA != null ? fmtOdds(f.advA) : "\u2014")), /* @__PURE__ */ React.createElement("button", { className: "bk-pick" + (inSlip(qB) ? " sel" : ""), disabled: f.advB == null, onClick: () => f.advB != null && toggleSel(qB, CODES[f.b] + " to go through v " + CODES[f.a], f.advB, f.b) }, /* @__PURE__ */ React.createElement("span", { className: "bk-pf" }, /* @__PURE__ */ React.createElement(Flag, { t: f.b }), " ", CODES[f.b] || f.b || "TBD"), /* @__PURE__ */ React.createElement("span", { className: "bk-po" }, f.advB != null ? fmtOdds(f.advB) : "\u2014"))) : /* @__PURE__ */ React.createElement("div", { className: "bk-picks" }, /* @__PURE__ */ React.createElement("button", { className: "bk-pick" + (inSlip(kH) ? " sel" : ""), disabled: f.oH == null, onClick: () => f.oH != null && toggleSel(kH, CODES[f.a] + " to beat " + CODES[f.b], f.oH, f.a) }, /* @__PURE__ */ React.createElement("span", { className: "bk-pf" }, /* @__PURE__ */ React.createElement(Flag, { t: f.a }), " ", CODES[f.a]), /* @__PURE__ */ React.createElement("span", { className: "bk-po" }, f.oH != null ? fmtOdds(f.oH) : "\u2014")), /* @__PURE__ */ React.createElement("button", { className: "bk-pick bk-draw" + (inSlip(kD) ? " sel" : ""), disabled: f.oD == null, onClick: () => f.oD != null && toggleSel(kD, CODES[f.a] + " v " + CODES[f.b] + " \u2014 draw", f.oD) }, /* @__PURE__ */ React.createElement("span", { className: "bk-pf" }, "Draw"), /* @__PURE__ */ React.createElement("span", { className: "bk-po" }, f.oD != null ? fmtOdds(f.oD) : "\u2014")), /* @__PURE__ */ React.createElement("button", { className: "bk-pick" + (inSlip(kA) ? " sel" : ""), disabled: f.oA == null, onClick: () => f.oA != null && toggleSel(kA, CODES[f.b] + " to beat " + CODES[f.a], f.oA, f.b) }, /* @__PURE__ */ React.createElement("span", { className: "bk-pf" }, /* @__PURE__ */ React.createElement(Flag, { t: f.b }), " ", CODES[f.b]), /* @__PURE__ */ React.createElement("span", { className: "bk-po" }, f.oA != null ? fmtOdds(f.oA) : "\u2014"))));
-  }))), bets.open.length > 0 && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "bk-sec" }, "Open bets"), /* @__PURE__ */ React.createElement("div", { className: "bk-bets" }, bets.open.map((b) => /* @__PURE__ */ React.createElement("div", { key: b.id, className: "bk-bet" }, /* @__PURE__ */ React.createElement("div", { className: "bk-bet-top" }, /* @__PURE__ */ React.createElement("span", { className: "bk-bet-name" }, b.sels.length === 1 && flagOf(b.sels[0]) && /* @__PURE__ */ React.createElement(Flag, { t: flagOf(b.sels[0]) }), b.sels.length > 1 ? "Acca \xB7 " + b.sels.length + " picks" : b.sels[0].label), /* @__PURE__ */ React.createElement("span", { className: "bk-bet-o" }, "@ ", fmtOdds(Math.round(b.odds * 100) / 100))), b.sels.length > 1 && /* @__PURE__ */ React.createElement("div", { className: "bk-bet-sels" }, b.sels.map((s) => s.label).join(" \xB7 ")), /* @__PURE__ */ React.createElement("div", { className: "bk-bet-fig" }, /* @__PURE__ */ React.createElement("span", null, "\u20AC", b.stake.toFixed(2), " \u2192 ", /* @__PURE__ */ React.createElement("b", null, "\u20AC", b.ret.toFixed(2))), /* @__PURE__ */ React.createElement("span", { className: "bk-settle" }, /* @__PURE__ */ React.createElement("button", { onClick: () => settleBet(b.id, "won") }, "Won"), /* @__PURE__ */ React.createElement("button", { onClick: () => settleBet(b.id, "lost") }, "Lost"), /* @__PURE__ */ React.createElement("button", { onClick: () => settleBet(b.id, "void") }, "Void"))))))), bets.settled.length > 0 && /* @__PURE__ */ React.createElement(Collapsible, { title: "Settled bets (" + bets.settled.length + ")" }, /* @__PURE__ */ React.createElement("div", { className: "bk-bets" }, bets.settled.map((b) => /* @__PURE__ */ React.createElement("div", { key: b.id, className: "bk-bet bk-" + b.result }, /* @__PURE__ */ React.createElement("div", { className: "bk-bet-top" }, /* @__PURE__ */ React.createElement("span", { className: "bk-bet-name" }, b.sels.length === 1 && flagOf(b.sels[0]) && /* @__PURE__ */ React.createElement(Flag, { t: flagOf(b.sels[0]) }), b.sels.length > 1 ? "Acca \xB7 " + b.sels.length + " picks" : b.sels[0].label), /* @__PURE__ */ React.createElement("span", { className: "bk-res" }, b.result === "won" ? "WON +\u20AC" + b.ret.toFixed(2) : b.result === "void" ? "VOID" : "LOST")))))), /* @__PURE__ */ React.createElement("button", { className: "bk-reset", onClick: resetBank }, /* @__PURE__ */ React.createElement(RotateCcw, { size: 13 }), " Reset bank")), /* @__PURE__ */ React.createElement("aside", { className: "bk-rail" }, /* @__PURE__ */ React.createElement("div", { className: "bk-rail-h" }, "\u{1F4F0} News wire"), /* @__PURE__ */ React.createElement("div", { className: "bk-wire" }, (() => {
+  }))), bets.open.length > 0 && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "bk-sec" }, "Open bets"), /* @__PURE__ */ React.createElement("div", { className: "bk-bets" }, bets.open.map((b) => /* @__PURE__ */ React.createElement("div", { key: b.id, className: "bk-bet" }, /* @__PURE__ */ React.createElement("div", { className: "bk-bet-top" }, /* @__PURE__ */ React.createElement("span", { className: "bk-bet-name" }, b.sels.length === 1 && flagOf(b.sels[0]) && /* @__PURE__ */ React.createElement(Flag, { t: flagOf(b.sels[0]) }), b.sels.length > 1 ? "Acca \xB7 " + b.sels.length + " picks" : b.sels[0].label), /* @__PURE__ */ React.createElement("span", { className: "bk-bet-o" }, "@ ", fmtOdds(Math.round(b.odds * 100) / 100))), b.sels.length > 1 && /* @__PURE__ */ React.createElement("div", { className: "bk-bet-sels" }, b.sels.map((s) => s.label).join(" \xB7 ")), /* @__PURE__ */ React.createElement("div", { className: "bk-bet-fig" }, /* @__PURE__ */ React.createElement("span", null, "\u20AC", b.stake.toFixed(2), " \u2192 ", /* @__PURE__ */ React.createElement("b", null, "\u20AC", b.ret.toFixed(2))), /* @__PURE__ */ React.createElement("span", { className: "bk-pending" }, "\u25CF Pending \u2014 settles on the result")))))), bets.settled.length > 0 && /* @__PURE__ */ React.createElement(Collapsible, { title: "Settled bets (" + bets.settled.length + ")" }, /* @__PURE__ */ React.createElement("div", { className: "bk-bets" }, bets.settled.map((b) => /* @__PURE__ */ React.createElement("div", { key: b.id, className: "bk-bet bk-" + b.result }, /* @__PURE__ */ React.createElement("div", { className: "bk-bet-top" }, /* @__PURE__ */ React.createElement("span", { className: "bk-bet-name" }, b.sels.length === 1 && flagOf(b.sels[0]) && /* @__PURE__ */ React.createElement(Flag, { t: flagOf(b.sels[0]) }), b.sels.length > 1 ? "Acca \xB7 " + b.sels.length + " picks" : b.sels[0].label), /* @__PURE__ */ React.createElement("span", { className: "bk-res" }, b.result === "won" ? "WON +\u20AC" + b.ret.toFixed(2) : b.result === "void" ? "VOID" : "LOST")))))), /* @__PURE__ */ React.createElement("div", { className: "bk-season" }, "Season wallet \xB7 everyone started on \u20AC1,000 \xB7 richest lad when the final whistle blows takes the side pot")), /* @__PURE__ */ React.createElement("aside", { className: "bk-rail" }, /* @__PURE__ */ React.createElement("div", { className: "bk-rail-h" }, "\u{1F4F0} News wire"), /* @__PURE__ */ React.createElement("div", { className: "bk-wire" }, (() => {
     const items = Object.keys(live.news).map((t) => __spreadValues({ t }, live.news[t])).filter((x) => x && x.title);
     if (!items.length) return /* @__PURE__ */ React.createElement("div", { className: "bk-wire-empty" }, live.ok ? "No headlines yet \u2014 they'll appear here as the day's teams make news. It's a free feed, so it can be quiet between games." : "Tap Refresh up top to connect, and the day's headlines will appear here.");
     return items.slice(0, 14).map((x) => /* @__PURE__ */ React.createElement("a", { key: x.t, className: "bk-wire-item", href: x.url || "#", target: "_blank", rel: "noopener noreferrer" }, /* @__PURE__ */ React.createElement("span", { className: "bk-wire-fl" }, /* @__PURE__ */ React.createElement(Flag, { t: x.t })), /* @__PURE__ */ React.createElement("span", { className: "bk-wire-tx" }, /* @__PURE__ */ React.createElement("span", { className: "bk-wire-team" }, x.t), /* @__PURE__ */ React.createElement("span", { className: "bk-wire-title" }, x.title)), x.source && /* @__PURE__ */ React.createElement("span", { className: "bk-wire-src" }, x.source)));
@@ -3226,6 +4238,9 @@ const CSS = `
 .bk-sub{display:flex;gap:6px;margin-bottom:16px;background:#0b1f15;border:1px solid rgba(233,178,60,.25);border-radius:12px;padding:5px}
 .bk-sub button{flex:1;padding:10px 6px;border:none;border-radius:8px;cursor:pointer;background:transparent;color:#9fc4ad;font-family:'Archivo';font-weight:800;font-size:13px;transition:.15s}
 .bk-sub button.on{background:linear-gradient(135deg,#f3c34b,#d99a2b);color:#0a1326}
+.st-sub{display:flex;gap:6px;margin-bottom:16px;background:rgba(94,200,240,.06);border:1px solid rgba(94,200,240,.22);border-radius:12px;padding:5px}
+.st-sub button{flex:1;padding:10px 6px;border:none;border-radius:8px;cursor:pointer;background:transparent;color:var(--muted);font-family:'Archivo';font-weight:800;font-size:13px;transition:.15s}
+.st-sub button.on{background:linear-gradient(135deg,#5EC8F0,#2f9fd0);color:#06121f}
 .bk-md{display:flex;gap:6px;margin-bottom:11px;overflow-x:auto;padding-bottom:5px;-webkit-overflow-scrolling:touch}
 .bk-md button{flex:none;white-space:nowrap;font-family:'Space Mono',monospace;font-size:11.5px;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:9px;padding:8px 12px;cursor:pointer}
 .bk-md button.on{color:#fff;background:linear-gradient(180deg,#16294a,#0f1d39);border-color:var(--ice)}
@@ -3302,6 +4317,88 @@ const CSS = `
 .bk-lost{opacity:.6}
 .bk-res{font-family:'Space Mono',monospace;font-size:11px;font-weight:700}
 .bk-won .bk-res{color:#34d399}.bk-lost .bk-res{color:var(--rose)}
+.bk-pending{font-family:'Space Mono',monospace;font-size:10px;color:var(--rose);opacity:.85;letter-spacing:.02em;white-space:nowrap}
+.bk-season{margin:16px auto 0;max-width:520px;text-align:center;font-family:'Space Mono',monospace;font-size:10px;line-height:1.55;color:rgba(226,232,240,.5)}
+.bk-pot{padding:4px 2px 10px}
+.bk-pot-hd h3{margin:0 0 6px;font-size:19px}
+.bk-pot-hd p{margin:0 0 14px;font-size:13px;line-height:1.55;color:rgba(226,232,240,.72)}
+.bk-pot-me{display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,rgba(56,189,248,.14),rgba(56,189,248,.04));border:1px solid rgba(56,189,248,.3);border-radius:14px;padding:14px 16px;margin-bottom:16px}
+.bk-pot-me>span{font-family:'Space Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:rgba(226,232,240,.6)}
+.bk-pot-me>b{font-size:24px;margin-left:auto;font-variant-numeric:tabular-nums}
+.bk-pot-me>i{font-style:normal;font-family:'Space Mono',monospace;font-size:12px;font-variant-numeric:tabular-nums}
+.bk-pot-me>i.up{color:#34d399}.bk-pot-me>i.down{color:var(--rose)}
+.bk-loan{display:flex;align-items:center;gap:10px;background:rgba(251,113,133,.1);border:1px solid rgba(251,113,133,.3);border-radius:12px;padding:11px 14px;margin:-6px 0 14px}
+.bk-loan>span{font-family:'Space Mono',monospace;font-size:11px;color:var(--rose)}
+.bk-loan>b{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--rose)}
+.bk-loan-repay{padding:7px 12px;border:none;border-radius:8px;background:var(--rose);color:#3a0a12;font-weight:800;font-size:12px;cursor:pointer}
+.bk-loan-take{width:100%;margin:-6px 0 14px;padding:11px;border:1px dashed rgba(251,113,133,.5);border-radius:12px;background:rgba(251,113,133,.06);color:var(--rose);font-weight:700;font-size:13px;cursor:pointer}
+.bk-pot-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.bk-pot-list li{display:flex;align-items:center;gap:11px;padding:11px 13px;background:rgba(148,163,184,.06);border:1px solid rgba(148,163,184,.12);border-radius:11px}
+.bk-pot-list li.lead{background:linear-gradient(135deg,rgba(250,204,21,.14),rgba(250,204,21,.03));border-color:rgba(250,204,21,.34)}
+.bk-pot-list li.me{border-color:rgba(56,189,248,.5)}
+.bk-pot-rk{width:24px;text-align:center;font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:rgba(226,232,240,.6)}
+.bk-pot-nm{font-weight:600;font-size:14px}
+.bk-pot-nm i{font-style:normal;font-size:10px;font-family:'Space Mono',monospace;color:#38bdf8;margin-left:6px;background:rgba(56,189,248,.14);padding:1px 6px;border-radius:6px}
+.bk-pot-bl{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:700;font-size:14px}
+.bk-pot-pl{font-family:'Space Mono',monospace;font-size:11px;font-variant-numeric:tabular-nums;min-width:78px;text-align:right}
+.bk-pot-pl.up{color:#34d399}.bk-pot-pl.down{color:var(--rose)}
+.bk-pot-foot{margin-top:14px;font-family:'Space Mono',monospace;font-size:10px;line-height:1.55;color:rgba(226,232,240,.45)}
+.tabs .nav-ic{font-size:16px;line-height:1;display:inline-flex}
+.gaf-wrap{max-width:640px;margin:0 auto}
+.gaf{background:rgba(148,163,184,.05);border:1px solid var(--line);border-radius:18px;padding:20px}
+.gaf-head{display:flex;align-items:center;gap:13px;margin-bottom:16px}
+.gaf-av{font-size:32px;width:56px;height:56px;display:flex;align-items:center;justify-content:center;background:rgba(94,200,240,.12);border-radius:14px}
+.gaf-t{font-weight:800;font-size:19px}
+.gaf-s{font-family:'Space Mono',monospace;font-size:12px;color:rgba(226,232,240,.6)}
+.gaf-talk{display:flex;flex-direction:column;gap:11px;margin-bottom:16px}
+.gaf-line{margin:0;font-size:16px;line-height:1.5;padding-left:14px;border-left:3px solid rgba(94,200,240,.4)}
+.gaf-bubble{font-size:15px;line-height:1.55;color:rgba(226,232,240,.85)}
+.gaf-btn{width:100%;padding:13px;font-weight:700;font-size:14px;color:#0b1020;background:#5ec8f0;border:none;border-radius:11px;cursor:pointer}
+.gaf-foot{margin-top:14px;font-family:'Space Mono',monospace;font-size:10px;line-height:1.55;color:rgba(226,232,240,.45)}
+.bk-ach{margin-top:18px}
+.bk-ach-h{display:flex;align-items:center;gap:8px;font-weight:800;font-size:15px;margin-bottom:10px}
+.bk-ach-h span{margin-left:auto;font-family:'Space Mono',monospace;font-size:12px;color:rgba(226,232,240,.55)}
+.bk-ach-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bk-ach-b{display:flex;flex-direction:column;gap:2px;padding:11px 12px;border-radius:11px;background:rgba(148,163,184,.05);border:1px solid rgba(148,163,184,.1);opacity:.42}
+.bk-ach-b.got{opacity:1;background:linear-gradient(135deg,rgba(56,189,248,.12),rgba(56,189,248,.03));border-color:rgba(56,189,248,.3)}
+.bk-ach-ic{font-size:23px;line-height:1}
+.bk-ach-t{font-weight:700;font-size:13px}
+.bk-ach-d{font-family:'Space Mono',monospace;font-size:10px;color:rgba(226,232,240,.55)}
+.bk-share{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin-top:16px;padding:13px;font-weight:700;font-size:14px;color:#0b1020;background:#5ec8f0;border:none;border-radius:11px;cursor:pointer}
+.bj-felt{background:linear-gradient(160deg,#16623f,#0d3d27);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:18px;min-height:210px}
+.bj-row{display:flex;flex-direction:column;gap:8px}
+.bj-lbl{font-family:'Space Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.72)}
+.bj-hand{display:flex;gap:8px;flex-wrap:wrap;min-height:64px}
+.bj-empty{color:rgba(255,255,255,.3);font-size:26px;line-height:64px}
+.bj-card{width:46px;height:64px;background:#fff;border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#1a1a1a;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.bj-card b{font-size:18px;line-height:1}.bj-card i{font-size:15px;font-style:normal;line-height:1}
+.bj-card.red{color:#d11}
+.bj-card.back{background:repeating-linear-gradient(45deg,#3a4a8c,#3a4a8c 5px,#2c3a72 5px,#2c3a72 10px)}
+.bj-actions{display:flex;gap:9px}.bj-actions .ac-go{flex:1}
+.lg .bk-pot{margin-top:22px;padding-top:22px;border-top:1px solid var(--line)}
+.lg .gaf{margin-top:22px}
+.bx-canvas{height:300px}
+.bx-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 4px}
+.bx-fighter{position:relative;display:flex;flex-direction:column;gap:3px;align-items:flex-start;text-align:left;padding:13px 13px 13px 18px;background:rgba(148,163,184,.06);border:1.5px solid rgba(148,163,184,.16);border-radius:13px;cursor:pointer;overflow:hidden;color:inherit}
+.bx-fighter .bx-corner{position:absolute;left:0;top:0;bottom:0;width:6px}
+.bx-fighter.red .bx-corner{background:#e23b3b}.bx-fighter.blue .bx-corner{background:#2f7de1}
+.bx-fighter.red.on{border-color:#e23b3b;background:rgba(226,59,59,.12)}
+.bx-fighter.blue.on{border-color:#2f7de1;background:rgba(47,125,225,.12)}
+.bx-fn{font-weight:800;font-size:15px;line-height:1.15}
+.bx-nick{font-family:'Space Mono',monospace;font-size:11px;color:rgba(226,232,240,.72);font-style:italic}
+.bx-meta{font-family:'Space Mono',monospace;font-size:11px;color:rgba(226,232,240,.55);margin-top:2px}
+.cz-tabs{display:flex;gap:7px;margin:12px 0 4px;flex-wrap:wrap}
+.cz-tabs button{flex:1;min-width:84px;padding:9px 6px;font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:rgba(226,232,240,.7);background:rgba(148,163,184,.08);border:1px solid rgba(148,163,184,.16);border-radius:9px;cursor:pointer}
+.cz-tabs button.on{color:#0b1020;background:#ffd34d;border-color:#ffd34d}
+.cz-game{margin-top:10px}
+.cz-canvas{width:100%;height:220px;border-radius:12px;display:block}
+.cz-plinko{height:300px}
+.cz-cash{width:100%;background:#34d399;color:#06281d;font-size:16px;border:none;animation:czpulse 1s infinite}
+@keyframes czpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.025)}}
+.cz-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0}
+.cz-reel{font-size:52px;text-align:center;padding:18px 0;background:rgba(15,20,35,.85);border:2px solid rgba(148,163,184,.2);border-radius:14px;line-height:1}
+.cz-reel.spin{animation:czspin .16s linear infinite}
+@keyframes czspin{0%{transform:translateY(-4px)}50%{transform:translateY(4px)}100%{transform:translateY(-4px)}}
 .bk-reset{display:flex;align-items:center;gap:6px;margin:16px auto 0;font-family:'Space Mono',monospace;font-size:11px;color:var(--rose);background:transparent;border:1px solid rgba(251,113,133,.3);border-radius:8px;padding:8px 13px;cursor:pointer}
 @media (max-width:520px){
   .bk-pf{font-size:11px}
