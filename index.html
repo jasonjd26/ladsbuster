@@ -1936,14 +1936,16 @@ function AlexsCorner({ bets, setBets, setToast }) {
   const buildRace = () => {
     const pool = HORSE_POOL.filter((n) => n !== BANKER);
     const used = /* @__PURE__ */ new Set(), picks = [];
-    while (picks.length < 5) {
+    const includeBanker = Math.random() < 0.6;
+    const need = includeBanker ? 5 : 6;
+    while (picks.length < need) {
       const n = pool[Math.floor(Math.random() * pool.length)];
       if (!used.has(n)) {
         used.add(n);
         picks.push(n);
       }
     }
-    const names = [BANKER, ...picks];
+    const names = includeBanker ? [BANKER, ...picks] : picks.slice();
     for (let i = names.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       const t = names[i];
@@ -1957,6 +1959,7 @@ function AlexsCorner({ bets, setBets, setToast }) {
       const isB = nm === BANKER;
       const rating = isB ? 1.18 : 0.78 + Math.random() * 0.5;
       const ct = COATS[Math.floor(Math.random() * COATS.length)];
+      const fallAt = isB ? Math.random() < 0.75 ? 1 + Math.floor(Math.random() * 3) : -1 : Math.random() < 0.12 ? Math.floor(Math.random() * 4) : -1;
       return {
         name: nm,
         num: i + 1,
@@ -1971,7 +1974,7 @@ function AlexsCorner({ bets, setBets, setToast }) {
         jumped: {},
         fallen: false,
         fellAt: 0,
-        fallAt: isB ? 1 + Math.floor(Math.random() * 3) : -1,
+        fallAt,
         target: 18 + (1.1 - rating) * 4 + Math.random() * 2,
         sp: 0.6 + Math.random() * 0.9,
         ph: Math.random() * 6.28,
@@ -2057,21 +2060,33 @@ function AlexsCorner({ bets, setBets, setToast }) {
     hs.forEach((h, i) => {
       const gy = top + i * laneH + laneH - 8;
       const wx = startPad + h.progress * trackLen;
+      if (h.fallen) {
+        const age = t - h.fellAt;
+        if (age < 0) return;
+        const alpha = Math.max(0, 1 - age / 0.9);
+        if (alpha <= 0) return;
+        const sx2 = wx - cameraX;
+        if (sx2 < -50 || sx2 > W + 60) return;
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        const drop = Math.min(11, age * 26);
+        drawHorse(ctx, sx2, gy + drop, 0, h.silk, h.saddle, h.coat, { fallen: true, mane: h.mane });
+        ctx.fillStyle = "#ffd9df";
+        ctx.font = "bold 9px Archivo,sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("FELL", sx2, gy - 34);
+        ctx.textAlign = "left";
+        ctx.restore();
+        return;
+      }
       const sx = Math.max(GUT + 14, wx - cameraX);
       let yoff = 0;
       if (t < h.jumpUntil) {
         const jp = 1 - (h.jumpUntil - t) / 0.5;
         yoff = -30 * Math.sin(Math.PI * Math.max(0, Math.min(1, jp)));
       }
-      const gait = h.fallen ? 0 : t * 9 * (0.6 + h.progress * 0.6) + i * 1.3;
-      drawHorse(ctx, sx, gy + yoff, gait, h.silk, h.saddle, h.coat, { fallen: h.fallen, mane: h.mane });
-      if (h.isBanker && h.fallen) {
-        ctx.fillStyle = "#ffd9df";
-        ctx.font = "bold 9px Archivo,sans-serif";
-        ctx.textAlign = "center";
-        ctx.fillText("DNF", sx, gy - 34);
-        ctx.textAlign = "left";
-      }
+      const gait = t * 9 * (0.6 + h.progress * 0.6) + i * 1.3;
+      drawHorse(ctx, sx, gy + yoff, gait, h.silk, h.saddle, h.coat, { fallen: false, mane: h.mane });
     });
     ctx.fillStyle = "rgba(10,20,14,.85)";
     ctx.fillRect(0, top, GUT, H - top - 8);
@@ -2126,7 +2141,7 @@ function AlexsCorner({ bets, setBets, setToast }) {
         HURDLES.forEach((hp, hi) => {
           if (h.progress >= hp && !h.jumped[hi]) {
             h.jumped[hi] = true;
-            if (h.isBanker && hi === h.fallAt) {
+            if (h.fallAt >= 0 && hi === h.fallAt) {
               h.fallen = true;
               h.fellAt = t;
             } else h.jumpUntil = t + 0.5;
@@ -2139,6 +2154,13 @@ function AlexsCorner({ bets, setBets, setToast }) {
         const w = R.hs.findIndex((h) => h.progress >= 1);
         if (w >= 0) {
           R.winner = w;
+          R.finishT = t;
+        } else if (!R.hs.some((h) => !h.fallen && h.progress < 1)) {
+          let bi = 0;
+          R.hs.forEach((h, idx) => {
+            if (h.progress > R.hs[bi].progress) bi = idx;
+          });
+          R.winner = bi;
           R.finishT = t;
         }
       }
