@@ -3230,7 +3230,7 @@ function App() {
     });
     setLeague(function (L) {
       var g = L.group || {}, ng = null;
-      FIXTURES.forEach(function (f) {
+      GROUP_FIXTURES.forEach(function (f) {
         var fwd = byPair[f.a + "|" + f.b], rev = byPair[f.b + "|" + f.a];
         if (!fwd && !rev) return;
         var ga = fwd ? fwd.hs : rev.as, gb = fwd ? fwd.as : rev.hs;
