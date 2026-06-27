@@ -3219,6 +3219,30 @@ function App() {
   const couponRunTotal = couponRun.reduce((s, x) => s + x.pts, 0);
   const advSet = sim ? new Set(Object.keys(sim.fin).filter((t) => sim.fin[t] !== "GROUP")) : /* @__PURE__ */ new Set();
   const lgRes = { group: league.group, ko: league.ko };
+  useEffect(() => {
+    if (!live.matches || !live.matches.length) return;
+    var ALIAS = { "Bosnia-Herzegovina": "Bosnia", "Cape Verde Islands": "Cape Verde", "Czech Republic": "Czechia", "Korea Republic": "South Korea", "IR Iran": "Iran", "United States": "USA", "Turkiye": "Turkey" };
+    var nm = function (x) { return ALIAS[x] || x; };
+    var byPair = {};
+    live.matches.forEach(function (m) {
+      if (!m || m.stage !== "GROUP_STAGE" || m.status !== "FINISHED" || m.hs == null || m.as == null) return;
+      byPair[nm(m.home) + "|" + nm(m.away)] = { hs: +m.hs, as: +m.as };
+    });
+    setLeague(function (L) {
+      var g = L.group || {}, ng = null;
+      FIXTURES.forEach(function (f) {
+        var fwd = byPair[f.a + "|" + f.b], rev = byPair[f.b + "|" + f.a];
+        if (!fwd && !rev) return;
+        var ga = fwd ? fwd.hs : rev.as, gb = fwd ? fwd.as : rev.hs;
+        var cur = g[f.id] || {};
+        if (String(cur.ga) !== String(ga) || String(cur.gb) !== String(gb)) {
+          if (!ng) ng = Object.assign({}, g);
+          ng[f.id] = { ga: ga, gb: gb };
+        }
+      });
+      return ng ? Object.assign({}, L, { group: ng }) : L;
+    });
+  }, [live.matches]);
   const meIdx = PLAYERS.indexOf(me);
   const liveKo = useMemo(() => {
     const pts = {};
