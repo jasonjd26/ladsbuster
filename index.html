@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-<title>Daly Sport Co. — World Cup 2026</title>
-<meta name="description" content="Daly Sport Co. — World Cup 2026 sweepstake, scouting, bookie and live simulator."/>
+<title>Daly Sport Co. ‚Äî World Cup 2026</title>
+<meta name="description" content="Daly Sport Co. ‚Äî World Cup 2026 sweepstake, scouting, bookie and live simulator."/>
 <meta name="theme-color" content="#0a1326"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="mobile-web-app-capable" content="yes"/>
@@ -16,7 +16,7 @@
 <style>html,body{margin:0;padding:0;background:#070d1c}#root{min-height:100vh}img{-webkit-user-drag:none}</style>
 </head>
 <body>
-<div id="root"><div style="color:#9fb4d6;font:15px/1.6 system-ui,-apple-system,sans-serif;padding:40px 24px;max-width:480px;margin:0 auto;text-align:center">Loading The Oracle…<br><br><span style="font-size:13px;color:#6b82a6">If this stays blank, this page needs to run JavaScript — open it in a web browser (Chrome or Safari) or via its hosted link, not a file preview.</span></div></div>
+<div id="root"><div style="color:#9fb4d6;font:15px/1.6 system-ui,-apple-system,sans-serif;padding:40px 24px;max-width:480px;margin:0 auto;text-align:center">Loading The Oracle‚Ä¶<br><br><span style="font-size:13px;color:#6b82a6">If this stays blank, this page needs to run JavaScript ‚Äî open it in a web browser (Chrome or Safari) or via its hosted link, not a file preview.</span></div></div>
 <script>/**
  * @license React
  * react.production.min.js
@@ -2287,21 +2287,32 @@ function BoxingNight({ bets, setBets, setToast }) {
     }
     if (punch) ctx.translate(face * punch * 6, 0);
     ctx.lineCap = "round";
-    ctx.strokeStyle = "#2a3346";
-    ctx.lineWidth = 11;
+    // Trunks (shorts) - use team color so they're visible
+    ctx.strokeStyle = col;
+    ctx.lineWidth = 12;
     ctx.beginPath();
-    ctx.moveTo(-9, -2);
+    ctx.moveTo(-9, -14);
     ctx.lineTo(-11, -46);
-    ctx.moveTo(10, -2);
+    ctx.moveTo(10, -14);
     ctx.lineTo(12, -46);
     ctx.stroke();
-    ctx.strokeStyle = "#eaeff7";
-    ctx.lineWidth = 11;
+    // Lower leg / shin - skin tone
+    ctx.strokeStyle = skin;
+    ctx.lineWidth = 10;
     ctx.beginPath();
     ctx.moveTo(-9, -2);
-    ctx.lineTo(-10, -12);
+    ctx.lineTo(-10, -18);
     ctx.moveTo(10, -2);
-    ctx.lineTo(11, -12);
+    ctx.lineTo(11, -18);
+    ctx.stroke();
+    // Boxing boots - dark
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 10;
+    ctx.beginPath();
+    ctx.moveTo(-10, -2);
+    ctx.lineTo(-14, 2);
+    ctx.moveTo(11, -2);
+    ctx.lineTo(15, 2);
     ctx.stroke();
     const tg = ctx.createLinearGradient(0, -66, 0, -44);
     tg.addColorStop(0, col);
@@ -2479,12 +2490,12 @@ function BoxingNight({ bets, setBets, setToast }) {
         } else {
           S2.roundClock += dt;
           S2.exchClock += dt;
-          if (S2.exchClock > 0.32) {
+          if (S2.exchClock > 0.24) {
             S2.exchClock = 0;
             const aggressorA = A2.speed * (0.7 + Math.random() * 0.6) >= B2.speed * (0.7 + Math.random() * 0.6);
             const att = aggressorA ? A2 : B2, def = aggressorA ? B2 : A2;
-            if (Math.random() < 0.45 + (att.speed - def.speed) * 0.02) {
-              const dmg = Math.max(2, att.power * 2.2 / (def.chin * 0.5 + 3) * (0.6 + Math.random() * 0.9));
+            if (Math.random() < 0.52 + (att.speed - def.speed) * 0.025) {
+              const dmg = Math.max(4, att.power * 5.5 / (def.chin * 0.35 + 1.8) * (0.65 + Math.random() * 0.85));
               if (aggressorA) {
                 S2.hpB = Math.max(0, S2.hpB - dmg);
                 S2.punchA = 1;
@@ -2820,101 +2831,204 @@ function PlinkoGame({ bets, setBets, setToast }) {
   return /* @__PURE__ */ React.createElement("div", { className: "cz-game" }, /* @__PURE__ */ React.createElement("canvas", { ref: cv, className: "cz-canvas cz-plinko" }), msg && /* @__PURE__ */ React.createElement("div", { className: "ac-result " + (msg.win ? "win" : "lose") }, msg.t), phase !== "done" ? /* @__PURE__ */ React.createElement("div", { className: "ac-bet" }, /* @__PURE__ */ React.createElement("div", { className: "ac-stake" }, /* @__PURE__ */ React.createElement("span", null, "\u20AC"), /* @__PURE__ */ React.createElement("input", { type: "number", min: "1", value: stake, onChange: (e) => setStake(e.target.value), disabled: phase === "dropping" })), /* @__PURE__ */ React.createElement("button", { className: "ac-go", onClick: drop, disabled: phase === "dropping" || !(+stake > 0) || +stake > bets.balance }, phase === "dropping" ? "Dropping\u2026" : "Drop \u20AC" + (+stake || 0).toFixed(2))) : /* @__PURE__ */ React.createElement("button", { className: "ac-go ac-again", onClick: reset }, "Drop again \u2192"), /* @__PURE__ */ React.createElement("div", { className: "ac-foot" }, "Edges pay 8\xD7; the middle is where balls go to die (0.3\xD7). Pure luck. Play money only."));
 }
 function BlackjackGame({ bets, setBets, setToast }) {
-  const SUITS = ["\u2660", "\u2665", "\u2666", "\u2663"], RANKS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
-  const draw1 = () => ({ r: RANKS[Math.floor(Math.random() * 13)], s: SUITS[Math.floor(Math.random() * 4)] });
+  const SUITS = ["‚ô†", "‚ô•", "‚ô¶", "‚ô£"], RANKS = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+  const buildShoe = () => {
+    const shoe = [];
+    for (let d = 0; d < 6; d++) SUITS.forEach(s => RANKS.forEach(r => shoe.push({r,s})));
+    for (let i = shoe.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i+1)); [shoe[i], shoe[j]] = [shoe[j], shoe[i]]; }
+    return shoe;
+  };
+  const [shoe, setShoe] = React.useState(buildShoe);
+  const shoeRef = React.useRef(shoe);
+  const draw1 = () => {
+    if (shoeRef.current.length < 60) { const s = buildShoe(); shoeRef.current = s; setShoe(s); }
+    const card = shoeRef.current.pop();
+    setShoe([...shoeRef.current]);
+    return card;
+  };
   const val = (hand) => {
     let t = 0, aces = 0;
-    hand.forEach((c) => {
-      if (c.r === "A") {
-        t += 11;
-        aces++;
-      } else if (c.r === "K" || c.r === "Q" || c.r === "J") t += 10;
-      else t += +c.r;
-    });
-    while (t > 21 && aces > 0) {
-      t -= 10;
-      aces--;
-    }
+    hand.forEach(c => { if (c.r==="A"){t+=11;aces++;} else if(["K","Q","J"].includes(c.r))t+=10; else t+=+c.r; });
+    while (t > 21 && aces > 0) { t-=10; aces--; }
     return t;
   };
-  const [stake, setStake] = useState(10);
-  const [phase, setPhase] = useState("idle");
-  const [player, setPlayer] = useState([]);
-  const [dealer, setDealer] = useState([]);
-  const [msg, setMsg] = useState(null);
+  const isBlackjack = h => h.length === 2 && val(h) === 21;
+  const canSplit = (h) => h.length === 2 && h[0].r === h[1].r;
+  const [stake, setStake] = React.useState(10);
+  const [phase, setPhase] = React.useState("idle");
+  const [player, setPlayer] = React.useState([]);
+  const [split, setSplit] = React.useState(null);
+  const [splitActive, setSplitActive] = React.useState(0);
+  const [dealer, setDealer] = React.useState([]);
+  const [doubled, setDoubled] = React.useState(false);
+  const [msg, setMsg] = React.useState(null);
+  const [insurance, setInsurance] = React.useState(null);
+
+  const deductStake = (amt) => {
+    if (amt > bets.balance) { setToast("Not enough funds"); return false; }
+    setBets(b => ({...b, balance: Math.round((b.balance - amt) * 100) / 100}));
+    return true;
+  };
+  const addWin = (amt) => setBets(b => ({...b, balance: Math.round((b.balance + amt) * 100) / 100}));
+
+  const resolveSingle = (pHand, dHand, st, isDouble) => {
+    const pv = val(pHand), dv = val(dHand);
+    const pBJ = isBlackjack(pHand);
+    if (pBJ && !isBlackjack(dHand)) { addWin(Math.round(st * 2.5 * 100)/100); return { t: "Blackjack! üÉè", win: true }; }
+    if (dv > 21) { addWin(st * 2); return { t: "Dealer busts " + dv + " ‚Äî you win!", win: true }; }
+    if (pv > dv) { addWin(st * 2); return { t: "You win! " + pv + " vs " + dv, win: true }; }
+    if (pv === dv && pBJ === isBlackjack(dHand)) { addWin(st); return { t: "Push ‚Äî " + pv + " each", win: null }; }
+    return { t: "Dealer wins " + dv + " to " + pv, win: false };
+  };
+
   const deal = () => {
     if (phase === "player") return;
     const st = +stake;
-    if (!(st > 0)) {
-      setToast("Enter a stake first");
-      return;
-    }
-    if (st > bets.balance) {
-      setToast("Not enough funds");
-      return;
-    }
-    setBets((b) => __spreadProps(__spreadValues({}, b), { balance: Math.round((b.balance - st) * 100) / 100 }));
-    setMsg(null);
+    if (!(st > 0)) { setToast("Enter a stake"); return; }
+    if (!deductStake(st)) return;
+    setDoubled(false); setSplit(null); setSplitActive(0); setMsg(null); setInsurance(null);
     const pp = [draw1(), draw1()], dd = [draw1(), draw1()];
-    setPlayer(pp);
-    setDealer(dd);
-    if (val(pp) === 21) {
-      const pay = Math.round(st * 2.5 * 100) / 100;
-      setBets((b) => __spreadProps(__spreadValues({}, b), { balance: Math.round((b.balance + pay) * 100) / 100 }));
-      setMsg({ t: "Blackjack! \u20AC" + pay.toFixed(2) + " \u{1F389}", win: true });
-      setToast("\u{1F0CF} Blackjack \u2014 \u20AC" + pay.toFixed(2) + "!");
-      setPhase("done");
-      return;
+    setPlayer(pp); setDealer(dd);
+    if (isBlackjack(pp)) {
+      let finalMsg;
+      if (dd[0].r === "A") {
+        // Offer insurance before revealing BJ
+        finalMsg = resolveSingle(pp, dd, st, false);
+      } else {
+        finalMsg = resolveSingle(pp, dd, st, false);
+      }
+      setMsg(finalMsg);
+      setPhase("done"); return;
+    }
+    if (dd[0].r === "A" && st * 0.5 <= bets.balance) {
+      setInsurance("offer");
     }
     setPhase("player");
   };
-  const hit = () => {
+
+  const takeInsurance = () => {
+    const st = +stake;
+    if (!deductStake(st * 0.5)) return;
+    setInsurance("taken");
+  };
+  const declineInsurance = () => setInsurance("declined");
+
+  const hit = (forSplit = false) => {
     if (phase !== "player") return;
-    const pp = [...player, draw1()];
-    setPlayer(pp);
-    if (val(pp) > 21) {
-      setMsg({ t: "Bust on " + val(pp) + ". Hard luck.", win: false });
-      setToast("\u{1F4A5} Bust on " + val(pp));
-      setPhase("done");
+    if (forSplit && split !== null) {
+      const newSplit = [...split, draw1()];
+      setSplit(newSplit);
+      if (val(newSplit) > 21) {
+        if (splitActive === 1) finishHands([...player], newSplit);
+        else { setSplitActive(1); }
+      }
+    } else {
+      const pp = [...player, draw1()];
+      setPlayer(pp);
+      if (val(pp) > 21) {
+        if (split !== null) { setSplitActive(1); }
+        else { finishHands(pp, split); }
+      }
     }
   };
-  const stand = () => {
+
+  const doStand = (forSplit = false) => {
     if (phase !== "player") return;
+    if (split !== null && !forSplit && splitActive === 0) {
+      setSplitActive(1); return;
+    }
+    finishHands(splitActive === 1 ? [...player] : [...player], split ? [...split] : null);
+  };
+
+  const doDouble = () => {
+    if (phase !== "player" || player.length !== 2) return;
     const st = +stake;
+    if (!deductStake(st)) return;
+    setDoubled(true);
+    const pp = [...player, draw1()];
+    setPlayer(pp);
+    finishHands(pp, split);
+  };
+
+  const doSplit = () => {
+    if (!canSplit(player)) return;
+    const st = +stake;
+    if (!deductStake(st)) return;
+    const hand1 = [player[0], draw1()];
+    const hand2 = [player[1], draw1()];
+    setPlayer(hand1);
+    setSplit(hand2);
+    setSplitActive(0);
+    setInsurance(null);
+  };
+
+  const finishHands = (pHand, sHand) => {
     let dd = [...dealer];
     while (val(dd) < 17) dd.push(draw1());
     setDealer(dd);
-    const pv = val(player), dv = val(dd);
-    let res, win = false, pay = 0;
-    if (dv > 21) {
-      res = "Dealer busts on " + dv + " \u2014 you win!";
-      win = true;
-      pay = st * 2;
-    } else if (pv > dv) {
-      res = "You win, " + pv + " to " + dv + "!";
-      win = true;
-      pay = st * 2;
-    } else if (pv === dv) {
-      res = "Push on " + pv + " \u2014 stake back.";
-      pay = st;
-    } else {
-      res = "Dealer wins " + dv + " to " + pv + ".";
+    const st = +stake * (doubled ? 2 : 1);
+    // Check insurance
+    if (insurance === "taken" && isBlackjack(dd)) {
+      addWin(st * 0.5 * 3); // insurance pays 2:1
+      setToast("Insurance paid!");
     }
-    if (pay > 0) setBets((b) => __spreadProps(__spreadValues({}, b), { balance: Math.round((b.balance + pay) * 100) / 100 }));
-    setMsg({ t: res, win });
-    if (win) setToast("\u{1F0CF} \u20AC" + (Math.round(st * 2 * 100) / 100).toFixed(2) + " \u2014 winner!");
+    const r1 = resolveSingle(pHand, dd, st, doubled);
+    let msgs = [r1.t];
+    if (sHand !== null) {
+      const r2 = resolveSingle(sHand, dd, +stake, false);
+      msgs.push("Split hand: " + r2.t);
+    }
+    setMsg({ t: msgs.join(" ¬∑ "), win: r1.win });
     setPhase("done");
+    if (r1.win) setToast("üÉè ‚Ç¨" + (st*2).toFixed(2) + " ‚Äî winner!");
   };
-  const next = () => {
-    setPhase("idle");
-    setPlayer([]);
-    setDealer([]);
-    setMsg(null);
-  };
+
+  const next = () => { setPhase("idle"); setPlayer([]); setDealer([]); setSplit(null); setDoubled(false); setMsg(null); setInsurance(null); setSplitActive(0); };
+
   const showDealer = phase === "done";
-  const Card = ({ c, hidden }) => /* @__PURE__ */ React.createElement("span", { className: "bj-card" + (c && (c.s === "\u2665" || c.s === "\u2666") ? " red" : "") + (hidden ? " back" : "") }, hidden || !c ? null : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("b", null, c.r), /* @__PURE__ */ React.createElement("i", null, c.s)));
-  return /* @__PURE__ */ React.createElement("div", { className: "cz-game bj" }, /* @__PURE__ */ React.createElement("div", { className: "bj-felt" }, /* @__PURE__ */ React.createElement("div", { className: "bj-row" }, /* @__PURE__ */ React.createElement("span", { className: "bj-lbl" }, "Dealer", showDealer ? " \xB7 " + val(dealer) : ""), /* @__PURE__ */ React.createElement("div", { className: "bj-hand" }, dealer.length ? dealer.map((c, i) => /* @__PURE__ */ React.createElement(Card, { key: i, c, hidden: !showDealer && i === 1 })) : /* @__PURE__ */ React.createElement("span", { className: "bj-empty" }, "\u2014"))), /* @__PURE__ */ React.createElement("div", { className: "bj-row" }, /* @__PURE__ */ React.createElement("span", { className: "bj-lbl" }, "You", player.length ? " \xB7 " + val(player) : ""), /* @__PURE__ */ React.createElement("div", { className: "bj-hand" }, player.length ? player.map((c, i) => /* @__PURE__ */ React.createElement(Card, { key: i, c })) : /* @__PURE__ */ React.createElement("span", { className: "bj-empty" }, "\u2014")))), msg && /* @__PURE__ */ React.createElement("div", { className: "ac-result " + (msg.win ? "win" : "lose") }, msg.t), phase === "player" ? /* @__PURE__ */ React.createElement("div", { className: "bj-actions" }, /* @__PURE__ */ React.createElement("button", { className: "ac-go", onClick: hit }, "Hit"), /* @__PURE__ */ React.createElement("button", { className: "ac-go ac-again", onClick: stand }, "Stand")) : phase === "done" ? /* @__PURE__ */ React.createElement("button", { className: "ac-go ac-again", onClick: next }, "New hand \u2192") : /* @__PURE__ */ React.createElement("div", { className: "ac-bet" }, /* @__PURE__ */ React.createElement("div", { className: "ac-stake" }, /* @__PURE__ */ React.createElement("span", null, "\u20AC"), /* @__PURE__ */ React.createElement("input", { type: "number", min: "1", value: stake, onChange: (e) => setStake(e.target.value) })), /* @__PURE__ */ React.createElement("button", { className: "ac-go", onClick: deal, disabled: !(+stake > 0) || +stake > bets.balance }, "Deal \u20AC", (+stake || 0).toFixed(2))), /* @__PURE__ */ React.createElement("div", { className: "ac-foot" }, "Dealer stands on 17 \xB7 blackjack pays 3:2 \xB7 play money only."));
+  const Card = ({ c, hidden }) => /* @__PURE__ */ React.createElement("span", { className: "bj-card" + (c && (c.s==="‚ô•"||c.s==="‚ô¶") ? " red" : "") + (hidden ? " back" : "") },
+    hidden || !c ? null : /* @__PURE__ */ React.createElement(React.Fragment, null,
+      /* @__PURE__ */ React.createElement("b", null, c.r),
+      /* @__PURE__ */ React.createElement("i", null, c.s)));
+
+  return /* @__PURE__ */ React.createElement("div", { className: "cz-game bj" },
+    /* @__PURE__ */ React.createElement("div", { className: "bj-felt" },
+      /* @__PURE__ */ React.createElement("div", { className: "bj-row" },
+        /* @__PURE__ */ React.createElement("span", { className: "bj-lbl" }, "Dealer", showDealer ? " ¬∑ " + val(dealer) : ""),
+        /* @__PURE__ */ React.createElement("div", { className: "bj-hand" },
+          dealer.length ? dealer.map((c, i) => /* @__PURE__ */ React.createElement(Card, { key: i, c, hidden: !showDealer && i === 1 }))
+          : /* @__PURE__ */ React.createElement("span", { className: "bj-empty" }, "‚Äî"))),
+      /* @__PURE__ */ React.createElement("div", { className: "bj-row" },
+        /* @__PURE__ */ React.createElement("span", { className: "bj-lbl" }, "You", player.length ? " ¬∑ " + val(player) : ""),
+        /* @__PURE__ */ React.createElement("div", { className: "bj-hand" },
+          player.length ? player.map((c, i) => /* @__PURE__ */ React.createElement(Card, { key: i, c }))
+          : /* @__PURE__ */ React.createElement("span", { className: "bj-empty" }, "‚Äî"))),
+      split !== null && /* @__PURE__ */ React.createElement("div", { className: "bj-row" },
+        /* @__PURE__ */ React.createElement("span", { className: "bj-lbl" }, "Split hand", split.length ? " ¬∑ " + val(split) : "", splitActive === 1 ? " (active)" : ""),
+        /* @__PURE__ */ React.createElement("div", { className: "bj-hand" },
+          split.map((c, i) => /* @__PURE__ */ React.createElement(Card, { key: i, c }))))),
+    insurance === "offer" && phase === "player" && /* @__PURE__ */ React.createElement("div", { className: "bj-insurance" },
+      /* @__PURE__ */ React.createElement("span", null, "Dealer shows Ace ‚Äî Insurance?"),
+      /* @__PURE__ */ React.createElement("button", { className: "ac-go", style: {flex:"none",padding:"6px 14px",fontSize:12}, onClick: takeInsurance }, "Take (‚Ç¨" + (+stake * 0.5).toFixed(2) + ")"),
+      /* @__PURE__ */ React.createElement("button", { className: "ac-go ac-again", style: {flex:"none",padding:"6px 14px",fontSize:12}, onClick: declineInsurance }, "No thanks")),
+    msg && /* @__PURE__ */ React.createElement("div", { className: "ac-result " + (msg.win ? "win" : msg.win === false ? "lose" : "") }, msg.t),
+    phase === "player" ? /* @__PURE__ */ React.createElement("div", { className: "bj-actions" },
+      /* @__PURE__ */ React.createElement("button", { className: "ac-go", onClick: () => hit(splitActive === 1) }, "Hit"),
+      /* @__PURE__ */ React.createElement("button", { className: "ac-go ac-again", onClick: () => doStand(splitActive === 1) }, "Stand"),
+      split === null && player.length === 2 && bets.balance >= +stake && /* @__PURE__ */ React.createElement("button", { className: "ac-go", style:{background:"#b8860b"}, onClick: doDouble }, "Double"),
+      split === null && canSplit(player) && bets.balance >= +stake && /* @__PURE__ */ React.createElement("button", { className: "ac-go", style:{background:"#5a3a8a"}, onClick: doSplit }, "Split"))
+    : phase === "done" ? /* @__PURE__ */ React.createElement("div", { className: "bj-actions" },
+      /* @__PURE__ */ React.createElement("button", { className: "ac-go ac-again", onClick: next }, "‚ñ∂ Next hand"))
+    : /* @__PURE__ */ React.createElement(React.Fragment, null,
+      /* @__PURE__ */ React.createElement("div", { className: "bj-stake" },
+        /* @__PURE__ */ React.createElement("span", null, "Stake"),
+        /* @__PURE__ */ React.createElement("button", { className: "bj-adj", onClick: () => setStake(s => Math.max(1, +s - 5)) }, "-"),
+        /* @__PURE__ */ React.createElement("input", { type: "number", className: "bj-stk-in", value: stake, min: 1, onChange: e => setStake(Math.max(1, +e.target.value || 1)) }),
+        /* @__PURE__ */ React.createElement("button", { className: "bj-adj", onClick: () => setStake(s => Math.min(bets.balance, +s + 5)) }, "+"),
+        /* @__PURE__ */ React.createElement("span", { style: {fontSize:11,color:"var(--muted)"} }, "Shoe: ", shoe.length, " cards")),
+      /* @__PURE__ */ React.createElement("button", { className: "ac-go", onClick: deal }, "Deal")));
 }
+
 function Casino({ bets, setBets, setToast }) {
   const [game, setGame] = useState("crash");
   return /* @__PURE__ */ React.createElement("div", { className: "ac cz" }, /* @__PURE__ */ React.createElement("div", { className: "ac-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "ac-t" }, "\u{1F3B0} The Casino"), /* @__PURE__ */ React.createElement("div", { className: "ac-s" }, "house games \xB7 all play money \xB7 all into your side-pot wallet")), /* @__PURE__ */ React.createElement("div", { className: "ac-bal" }, /* @__PURE__ */ React.createElement("span", null, "Wallet"), /* @__PURE__ */ React.createElement("b", null, "\u20AC", bets.balance.toFixed(2)))), /* @__PURE__ */ React.createElement("div", { className: "cz-tabs" }, /* @__PURE__ */ React.createElement("button", { className: game === "crash" ? "on" : "", onClick: () => setGame("crash") }, "\u{1F4C8} Crash"), /* @__PURE__ */ React.createElement("button", { className: game === "slots" ? "on" : "", onClick: () => setGame("slots") }, "\u{1F3B0} Slots"), /* @__PURE__ */ React.createElement("button", { className: game === "plinko" ? "on" : "", onClick: () => setGame("plinko") }, "\u{1F53B} Plinko"), /* @__PURE__ */ React.createElement("button", { className: game === "blackjack" ? "on" : "", onClick: () => setGame("blackjack") }, "\u{1F0CF} Blackjack")), game === "crash" ? /* @__PURE__ */ React.createElement(CrashGame, { bets, setBets, setToast }) : game === "slots" ? /* @__PURE__ */ React.createElement(SlotsGame, { bets, setBets, setToast }) : game === "plinko" ? /* @__PURE__ */ React.createElement(PlinkoGame, { bets, setBets, setToast }) : /* @__PURE__ */ React.createElement(BlackjackGame, { bets, setBets, setToast }));
@@ -3012,6 +3126,7 @@ function App() {
   const [runs, setRuns] = useState(0);
   const [league, setLeague] = useState(loadLeague);
   const [manage, setManage] = useState(false);
+  const [fxDate, setFxDate] = useState("");
   const [lgView, setLgView] = useState("table");
   const [mView, setMView] = useState("results");
   const [koRound, setKoRound] = useState("Round of 32");
@@ -3047,6 +3162,14 @@ function App() {
       if (me) localStorage.setItem("wc26me", me);
       else localStorage.removeItem("wc26me");
     } catch (e) {
+    }
+  }, [me]);
+  useEffect(() => {
+    if (me && PLAYER_PICKS[me]) {
+      const arr = PLAYER_PICKS[me];
+      const obj = {};
+      Object.keys(POTS).forEach((p, idx) => { obj[+p] = arr[idx] || null; });
+      setPicks(obj);
     }
   }, [me]);
   const total = useMemo(() => Object.keys(picks).reduce((s, p) => {
@@ -3856,7 +3979,15 @@ function App() {
       pullLeague();
     }
   }, []);
+  // Auto-refresh every 30s while matches are live
+  useEffect(() => {
+    const hasLive = (live.matches || []).some(m => m.status === "IN_PLAY" || m.status === "PAUSED");
+    if (!hasLive) return;
+    const id = setInterval(() => refreshLive(), 30000);
+    return () => clearInterval(id);
+  }, [live.matches]);
   const liveGroups = live.matches ? live.matches.filter((m) => m.stage === "GROUP_STAGE") : null;
+  const liveMatchCount = (live.matches || []).filter(m => m.status === "IN_PLAY" || m.status === "PAUSED").length;
   const schedule = useMemo(() => {
     if (!live.matches || !live.matches.length) return null;
     const byDate = {};
@@ -3923,12 +4054,12 @@ function App() {
       fetchNewsFor(tt);
     }
   }, [tab, selDate, live.matches]);
-  return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("style", null, CSS), /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("div", { className: "bg-glow" }), /* @__PURE__ */ React.createElement("header", { className: "top" }, /* @__PURE__ */ React.createElement("div", { className: "brand" }, /* @__PURE__ */ React.createElement("div", { className: "mark" }, /* @__PURE__ */ React.createElement(WCTrophy, { className: "mark-tro" })), /* @__PURE__ */ React.createElement("div", { className: "brand-tx" }, /* @__PURE__ */ React.createElement("div", { className: "brand-t" }, "DALY SPORT CO."), /* @__PURE__ */ React.createElement("div", { className: "brand-s" }, "World Cup 2026 \xB7 the lads' sweepstake"))), /* @__PURE__ */ React.createElement("nav", { className: "tabs" }, /* @__PURE__ */ React.createElement("button", { className: tab === "standings" ? "on" : "", onClick: () => setTab("standings") }, /* @__PURE__ */ React.createElement(Users, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Standings")), /* @__PURE__ */ React.createElement("button", { className: tab === "scout" ? "on" : "", onClick: () => setTab("scout") }, /* @__PURE__ */ React.createElement(BookOpen, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Scout")), /* @__PURE__ */ React.createElement("button", { className: tab === "sim" ? "on" : "", onClick: () => setTab("sim") }, /* @__PURE__ */ React.createElement(Zap, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Simulate")), /* @__PURE__ */ React.createElement("button", { className: tab === "bookie" ? "on" : "", onClick: () => setTab("bookie") }, /* @__PURE__ */ React.createElement(Coins, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Bookie"))), /* @__PURE__ */ React.createElement("button", { className: "refresh" + (live.loading ? " spin" : "") + (live.ok ? " ok" : ""), onClick: refreshLive, title: live.ok ? "Live \xB7 updated " + (liveAgo === 0 ? "just now" : liveAgo + "m ago") : live.err ? "Tap to retry" : "Tap to load live scores" }, /* @__PURE__ */ React.createElement(RotateCcw, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, live.loading ? "Refreshing\u2026" : live.ok ? liveAgo === 0 ? "Live \xB7 now" : "Live \xB7 " + liveAgo + "m" : "Refresh"))), tab === "standings" && /* @__PURE__ */ React.createElement("div", { className: "lg" }, /* @__PURE__ */ React.createElement("div", { className: "st-sub" }, /* @__PURE__ */ React.createElement("button", { className: stView === "table" ? "on" : "", onClick: () => setStView("table") }, "Standings"), /* @__PURE__ */ React.createElement("button", { className: stView === "gaffer" ? "on" : "", onClick: () => setStView("gaffer") }, "\u{1F399}\uFE0F Gaffer"), /* @__PURE__ */ React.createElement("button", { className: stView === "pot" ? "on" : "", onClick: () => setStView("pot") }, "\u{1F4B0} Side Pot")), stView === "table" && /* @__PURE__ */ React.createElement(React.Fragment, null, meIdx < 0 ? /* @__PURE__ */ React.createElement("div", { className: "me-pick" }, /* @__PURE__ */ React.createElement("div", { className: "me-pick-h" }, "\u{1F44B} Who are you?"), /* @__PURE__ */ React.createElement("div", { className: "me-pick-sub" }, "Tap your name to follow your six and see your teams' games. It's just for this phone \u2014 no password needed."), /* @__PURE__ */ React.createElement("div", { className: "me-pick-grid" }, PLAYERS.map((n) => /* @__PURE__ */ React.createElement("button", { key: n, onClick: () => setMe(n) }, n)))) : /* @__PURE__ */ React.createElement("div", { className: "me-today" }, /* @__PURE__ */ React.createElement("div", { className: "me-today-top" }, /* @__PURE__ */ React.createElement("span", { className: "me-today-who" }, "Following ", /* @__PURE__ */ React.createElement("b", null, me)), /* @__PURE__ */ React.createElement("button", { className: "me-switch", onClick: () => setMe("") }, "change")), !live.matches ? /* @__PURE__ */ React.createElement("div", { className: "me-today-none" }, "Tap Refresh up top to load today's games.") : todayMatches.length === 0 ? /* @__PURE__ */ React.createElement("div", { className: "me-today-none" }, "None of your six are out today \u2014 your games show here on match days.") : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "me-today-h" }, "Your teams today"), /* @__PURE__ */ React.createElement("div", { className: "me-today-list" }, todayMatches.map((m) => {
+  return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("style", null, CSS), /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("div", { className: "bg-glow" }), /* @__PURE__ */ React.createElement("header", { className: "top" }, /* @__PURE__ */ React.createElement("div", { className: "brand" }, /* @__PURE__ */ React.createElement("div", { className: "mark" }, /* @__PURE__ */ React.createElement(WCTrophy, { className: "mark-tro" })), /* @__PURE__ */ React.createElement("div", { className: "brand-tx" }, /* @__PURE__ */ React.createElement("div", { className: "brand-t" }, "DALY SPORT CO."), /* @__PURE__ */ React.createElement("div", { className: "brand-s" }, "World Cup 2026 \xB7 the lads' sweepstake"))), /* @__PURE__ */ React.createElement("nav", { className: "tabs" }, /* @__PURE__ */ React.createElement("button", { className: tab === "standings" ? "on" : "", onClick: () => setTab("standings") }, /* @__PURE__ */ React.createElement(Users, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Standings")), /* @__PURE__ */ React.createElement("button", { className: tab === "scout" ? "on" : "", onClick: () => setTab("scout") }, /* @__PURE__ */ React.createElement(BookOpen, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Scout")), /* @__PURE__ */ React.createElement("button", { className: tab === "sim" ? "on" : "", onClick: () => setTab("sim") }, /* @__PURE__ */ React.createElement(Zap, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Simulate")), /* @__PURE__ */ React.createElement("button", { className: tab === "bookie" ? "on" : "", onClick: () => setTab("bookie") }, /* @__PURE__ */ React.createElement(Coins, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Bookie"))), /* @__PURE__ */ React.createElement("button", { className: "refresh" + (live.loading ? " spin" : "") + (live.ok ? " ok" : ""), onClick: refreshLive, title: live.ok ? "Live \xB7 updated " + (liveAgo === 0 ? "just now" : liveAgo + "m ago") : live.err ? "Tap to retry" : "Tap to load live scores" }, /* @__PURE__ */ React.createElement(RotateCcw, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, live.loading ? "Refreshing\u2026" : live.ok ? liveAgo === 0 ? "Live \xB7 now" : "Live \xB7 " + liveAgo + "m" : "Refresh"), liveMatchCount > 0 && /* @__PURE__ */ React.createElement("span", { className: "live-pill" }, liveMatchCount, " LIVE"))), tab === "standings" && /* @__PURE__ */ React.createElement("div", { className: "lg" }, /* @__PURE__ */ React.createElement("div", { className: "st-sub" }, /* @__PURE__ */ React.createElement("button", { className: stView === "table" ? "on" : "", onClick: () => setStView("table") }, "Standings"), /* @__PURE__ */ React.createElement("button", { className: stView === "gaffer" ? "on" : "", onClick: () => setStView("gaffer") }, "\u{1F399}\uFE0F Gaffer"), /* @__PURE__ */ React.createElement("button", { className: stView === "pot" ? "on" : "", onClick: () => setStView("pot") }, "\u{1F4B0} Side Pot")), stView === "table" && /* @__PURE__ */ React.createElement(React.Fragment, null, meIdx < 0 ? /* @__PURE__ */ React.createElement("div", { className: "me-pick" }, /* @__PURE__ */ React.createElement("div", { className: "me-pick-h" }, "\u{1F44B} Who are you?"), /* @__PURE__ */ React.createElement("div", { className: "me-pick-sub" }, "Tap your name to follow your six and see your teams' games. It's just for this phone \u2014 no password needed."), /* @__PURE__ */ React.createElement("div", { className: "me-pick-grid" }, PLAYERS.map((n) => /* @__PURE__ */ React.createElement("button", { key: n, onClick: () => setMe(n) }, n)))) : /* @__PURE__ */ React.createElement("div", { className: "me-today" }, /* @__PURE__ */ React.createElement("div", { className: "me-today-top" }, /* @__PURE__ */ React.createElement("span", { className: "me-today-who" }, "Following ", /* @__PURE__ */ React.createElement("b", null, me)), /* @__PURE__ */ React.createElement("button", { className: "me-switch", onClick: () => setMe("") }, "change")), !live.matches ? /* @__PURE__ */ React.createElement("div", { className: "me-today-none" }, "Tap Refresh up top to load today's games.") : todayMatches.length === 0 ? /* @__PURE__ */ React.createElement("div", { className: "me-today-none" }, liveMatchCount > 0 ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("span", {className:"live-dot-sm"}), "", liveMatchCount, " live match", liveMatchCount>1?"es":"", " ‚Äî none are your teams") : "None of your six are out today \u2014 your games show here on match days.") : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "me-today-h" }, "Your teams today"), /* @__PURE__ */ React.createElement("div", { className: "me-today-list" }, todayMatches.map((m) => {
     const played = m.hs != null && m.as != null;
     const d = new Date(m.date);
     const ko = isNaN(d.getTime()) ? "" : d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
     const stat = played ? m.status === "FINISHED" ? "FT" : m.status === "IN_PLAY" || m.status === "PAUSED" ? "LIVE" : "" : ko;
-    return /* @__PURE__ */ React.createElement("div", { key: m.id, className: "me-game" }, /* @__PURE__ */ React.createElement("span", { className: "me-team" + (m.mineHome ? " mine" : "") }, /* @__PURE__ */ React.createElement(Flag, { t: m.home }), " ", CODES[m.home] || m.home), /* @__PURE__ */ React.createElement("span", { className: "me-mid" }, played ? /* @__PURE__ */ React.createElement("b", null, m.hs, "\u2013", m.as) : /* @__PURE__ */ React.createElement("b", { className: "me-v" }, "v"), stat && /* @__PURE__ */ React.createElement("i", { className: m.status === "IN_PLAY" || m.status === "PAUSED" ? "liveon" : "" }, stat)), /* @__PURE__ */ React.createElement("span", { className: "me-team me-r" + (m.mineAway ? " mine" : "") }, CODES[m.away] || m.away, " ", /* @__PURE__ */ React.createElement(Flag, { t: m.away })));
+    return /* @__PURE__ */ React.createElement("div", { key: m.id, className: "me-game" + (m.status==="IN_PLAY"||m.status==="PAUSED" ? " me-game-live" : "") }, /* @__PURE__ */ React.createElement("span", { className: "me-team" + (m.mineHome ? " mine" : "") }, /* @__PURE__ */ React.createElement(Flag, { t: m.home }), " ", CODES[m.home] || m.home), /* @__PURE__ */ React.createElement("span", { className: "me-mid" }, played ? /* @__PURE__ */ React.createElement("b", {className: m.status==="IN_PLAY"||m.status==="PAUSED" ? "score-live" : ""}, m.hs, "\u2013", m.as) : /* @__PURE__ */ React.createElement("b", { className: "me-v" }, "v"), stat && /* @__PURE__ */ React.createElement("i", { className: m.status === "IN_PLAY" || m.status === "PAUSED" ? "liveon live-pulse" : "" }, stat)), /* @__PURE__ */ React.createElement("span", { className: "me-team me-r" + (m.mineAway ? " mine" : "") }, CODES[m.away] || m.away, " ", /* @__PURE__ */ React.createElement(Flag, { t: m.away })));
   })))), !helpSeen && /* @__PURE__ */ React.createElement("div", { className: "how" }, /* @__PURE__ */ React.createElement("button", { className: "how-x", onClick: () => {
     setHelpSeen(true);
     try {
@@ -3959,23 +4090,79 @@ function App() {
   }))), mView === "picks" && /* @__PURE__ */ React.createElement("div", { className: "mng-body" }, /* @__PURE__ */ React.createElement("div", { className: "mng-note" }, LOCK_PICKS ? /* @__PURE__ */ React.createElement(React.Fragment, null, "\u{1F512} ", /* @__PURE__ */ React.createElement("b", null, "Picks are locked."), " Everyone's six teams and goal totals are final for the tournament \u2014 they can't be changed.") : /* @__PURE__ */ React.createElement(React.Fragment, null, "Set each person's six teams \u2014 one per pot \u2014 plus their ", /* @__PURE__ */ React.createElement("b", null, "total-goals prediction"), " (the box on the right), which decides ties at the end. These all travel with the share link, so you only set them once.")), /* @__PURE__ */ React.createElement("div", { className: "pk-edit" }, PLAYERS.map((name, pi) => {
     var _a;
     return /* @__PURE__ */ React.createElement("div", { key: name, className: "pe-row" + (LOCK_PICKS ? " pe-locked" : "") }, /* @__PURE__ */ React.createElement("div", { className: "pe-name" }, name, pi === meIdx && /* @__PURE__ */ React.createElement("i", { className: "lg-you" }, "you")), /* @__PURE__ */ React.createElement("div", { className: "pe-picks" }, LOCK_PICKS ? /* @__PURE__ */ React.createElement(React.Fragment, null, (league.picks[pi] || []).map((t, potIdx) => /* @__PURE__ */ React.createElement("span", { key: potIdx, className: "pe-lk" }, /* @__PURE__ */ React.createElement(Flag, { t }), /* @__PURE__ */ React.createElement("i", null, CODES[t] || t))), /* @__PURE__ */ React.createElement("span", { className: "pe-glab" }, "goal total"), /* @__PURE__ */ React.createElement("b", { className: "pe-lkg" }, league.guesses[pi] != null && league.guesses[pi] !== "" ? league.guesses[pi] : "\u2014")) : /* @__PURE__ */ React.createElement(React.Fragment, null, [1, 2, 3, 4, 5, 6].map((p, potIdx) => /* @__PURE__ */ React.createElement("select", { key: p, className: "pe-sel", value: league.picks[pi][potIdx] || "", onChange: (e) => setPick(pi, potIdx, e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "" }, "P", p, " \u2014"), POT_TEAMS[p].map((t) => /* @__PURE__ */ React.createElement("option", { key: t, value: t }, CODES[t], " \xB7 ", t)))), /* @__PURE__ */ React.createElement("span", { className: "pe-glab" }, "goal total"), /* @__PURE__ */ React.createElement("input", { className: "pe-goals", type: "number", min: "0", placeholder: "\u2014", value: (_a = league.guesses[pi]) != null ? _a : "", onChange: (e) => setGuess(pi, e.target.value) }))));
-  }))), mView === "share" && /* @__PURE__ */ React.createElement("div", { className: "mng-body" }, /* @__PURE__ */ React.createElement("div", { className: "share-card" }, /* @__PURE__ */ React.createElement("div", { className: "share-h" }, /* @__PURE__ */ React.createElement(Link2, { size: 16 }), " Share the live standings"), /* @__PURE__ */ React.createElement("p", { className: "share-tx" }, "Everything you enter is packed into the link below. After updating results, copy it and drop it in the group chat \u2014 whoever opens it sees the current table. To update later, just re-share the new link."), /* @__PURE__ */ React.createElement("button", { className: "share-btn", onClick: copyLink }, /* @__PURE__ */ React.createElement(Copy, { size: 15 }), " Copy live link"), /* @__PURE__ */ React.createElement("button", { className: "share-btn2", onClick: copyCode }, "Copy code instead")), /* @__PURE__ */ React.createElement("div", { className: "share-card" }, /* @__PURE__ */ React.createElement("div", { className: "share-h" }, "Load an update"), /* @__PURE__ */ React.createElement("p", { className: "share-tx" }, "Got a newer link or code from the scorekeeper? Paste it here to sync \u2014 or just open their link directly."), /* @__PURE__ */ React.createElement("textarea", { className: "share-in", placeholder: "Paste a link or code\u2026", value: importTxt, onChange: (e) => setImportTxt(e.target.value) }), /* @__PURE__ */ React.createElement("button", { className: "share-btn", onClick: doImport }, "Load it")), /* @__PURE__ */ React.createElement("div", { className: "share-card" }, /* @__PURE__ */ React.createElement("div", { className: "share-h" }, "Cloud sync ", /* @__PURE__ */ React.createElement("span", { className: "cloud-badge " + (cloud.state === "on" ? "on" : cloud.state === "off" ? "off" : "") }, cloud.state === "on" ? "on" : cloud.state === "off" ? "not set up" : "checking\u2026")), /* @__PURE__ */ React.createElement("p", { className: "share-tx" }, cloud.state === "on" ? "Your worker has a league store. Each lad can save his own six from the Scout tab and it lands here automatically \u2014 no link-passing. Tap below to push the whole league up at once." : "Optional upgrade: with a small store added to your worker, every lad saves his own six on his own phone and it all flows into one shared table. Until that's set up, the link/code above is how you share. Setup steps are in the chat."), /* @__PURE__ */ React.createElement("button", { className: "share-btn" + (cloud.busy ? " busy" : ""), onClick: pushLeague, disabled: cloud.busy }, cloud.busy ? "Syncing\u2026" : "Sync whole league to the cloud")), /* @__PURE__ */ React.createElement("button", { className: "share-reset", onClick: resetLeague }, /* @__PURE__ */ React.createElement(X, { size: 13 }), " Reset league")))), lgView === "fixtures" && /* @__PURE__ */ React.createElement("div", { className: "lg-pane" }, !live.matches ? /* @__PURE__ */ React.createElement("div", { className: "lg-empty" }, "Tap ", /* @__PURE__ */ React.createElement("b", null, "Refresh"), " up top to pull the full fixture list and live scores.") : (() => {
-    const grp = {};
-    [...live.matches].sort((x, y) => new Date(x.date) - new Date(y.date)).forEach((m) => {
-      const L = m.stage === "GROUP_STAGE" ? "Matchday " + (m.matchday || "?") : prettyStage(m.stage);
-      (grp[L] = grp[L] || []).push(m);
+  }))), mView === "share" && /* @__PURE__ */ React.createElement("div", { className: "mng-body" }, /* @__PURE__ */ React.createElement("div", { className: "share-card" }, /* @__PURE__ */ React.createElement("div", { className: "share-h" }, /* @__PURE__ */ React.createElement(Link2, { size: 16 }), " Share the live standings"), /* @__PURE__ */ React.createElement("p", { className: "share-tx" }, "Everything you enter is packed into the link below. After updating results, copy it and drop it in the group chat \u2014 whoever opens it sees the current table. To update later, just re-share the new link."), /* @__PURE__ */ React.createElement("button", { className: "share-btn", onClick: copyLink }, /* @__PURE__ */ React.createElement(Copy, { size: 15 }), " Copy live link"), /* @__PURE__ */ React.createElement("button", { className: "share-btn2", onClick: copyCode }, "Copy code instead")), /* @__PURE__ */ React.createElement("div", { className: "share-card" }, /* @__PURE__ */ React.createElement("div", { className: "share-h" }, "Load an update"), /* @__PURE__ */ React.createElement("p", { className: "share-tx" }, "Got a newer link or code from the scorekeeper? Paste it here to sync \u2014 or just open their link directly."), /* @__PURE__ */ React.createElement("textarea", { className: "share-in", placeholder: "Paste a link or code\u2026", value: importTxt, onChange: (e) => setImportTxt(e.target.value) }), /* @__PURE__ */ React.createElement("button", { className: "share-btn", onClick: doImport }, "Load it")), /* @__PURE__ */ React.createElement("div", { className: "share-card" }, /* @__PURE__ */ React.createElement("div", { className: "share-h" }, "Cloud sync ", /* @__PURE__ */ React.createElement("span", { className: "cloud-badge " + (cloud.state === "on" ? "on" : cloud.state === "off" ? "off" : "") }, cloud.state === "on" ? "on" : cloud.state === "off" ? "not set up" : "checking\u2026")), /* @__PURE__ */ React.createElement("p", { className: "share-tx" }, cloud.state === "on" ? "Your worker has a league store. Each lad can save his own six from the Scout tab and it lands here automatically \u2014 no link-passing. Tap below to push the whole league up at once." : "Optional upgrade: with a small store added to your worker, every lad saves his own six on his own phone and it all flows into one shared table. Until that's set up, the link/code above is how you share. Setup steps are in the chat."), /* @__PURE__ */ React.createElement("button", { className: "share-btn" + (cloud.busy ? " busy" : ""), onClick: pushLeague, disabled: cloud.busy }, cloud.busy ? "Syncing\u2026" : "Sync whole league to the cloud")), /* @__PURE__ */ React.createElement("button", { className: "share-reset", onClick: resetLeague }, /* @__PURE__ */ React.createElement(X, { size: 13 }), " Reset league")))), lgView === "fixtures" && /* @__PURE__ */ React.createElement("div", { className: "lg-pane fxv-pane" }, !live.matches ? /* @__PURE__ */ React.createElement("div", { className: "lg-empty" }, "Tap ", /* @__PURE__ */ React.createElement("b", null, "Refresh"), " up top to pull the fixture list and live scores.") : (() => {
+    // Build date index
+    const byDate = {};
+    [...live.matches].sort((x,y) => new Date(x.date)-new Date(y.date)).forEach(m => {
+      const d = new Date(m.date);
+      const k = isNaN(d.getTime()) ? "TBD" : d.toISOString().slice(0,10);
+      (byDate[k] = byDate[k]||[]).push(m);
     });
-    const keys = Object.keys(grp).sort((a, b) => new Date(grp[a][0].date) - new Date(grp[b][0].date));
-    return keys.map((k) => /* @__PURE__ */ React.createElement("div", { key: k, className: "fxv-block" }, /* @__PURE__ */ React.createElement("div", { className: "fxv-h" }, k), grp[k].map((m) => {
-      const played = m.hs != null && m.as != null;
-      const dt = new Date(m.date);
-      const valid = !isNaN(dt.getTime());
-      const day = valid ? dt.toLocaleDateString([], { weekday: "short", day: "numeric", month: "short" }) : "";
-      const ko = valid ? dt.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "";
-      const stat = played ? m.status === "FINISHED" ? "FT" : m.status === "IN_PLAY" || m.status === "PAUSED" ? "LIVE" : "" : "";
-      const H = normTeam(m.home), A = normTeam(m.away);
-      return /* @__PURE__ */ React.createElement("div", { key: m.id, className: "fxv" }, /* @__PURE__ */ React.createElement("span", { className: "fxv-day" }, day), /* @__PURE__ */ React.createElement("span", { className: "fxv-t fxv-a" }, CODES[H] || m.home, " ", /* @__PURE__ */ React.createElement(Flag, { t: H })), /* @__PURE__ */ React.createElement("span", { className: "fxv-mid" }, played ? /* @__PURE__ */ React.createElement("b", null, m.hs, "\u2013", m.as) : /* @__PURE__ */ React.createElement("span", { className: "fxv-ko" }, ko || "TBD"), stat && /* @__PURE__ */ React.createElement("i", { className: stat === "LIVE" ? "liveon" : "" }, stat)), /* @__PURE__ */ React.createElement("span", { className: "fxv-t fxv-b" }, /* @__PURE__ */ React.createElement(Flag, { t: A }), " ", CODES[A] || m.away));
-    })));
+    const allDates = Object.keys(byDate).filter(k=>k!=="TBD").sort();
+    const today = new Date().toISOString().slice(0,10);
+    const selD = fxDate || (allDates.includes(today) ? today : (allDates.find(d=>d>=today)||allDates[0]||""));
+    const dayMs = selD ? (byDate[selD]||[]) : [];
+    const hasLiveToday = dayMs.some(m=>m.status==="IN_PLAY"||m.status==="PAUSED");
+    return /* @__PURE__ */ React.createElement(React.Fragment, null,
+      // Date scroller
+      /* @__PURE__ */ React.createElement("div", { className: "fxv-dates" },
+        allDates.map(d => {
+          const dt = new Date(d+"T12:00:00Z");
+          const label = dt.toLocaleDateString([], { weekday:"short", day:"numeric", month:"short" });
+          const hasLive = (byDate[d]||[]).some(m=>m.status==="IN_PLAY"||m.status==="PAUSED");
+          const isToday = d===today;
+          const isSel = d===selD;
+          return /* @__PURE__ */ React.createElement("button", {
+            key: d,
+            className: "fxv-date-chip" + (isSel?" sel":"") + (hasLive?" live-chip":"") + (isToday?" today-chip":""),
+            onClick: () => setFxDate(d)
+          }, hasLive && /* @__PURE__ */ React.createElement("span", {className:"fxv-dot-live"}),
+          label);
+        })
+      ),
+      // Match cards for selected date
+      hasLiveToday && /* @__PURE__ */ React.createElement("div", {className:"fxv-live-banner"}, "\u{1F7E2} LIVE NOW"),
+      /* @__PURE__ */ React.createElement("div", {className:"fxv-cards"},
+        dayMs.length===0 ? /* @__PURE__ */ React.createElement("div", {className:"lg-empty"}, "No matches on this date.") :
+        dayMs.map(m => {
+          const H = normTeam(m.home), A = normTeam(m.away);
+          const isLive = m.status==="IN_PLAY"||m.status==="PAUSED";
+          const isDone = m.status==="FINISHED";
+          const played = m.hs!=null && m.as!=null;
+          const dt = new Date(m.date);
+          const ko = isNaN(dt.getTime()) ? "TBD" : dt.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+          const stageLabel = m.stage==="GROUP_STAGE"
+            ? ("Group "+(m.group||"").replace("GROUP_","")+" ¬∑ MD"+m.matchday)
+            : prettyStage(m.stage);
+          const winHome = m.winner==="HOME_TEAM";
+          const winAway = m.winner==="AWAY_TEAM";
+          return /* @__PURE__ */ React.createElement("div", {key:m.id, className:"fxv-card"+(isLive?" fxv-live":"")+(isDone?" fxv-done":"")},
+            /* @__PURE__ */ React.createElement("div", {className:"fxv-card-top"},
+              /* @__PURE__ */ React.createElement("span", {className:"fxv-stage"}, stageLabel),
+              isLive ? /* @__PURE__ */ React.createElement("span", {className:"fxv-status live-pulse"}, "\u{1F7E2} LIVE")
+              : isDone ? /* @__PURE__ */ React.createElement("span", {className:"fxv-status done"}, "FT")
+              : /* @__PURE__ */ React.createElement("span", {className:"fxv-status timed"}, ko)
+            ),
+            /* @__PURE__ */ React.createElement("div", {className:"fxv-card-body"},
+              /* @__PURE__ */ React.createElement("div", {className:"fxv-side"+(winHome?" fxv-winner":"")+(winAway&&isDone?" fxv-loser":"")},
+                /* @__PURE__ */ React.createElement("span", {className:"fxv-flag-lg"}, /* @__PURE__ */ React.createElement(Flag, {t:H})),
+                /* @__PURE__ */ React.createElement("span", {className:"fxv-tname"}, H||m.home)
+              ),
+              /* @__PURE__ */ React.createElement("div", {className:"fxv-score-col"},
+                played
+                  ? /* @__PURE__ */ React.createElement("span", {className:"fxv-score"+(isLive?" score-live":"")}, m.hs, /* @__PURE__ */ React.createElement("span",{className:"fxv-dash"},"‚Äì"), m.as)
+                  : /* @__PURE__ */ React.createElement("span", {className:"fxv-vs"}, "vs")
+              ),
+              /* @__PURE__ */ React.createElement("div", {className:"fxv-side fxv-right"+(winAway?" fxv-winner":"")+(winHome&&isDone?" fxv-loser":"")},
+                /* @__PURE__ */ React.createElement("span", {className:"fxv-flag-lg"}, /* @__PURE__ */ React.createElement(Flag, {t:A})),
+                /* @__PURE__ */ React.createElement("span", {className:"fxv-tname"}, A||m.away)
+              )
+            ),
+            m.penHome!=null && /* @__PURE__ */ React.createElement("div", {className:"fxv-pen"}, "Penalties: ", m.penHome, "‚Äì", m.penAway)
+          );
+        })
+      )
+    );
   })()), lgView === "groups" && /* @__PURE__ */ React.createElement("div", { className: "lg-pane" }, /* @__PURE__ */ React.createElement("div", { className: "grpv-grid" }, Object.keys(GROUPS).map((g) => {
     const T = gTables[g];
     return /* @__PURE__ */ React.createElement("div", { key: g, className: "grpv" }, /* @__PURE__ */ React.createElement("div", { className: "grpv-h" }, "Group ", g, T.complete && /* @__PURE__ */ React.createElement("i", { className: "grpv-done" }, "done")), /* @__PURE__ */ React.createElement("div", { className: "grpv-row grpv-head" }, /* @__PURE__ */ React.createElement("span", { className: "grpv-pos" }, "#"), /* @__PURE__ */ React.createElement("span", { className: "grpv-team" }, "Team"), /* @__PURE__ */ React.createElement("span", null, "P"), /* @__PURE__ */ React.createElement("span", null, "GD"), /* @__PURE__ */ React.createElement("span", null, "Pts")), T.order.map((t, i) => {
@@ -4018,7 +4205,7 @@ function App() {
   }), /* @__PURE__ */ React.createElement("div", { className: "bk-stk" }, /* @__PURE__ */ React.createElement("span", null, slip.length > 1 ? "Acca \xB7 " + slip.length + " picks @ " + fmtOdds(Math.round(slipOdds * 100) / 100) : "Stake (\u20AC)"), /* @__PURE__ */ React.createElement("input", { type: "number", min: "1", value: stake, onChange: (e) => setStake(e.target.value) })), /* @__PURE__ */ React.createElement("div", { className: "bk-ret" }, "Potential return ", /* @__PURE__ */ React.createElement("b", null, "\u20AC", (Math.max(0, +stake || 0) * slipOdds).toFixed(2))), /* @__PURE__ */ React.createElement("button", { className: "bk-place", onClick: placeBet, disabled: !(+stake > 0) || +stake > bets.balance }, "Place bet \xB7 \u20AC", (+stake || 0).toFixed(2)), +stake > bets.balance && /* @__PURE__ */ React.createElement("div", { className: "bk-warn" }, "Not enough funds")), /* @__PURE__ */ React.createElement("div", { className: "bk-sec" }, "To lift the trophy ", oddsLive ? /* @__PURE__ */ React.createElement("span", { className: "bk-livetag" }, "live odds") : null), oddsLive && /* @__PURE__ */ React.createElement("div", { className: "bk-oddsnote" }, "Prices shift as results land \u2014 beaten teams drop off the board."), /* @__PURE__ */ React.createElement("div", { className: "bk-out" }, (showAllOut ? outright : outright.slice(0, 16)).map((o) => {
     const key = "W:" + o.t;
     if (o.out) return /* @__PURE__ */ React.createElement("div", { key: o.t, className: "bk-orow out", "aria-disabled": "true" }, /* @__PURE__ */ React.createElement("span", { className: "bk-oflag" }, /* @__PURE__ */ React.createElement(Flag, { t: o.t })), /* @__PURE__ */ React.createElement("span", { className: "bk-oname" }, o.t), /* @__PURE__ */ React.createElement("span", { className: "bk-oout" }, "OUT"));
-    return /* @__PURE__ */ React.createElement("button", { key: o.t, className: "bk-orow" + (inSlip(key) ? " sel" : ""), onClick: () => toggleSel(key, o.t + " to win the World Cup", o.odds, o.t) }, /* @__PURE__ */ React.createElement("span", { className: "bk-oflag" }, /* @__PURE__ */ React.createElement(Flag, { t: o.t })), /* @__PURE__ */ React.createElement("span", { className: "bk-oname" }, o.t), /* @__PURE__ */ React.createElement("span", { className: "bk-odds" }, fmtOdds(o.odds)));
+    return /* @__PURE__ */ React.createElement("div", { key: o.t, className: "bk-orow-wrap" }, /* @__PURE__ */ React.createElement("button", { className: "bk-orow" + (inSlip(key) ? " sel" : ""), onClick: () => toggleSel(key, o.t + " to win the World Cup", o.odds, o.t) }, /* @__PURE__ */ React.createElement("span", { className: "bk-oflag" }, /* @__PURE__ */ React.createElement(Flag, { t: o.t })), /* @__PURE__ */ React.createElement("span", { className: "bk-oname" }, o.t), /* @__PURE__ */ React.createElement("span", { className: "bk-odds" }, fmtOdds(o.odds))), live.news[o.t] && /* @__PURE__ */ React.createElement("div", {className:"bk-news-snip"}, /* @__PURE__ */ React.createElement("span",{className:"bk-news-dot"}), live.news[o.t].url ? /* @__PURE__ */ React.createElement("a",{href:live.news[o.t].url,target:"_blank",rel:"noopener noreferrer",className:"bk-news-link"}, live.news[o.t].title) : live.news[o.t].title));
   }), /* @__PURE__ */ React.createElement("button", { className: "bk-more", onClick: () => setShowAllOut((v) => !v) }, showAllOut ? "Show top 16" : "Show all 48")), /* @__PURE__ */ React.createElement("div", { className: "bk-sec" }, "Match odds ", oddsLive ? /* @__PURE__ */ React.createElement("span", { className: "bk-livetag" }, "live odds") : schedule ? /* @__PURE__ */ React.createElement("span", { className: "bk-livetag" }, "live fixtures") : null), !schedule ? /* @__PURE__ */ React.createElement("div", { className: "bk-wire-empty" }, "Tap ", /* @__PURE__ */ React.createElement("b", null, "Refresh"), " up top to load the full schedule and live prices.") : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "bk-md" }, schedule.dates.map((d) => {
     const dt = d === "TBD" ? null : new Date(d);
     const lab = dt ? dt.toLocaleDateString([], { weekday: "short", day: "numeric", month: "short" }) : "TBD";
@@ -4440,7 +4627,54 @@ const CSS = `
 .bj-card b{font-size:18px;line-height:1}.bj-card i{font-size:15px;font-style:normal;line-height:1}
 .bj-card.red{color:#d11}
 .bj-card.back{background:repeating-linear-gradient(45deg,#3a4a8c,#3a4a8c 5px,#2c3a72 5px,#2c3a72 10px)}
-.bj-actions{display:flex;gap:9px}.bj-actions .ac-go{flex:1}
+.bj-actions{display:flex;gap:9px;flex-wrap:wrap}.bj-actions .ac-go{flex:1;min-width:80px}
+.bj-insurance{display:flex;align-items:center;gap:9px;padding:8px 12px;background:rgba(233,178,60,.08);border:1px solid rgba(233,178,60,.25);border-radius:10px;font-size:13px;color:var(--gold);flex-wrap:wrap}
+.bj-stake{display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:8px}
+.bj-adj{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--fg);cursor:pointer;font-size:16px;display:grid;place-items:center}
+.bj-stk-in{width:60px;text-align:center;padding:5px;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:7px;color:var(--fg);font-family:Space Mono,monospace;font-size:14px}
+.live-pill{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:800;letter-spacing:.08em;padding:3px 8px;border-radius:20px;background:rgba(34,197,94,.15);color:#22c55e;border:1px solid rgba(34,197,94,.3);animation:livePulse 2s ease-in-out infinite}
+@keyframes livePulse{0%,100%{opacity:1}50%{opacity:.6}}
+.live-dot-sm{display:inline-block;width:7px;height:7px;border-radius:50%;background:#22c55e;margin-right:5px;animation:livePulse 1.5s ease-in-out infinite}
+.fxv-pane{padding:0}
+.fxv-dates{display:flex;gap:6px;overflow-x:auto;padding:14px 16px 10px;scrollbar-width:none;border-bottom:1px solid var(--line)}
+.fxv-dates::-webkit-scrollbar{display:none}
+.fxv-date-chip{flex:0 0 auto;font-size:12px;font-weight:600;padding:6px 12px;border-radius:20px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;white-space:nowrap;transition:.15s;font-family:Archivo,sans-serif}
+.fxv-date-chip.sel{background:var(--ink3);color:var(--fg);border-color:rgba(140,170,220,.4)}
+.fxv-date-chip.today-chip{border-color:var(--gold);color:var(--gold)}
+.fxv-date-chip.live-chip{border-color:#22c55e;color:#22c55e}
+.fxv-date-chip.sel.live-chip{background:rgba(34,197,94,.1)}
+.fxv-dot-live{display:inline-block;width:6px;height:6px;border-radius:50%;background:#22c55e;margin-right:5px;animation:livePulse 1.5s ease-in-out infinite}
+.fxv-live-banner{display:flex;align-items:center;gap:8px;padding:8px 16px;font-size:12px;font-weight:700;color:#22c55e;letter-spacing:.08em;border-bottom:1px solid rgba(34,197,94,.15)}
+.fxv-cards{display:flex;flex-direction:column;gap:10px;padding:12px 16px}
+.fxv-card{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:linear-gradient(180deg,var(--card),var(--ink));transition:border-color .15s}
+.fxv-card.fxv-live{border-color:rgba(34,197,94,.4);box-shadow:0 0 20px -8px rgba(34,197,94,.25)}
+.fxv-card.fxv-done{opacity:.85}
+.fxv-card-top{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;border-bottom:1px solid var(--line2);font-size:11px}
+.fxv-stage{color:var(--muted);font-weight:600;letter-spacing:.03em}
+.fxv-status{font-size:11px;font-weight:700;letter-spacing:.06em}
+.fxv-status.live-pulse{color:#22c55e;animation:livePulse 1.5s ease-in-out infinite}
+.fxv-status.done{color:var(--faint)}
+.fxv-status.timed{color:var(--muted);font-family:Space Mono,monospace}
+.fxv-card-body{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;padding:16px 14px}
+.fxv-side{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.fxv-side.fxv-right{}
+.fxv-side.fxv-winner .fxv-tname{color:var(--fg);font-weight:800}
+.fxv-side.fxv-loser{opacity:.5}
+.fxv-flag-lg{font-size:36px;line-height:1}
+.fxv-tname{font-size:13px;font-weight:600;color:var(--muted)}
+.fxv-score-col{display:flex;flex-direction:column;align-items:center;gap:4px}
+.fxv-score{font-family:Space Mono,monospace;font-size:28px;font-weight:700;color:var(--fg);letter-spacing:-.02em}
+.fxv-score.score-live{color:#22c55e;text-shadow:0 0 12px rgba(34,197,94,.4)}
+.fxv-vs{font-family:Space Mono,monospace;font-size:18px;color:var(--faint)}
+.fxv-dash{margin:0 4px;color:var(--faint)}
+.fxv-pen{text-align:center;padding:6px;font-size:11px;color:var(--muted);border-top:1px solid var(--line2)}
+.score-live{color:#22c55e!important}
+.me-game-live{border-color:rgba(34,197,94,.4)!important;background:rgba(34,197,94,.04)!important}
+.bk-orow-wrap{display:flex;flex-direction:column}
+.bk-news-snip{display:flex;align-items:center;gap:6px;padding:4px 10px 6px 10px;font-size:11px;color:var(--muted)}
+.bk-news-dot{width:5px;height:5px;border-radius:50%;background:#5EC8F0;flex:none}
+.bk-news-link{color:var(--muted);text-decoration:none;flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.bk-news-link:hover{color:var(--fg)}
 .lg .bk-pot{margin-top:22px;padding-top:22px;border-top:1px solid var(--line)}
 .lg .gaf{margin-top:22px}
 .bx-canvas{height:300px}
