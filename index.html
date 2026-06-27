@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-<title>Daly Sport Co. ‚Äî World Cup 2026</title>
-<meta name="description" content="Daly Sport Co. ‚Äî World Cup 2026 sweepstake, scouting, bookie and live simulator."/>
+<title>Daly Sport Co. &#8212; World Cup 2026</title>
+<meta name="description" content="Daly Sport Co. &#8212; World Cup 2026 sweepstake, scouting, bookie and live simulator."/>
 <meta name="theme-color" content="#0a1326"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="mobile-web-app-capable" content="yes"/>
@@ -16,7 +16,7 @@
 <style>html,body{margin:0;padding:0;background:#070d1c}#root{min-height:100vh}img{-webkit-user-drag:none}</style>
 </head>
 <body>
-<div id="root"><div style="color:#9fb4d6;font:15px/1.6 system-ui,-apple-system,sans-serif;padding:40px 24px;max-width:480px;margin:0 auto;text-align:center">Loading The Oracle‚Ä¶<br><br><span style="font-size:13px;color:#6b82a6">If this stays blank, this page needs to run JavaScript ‚Äî open it in a web browser (Chrome or Safari) or via its hosted link, not a file preview.</span></div></div>
+<div id="root"><div style="color:#9fb4d6;font:15px/1.6 system-ui,-apple-system,sans-serif;padding:40px 24px;max-width:480px;margin:0 auto;text-align:center">Loading The Oracle&#8230;<br><br><span style="font-size:13px;color:#6b82a6">If this stays blank, this page needs to run JavaScript &#8212; open it in a web browser (Chrome or Safari) or via its hosted link, not a file preview.</span></div></div>
 <script>/**
  * @license React
  * react.production.min.js
@@ -2831,7 +2831,7 @@ function PlinkoGame({ bets, setBets, setToast }) {
   return /* @__PURE__ */ React.createElement("div", { className: "cz-game" }, /* @__PURE__ */ React.createElement("canvas", { ref: cv, className: "cz-canvas cz-plinko" }), msg && /* @__PURE__ */ React.createElement("div", { className: "ac-result " + (msg.win ? "win" : "lose") }, msg.t), phase !== "done" ? /* @__PURE__ */ React.createElement("div", { className: "ac-bet" }, /* @__PURE__ */ React.createElement("div", { className: "ac-stake" }, /* @__PURE__ */ React.createElement("span", null, "\u20AC"), /* @__PURE__ */ React.createElement("input", { type: "number", min: "1", value: stake, onChange: (e) => setStake(e.target.value), disabled: phase === "dropping" })), /* @__PURE__ */ React.createElement("button", { className: "ac-go", onClick: drop, disabled: phase === "dropping" || !(+stake > 0) || +stake > bets.balance }, phase === "dropping" ? "Dropping\u2026" : "Drop \u20AC" + (+stake || 0).toFixed(2))) : /* @__PURE__ */ React.createElement("button", { className: "ac-go ac-again", onClick: reset }, "Drop again \u2192"), /* @__PURE__ */ React.createElement("div", { className: "ac-foot" }, "Edges pay 8\xD7; the middle is where balls go to die (0.3\xD7). Pure luck. Play money only."));
 }
 function BlackjackGame({ bets, setBets, setToast }) {
-  const SUITS = ["‚ô†", "‚ô•", "‚ô¶", "‚ô£"], RANKS = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+  const SUITS = ["\u2660", "\u2665", "\u2666", "\u2663"], RANKS = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
   const buildShoe = () => {
     const shoe = [];
     for (let d = 0; d < 6; d++) SUITS.forEach(s => RANKS.forEach(r => shoe.push({r,s})));
@@ -2874,10 +2874,10 @@ function BlackjackGame({ bets, setBets, setToast }) {
   const resolveSingle = (pHand, dHand, st, isDouble) => {
     const pv = val(pHand), dv = val(dHand);
     const pBJ = isBlackjack(pHand);
-    if (pBJ && !isBlackjack(dHand)) { addWin(Math.round(st * 2.5 * 100)/100); return { t: "Blackjack! üÉè", win: true }; }
-    if (dv > 21) { addWin(st * 2); return { t: "Dealer busts " + dv + " ‚Äî you win!", win: true }; }
+    if (pBJ && !isBlackjack(dHand)) { addWin(Math.round(st * 2.5 * 100)/100); return { t: "Blackjack! \uD83C\uDCCF", win: true }; }
+    if (dv > 21) { addWin(st * 2); return { t: "Dealer busts " + dv + " \u2014 you win!", win: true }; }
     if (pv > dv) { addWin(st * 2); return { t: "You win! " + pv + " vs " + dv, win: true }; }
-    if (pv === dv && pBJ === isBlackjack(dHand)) { addWin(st); return { t: "Push ‚Äî " + pv + " each", win: null }; }
+    if (pv === dv && pBJ === isBlackjack(dHand)) { addWin(st); return { t: "Push \u2014 " + pv + " each", win: null }; }
     return { t: "Dealer wins " + dv + " to " + pv, win: false };
   };
 
@@ -2978,15 +2978,15 @@ function BlackjackGame({ bets, setBets, setToast }) {
       const r2 = resolveSingle(sHand, dd, +stake, false);
       msgs.push("Split hand: " + r2.t);
     }
-    setMsg({ t: msgs.join(" ¬∑ "), win: r1.win });
+    setMsg({ t: msgs.join(" \u00B7 "), win: r1.win });
     setPhase("done");
-    if (r1.win) setToast("üÉè ‚Ç¨" + (st*2).toFixed(2) + " ‚Äî winner!");
+    if (r1.win) setToast("\uD83C\uDCCF \u20AC" + (st*2).toFixed(2) + " \u2014 winner!");
   };
 
   const next = () => { setPhase("idle"); setPlayer([]); setDealer([]); setSplit(null); setDoubled(false); setMsg(null); setInsurance(null); setSplitActive(0); };
 
   const showDealer = phase === "done";
-  const Card = ({ c, hidden }) => /* @__PURE__ */ React.createElement("span", { className: "bj-card" + (c && (c.s==="‚ô•"||c.s==="‚ô¶") ? " red" : "") + (hidden ? " back" : "") },
+  const Card = ({ c, hidden }) => /* @__PURE__ */ React.createElement("span", { className: "bj-card" + (c && (c.s==="\u2665"||c.s==="\u2666") ? " red" : "") + (hidden ? " back" : "") },
     hidden || !c ? null : /* @__PURE__ */ React.createElement(React.Fragment, null,
       /* @__PURE__ */ React.createElement("b", null, c.r),
       /* @__PURE__ */ React.createElement("i", null, c.s)));
@@ -2994,22 +2994,22 @@ function BlackjackGame({ bets, setBets, setToast }) {
   return /* @__PURE__ */ React.createElement("div", { className: "cz-game bj" },
     /* @__PURE__ */ React.createElement("div", { className: "bj-felt" },
       /* @__PURE__ */ React.createElement("div", { className: "bj-row" },
-        /* @__PURE__ */ React.createElement("span", { className: "bj-lbl" }, "Dealer", showDealer ? " ¬∑ " + val(dealer) : ""),
+        /* @__PURE__ */ React.createElement("span", { className: "bj-lbl" }, "Dealer", showDealer ? " \u00B7 " + val(dealer) : ""),
         /* @__PURE__ */ React.createElement("div", { className: "bj-hand" },
           dealer.length ? dealer.map((c, i) => /* @__PURE__ */ React.createElement(Card, { key: i, c, hidden: !showDealer && i === 1 }))
-          : /* @__PURE__ */ React.createElement("span", { className: "bj-empty" }, "‚Äî"))),
+          : /* @__PURE__ */ React.createElement("span", { className: "bj-empty" }, "\u2014"))),
       /* @__PURE__ */ React.createElement("div", { className: "bj-row" },
-        /* @__PURE__ */ React.createElement("span", { className: "bj-lbl" }, "You", player.length ? " ¬∑ " + val(player) : ""),
+        /* @__PURE__ */ React.createElement("span", { className: "bj-lbl" }, "You", player.length ? " \u00B7 " + val(player) : ""),
         /* @__PURE__ */ React.createElement("div", { className: "bj-hand" },
           player.length ? player.map((c, i) => /* @__PURE__ */ React.createElement(Card, { key: i, c }))
-          : /* @__PURE__ */ React.createElement("span", { className: "bj-empty" }, "‚Äî"))),
+          : /* @__PURE__ */ React.createElement("span", { className: "bj-empty" }, "\u2014"))),
       split !== null && /* @__PURE__ */ React.createElement("div", { className: "bj-row" },
-        /* @__PURE__ */ React.createElement("span", { className: "bj-lbl" }, "Split hand", split.length ? " ¬∑ " + val(split) : "", splitActive === 1 ? " (active)" : ""),
+        /* @__PURE__ */ React.createElement("span", { className: "bj-lbl" }, "Split hand", split.length ? " \u00B7 " + val(split) : "", splitActive === 1 ? " (active)" : ""),
         /* @__PURE__ */ React.createElement("div", { className: "bj-hand" },
           split.map((c, i) => /* @__PURE__ */ React.createElement(Card, { key: i, c }))))),
     insurance === "offer" && phase === "player" && /* @__PURE__ */ React.createElement("div", { className: "bj-insurance" },
-      /* @__PURE__ */ React.createElement("span", null, "Dealer shows Ace ‚Äî Insurance?"),
-      /* @__PURE__ */ React.createElement("button", { className: "ac-go", style: {flex:"none",padding:"6px 14px",fontSize:12}, onClick: takeInsurance }, "Take (‚Ç¨" + (+stake * 0.5).toFixed(2) + ")"),
+      /* @__PURE__ */ React.createElement("span", null, "Dealer shows Ace \u2014 Insurance?"),
+      /* @__PURE__ */ React.createElement("button", { className: "ac-go", style: {flex:"none",padding:"6px 14px",fontSize:12}, onClick: takeInsurance }, "Take (\u20AC" + (+stake * 0.5).toFixed(2) + ")"),
       /* @__PURE__ */ React.createElement("button", { className: "ac-go ac-again", style: {flex:"none",padding:"6px 14px",fontSize:12}, onClick: declineInsurance }, "No thanks")),
     msg && /* @__PURE__ */ React.createElement("div", { className: "ac-result " + (msg.win ? "win" : msg.win === false ? "lose" : "") }, msg.t),
     phase === "player" ? /* @__PURE__ */ React.createElement("div", { className: "bj-actions" },
@@ -3018,7 +3018,7 @@ function BlackjackGame({ bets, setBets, setToast }) {
       split === null && player.length === 2 && bets.balance >= +stake && /* @__PURE__ */ React.createElement("button", { className: "ac-go", style:{background:"#b8860b"}, onClick: doDouble }, "Double"),
       split === null && canSplit(player) && bets.balance >= +stake && /* @__PURE__ */ React.createElement("button", { className: "ac-go", style:{background:"#5a3a8a"}, onClick: doSplit }, "Split"))
     : phase === "done" ? /* @__PURE__ */ React.createElement("div", { className: "bj-actions" },
-      /* @__PURE__ */ React.createElement("button", { className: "ac-go ac-again", onClick: next }, "‚ñ∂ Next hand"))
+      /* @__PURE__ */ React.createElement("button", { className: "ac-go ac-again", onClick: next }, "\u25B6 Next hand"))
     : /* @__PURE__ */ React.createElement(React.Fragment, null,
       /* @__PURE__ */ React.createElement("div", { className: "bj-stake" },
         /* @__PURE__ */ React.createElement("span", null, "Stake"),
@@ -4054,7 +4054,7 @@ function App() {
       fetchNewsFor(tt);
     }
   }, [tab, selDate, live.matches]);
-  return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("style", null, CSS), /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("div", { className: "bg-glow" }), /* @__PURE__ */ React.createElement("header", { className: "top" }, /* @__PURE__ */ React.createElement("div", { className: "brand" }, /* @__PURE__ */ React.createElement("div", { className: "mark" }, /* @__PURE__ */ React.createElement(WCTrophy, { className: "mark-tro" })), /* @__PURE__ */ React.createElement("div", { className: "brand-tx" }, /* @__PURE__ */ React.createElement("div", { className: "brand-t" }, "DALY SPORT CO."), /* @__PURE__ */ React.createElement("div", { className: "brand-s" }, "World Cup 2026 \xB7 the lads' sweepstake"))), /* @__PURE__ */ React.createElement("nav", { className: "tabs" }, /* @__PURE__ */ React.createElement("button", { className: tab === "standings" ? "on" : "", onClick: () => setTab("standings") }, /* @__PURE__ */ React.createElement(Users, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Standings")), /* @__PURE__ */ React.createElement("button", { className: tab === "scout" ? "on" : "", onClick: () => setTab("scout") }, /* @__PURE__ */ React.createElement(BookOpen, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Scout")), /* @__PURE__ */ React.createElement("button", { className: tab === "sim" ? "on" : "", onClick: () => setTab("sim") }, /* @__PURE__ */ React.createElement(Zap, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Simulate")), /* @__PURE__ */ React.createElement("button", { className: tab === "bookie" ? "on" : "", onClick: () => setTab("bookie") }, /* @__PURE__ */ React.createElement(Coins, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Bookie"))), /* @__PURE__ */ React.createElement("button", { className: "refresh" + (live.loading ? " spin" : "") + (live.ok ? " ok" : ""), onClick: refreshLive, title: live.ok ? "Live \xB7 updated " + (liveAgo === 0 ? "just now" : liveAgo + "m ago") : live.err ? "Tap to retry" : "Tap to load live scores" }, /* @__PURE__ */ React.createElement(RotateCcw, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, live.loading ? "Refreshing\u2026" : live.ok ? liveAgo === 0 ? "Live \xB7 now" : "Live \xB7 " + liveAgo + "m" : "Refresh"), liveMatchCount > 0 && /* @__PURE__ */ React.createElement("span", { className: "live-pill" }, liveMatchCount, " LIVE"))), tab === "standings" && /* @__PURE__ */ React.createElement("div", { className: "lg" }, /* @__PURE__ */ React.createElement("div", { className: "st-sub" }, /* @__PURE__ */ React.createElement("button", { className: stView === "table" ? "on" : "", onClick: () => setStView("table") }, "Standings"), /* @__PURE__ */ React.createElement("button", { className: stView === "gaffer" ? "on" : "", onClick: () => setStView("gaffer") }, "\u{1F399}\uFE0F Gaffer"), /* @__PURE__ */ React.createElement("button", { className: stView === "pot" ? "on" : "", onClick: () => setStView("pot") }, "\u{1F4B0} Side Pot")), stView === "table" && /* @__PURE__ */ React.createElement(React.Fragment, null, meIdx < 0 ? /* @__PURE__ */ React.createElement("div", { className: "me-pick" }, /* @__PURE__ */ React.createElement("div", { className: "me-pick-h" }, "\u{1F44B} Who are you?"), /* @__PURE__ */ React.createElement("div", { className: "me-pick-sub" }, "Tap your name to follow your six and see your teams' games. It's just for this phone \u2014 no password needed."), /* @__PURE__ */ React.createElement("div", { className: "me-pick-grid" }, PLAYERS.map((n) => /* @__PURE__ */ React.createElement("button", { key: n, onClick: () => setMe(n) }, n)))) : /* @__PURE__ */ React.createElement("div", { className: "me-today" }, /* @__PURE__ */ React.createElement("div", { className: "me-today-top" }, /* @__PURE__ */ React.createElement("span", { className: "me-today-who" }, "Following ", /* @__PURE__ */ React.createElement("b", null, me)), /* @__PURE__ */ React.createElement("button", { className: "me-switch", onClick: () => setMe("") }, "change")), !live.matches ? /* @__PURE__ */ React.createElement("div", { className: "me-today-none" }, "Tap Refresh up top to load today's games.") : todayMatches.length === 0 ? /* @__PURE__ */ React.createElement("div", { className: "me-today-none" }, liveMatchCount > 0 ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("span", {className:"live-dot-sm"}), "", liveMatchCount, " live match", liveMatchCount>1?"es":"", " ‚Äî none are your teams") : "None of your six are out today \u2014 your games show here on match days.") : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "me-today-h" }, "Your teams today"), /* @__PURE__ */ React.createElement("div", { className: "me-today-list" }, todayMatches.map((m) => {
+  return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("style", null, CSS), /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("div", { className: "bg-glow" }), /* @__PURE__ */ React.createElement("header", { className: "top" }, /* @__PURE__ */ React.createElement("div", { className: "brand" }, /* @__PURE__ */ React.createElement("div", { className: "mark" }, /* @__PURE__ */ React.createElement(WCTrophy, { className: "mark-tro" })), /* @__PURE__ */ React.createElement("div", { className: "brand-tx" }, /* @__PURE__ */ React.createElement("div", { className: "brand-t" }, "DALY SPORT CO."), /* @__PURE__ */ React.createElement("div", { className: "brand-s" }, "World Cup 2026 \xB7 the lads' sweepstake"))), /* @__PURE__ */ React.createElement("nav", { className: "tabs" }, /* @__PURE__ */ React.createElement("button", { className: tab === "standings" ? "on" : "", onClick: () => setTab("standings") }, /* @__PURE__ */ React.createElement(Users, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Standings")), /* @__PURE__ */ React.createElement("button", { className: tab === "scout" ? "on" : "", onClick: () => setTab("scout") }, /* @__PURE__ */ React.createElement(BookOpen, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Scout")), /* @__PURE__ */ React.createElement("button", { className: tab === "sim" ? "on" : "", onClick: () => setTab("sim") }, /* @__PURE__ */ React.createElement(Zap, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Simulate")), /* @__PURE__ */ React.createElement("button", { className: tab === "bookie" ? "on" : "", onClick: () => setTab("bookie") }, /* @__PURE__ */ React.createElement(Coins, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Bookie"))), /* @__PURE__ */ React.createElement("button", { className: "refresh" + (live.loading ? " spin" : "") + (live.ok ? " ok" : ""), onClick: refreshLive, title: live.ok ? "Live \xB7 updated " + (liveAgo === 0 ? "just now" : liveAgo + "m ago") : live.err ? "Tap to retry" : "Tap to load live scores" }, /* @__PURE__ */ React.createElement(RotateCcw, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, live.loading ? "Refreshing\u2026" : live.ok ? liveAgo === 0 ? "Live \xB7 now" : "Live \xB7 " + liveAgo + "m" : "Refresh"), liveMatchCount > 0 && /* @__PURE__ */ React.createElement("span", { className: "live-pill" }, liveMatchCount, " LIVE"))), tab === "standings" && /* @__PURE__ */ React.createElement("div", { className: "lg" }, /* @__PURE__ */ React.createElement("div", { className: "st-sub" }, /* @__PURE__ */ React.createElement("button", { className: stView === "table" ? "on" : "", onClick: () => setStView("table") }, "Standings"), /* @__PURE__ */ React.createElement("button", { className: stView === "gaffer" ? "on" : "", onClick: () => setStView("gaffer") }, "\u{1F399}\uFE0F Gaffer"), /* @__PURE__ */ React.createElement("button", { className: stView === "pot" ? "on" : "", onClick: () => setStView("pot") }, "\u{1F4B0} Side Pot")), stView === "table" && /* @__PURE__ */ React.createElement(React.Fragment, null, meIdx < 0 ? /* @__PURE__ */ React.createElement("div", { className: "me-pick" }, /* @__PURE__ */ React.createElement("div", { className: "me-pick-h" }, "\u{1F44B} Who are you?"), /* @__PURE__ */ React.createElement("div", { className: "me-pick-sub" }, "Tap your name to follow your six and see your teams' games. It's just for this phone \u2014 no password needed."), /* @__PURE__ */ React.createElement("div", { className: "me-pick-grid" }, PLAYERS.map((n) => /* @__PURE__ */ React.createElement("button", { key: n, onClick: () => setMe(n) }, n)))) : /* @__PURE__ */ React.createElement("div", { className: "me-today" }, /* @__PURE__ */ React.createElement("div", { className: "me-today-top" }, /* @__PURE__ */ React.createElement("span", { className: "me-today-who" }, "Following ", /* @__PURE__ */ React.createElement("b", null, me)), /* @__PURE__ */ React.createElement("button", { className: "me-switch", onClick: () => setMe("") }, "change")), !live.matches ? /* @__PURE__ */ React.createElement("div", { className: "me-today-none" }, "Tap Refresh up top to load today's games.") : todayMatches.length === 0 ? /* @__PURE__ */ React.createElement("div", { className: "me-today-none" }, liveMatchCount > 0 ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("span", {className:"live-dot-sm"}), "", liveMatchCount, " live match", liveMatchCount>1?"es":"", " \u2014 none are your teams") : "None of your six are out today \u2014 your games show here on match days.") : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "me-today-h" }, "Your teams today"), /* @__PURE__ */ React.createElement("div", { className: "me-today-list" }, todayMatches.map((m) => {
     const played = m.hs != null && m.as != null;
     const d = new Date(m.date);
     const ko = isNaN(d.getTime()) ? "" : d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -4132,7 +4132,7 @@ function App() {
           const dt = new Date(m.date);
           const ko = isNaN(dt.getTime()) ? "TBD" : dt.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
           const stageLabel = m.stage==="GROUP_STAGE"
-            ? ("Group "+(m.group||"").replace("GROUP_","")+" ¬∑ MD"+m.matchday)
+            ? ("Group "+(m.group||"").replace("GROUP_","")+" \u00B7 MD"+m.matchday)
             : prettyStage(m.stage);
           const winHome = m.winner==="HOME_TEAM";
           const winAway = m.winner==="AWAY_TEAM";
@@ -4150,7 +4150,7 @@ function App() {
               ),
               /* @__PURE__ */ React.createElement("div", {className:"fxv-score-col"},
                 played
-                  ? /* @__PURE__ */ React.createElement("span", {className:"fxv-score"+(isLive?" score-live":"")}, m.hs, /* @__PURE__ */ React.createElement("span",{className:"fxv-dash"},"‚Äì"), m.as)
+                  ? /* @__PURE__ */ React.createElement("span", {className:"fxv-score"+(isLive?" score-live":"")}, m.hs, /* @__PURE__ */ React.createElement("span",{className:"fxv-dash"},"\u2013"), m.as)
                   : /* @__PURE__ */ React.createElement("span", {className:"fxv-vs"}, "vs")
               ),
               /* @__PURE__ */ React.createElement("div", {className:"fxv-side fxv-right"+(winAway?" fxv-winner":"")+(winHome&&isDone?" fxv-loser":"")},
@@ -4158,7 +4158,7 @@ function App() {
                 /* @__PURE__ */ React.createElement("span", {className:"fxv-tname"}, A||m.away)
               )
             ),
-            m.penHome!=null && /* @__PURE__ */ React.createElement("div", {className:"fxv-pen"}, "Penalties: ", m.penHome, "‚Äì", m.penAway)
+            m.penHome!=null && /* @__PURE__ */ React.createElement("div", {className:"fxv-pen"}, "Penalties: ", m.penHome, "\u2013", m.penAway)
           );
         })
       )
