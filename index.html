@@ -384,54 +384,54 @@ var Link2 = _mk(_ICONS.Link2);
 var X = _mk(_ICONS.X);
 var Coins = _mk(_ICONS.Coins);
 const TEAMS = {
-  Argentina: { pot: 1, group: "J", rating: 1877, ep: 14.4, adv: 99, r16: 73.1, qf: 58.9, sf: 44.6, final: 29.9, win: 18.2 },
-  Spain: { pot: 1, group: "H", rating: 1875, ep: 14.42, adv: 99.5, r16: 76.6, qf: 55.9, sf: 42.6, final: 27.7, win: 17.1 },
-  France: { pot: 1, group: "I", rating: 1871, ep: 14.61, adv: 98.1, r16: 84.1, qf: 64.1, sf: 46.4, final: 28.9, win: 18 },
-  England: { pot: 1, group: "L", rating: 1828, ep: 12.88, adv: 98.2, r16: 77.8, qf: 52.3, sf: 33.7, final: 19.5, win: 10.6 },
-  Portugal: { pot: 1, group: "K", rating: 1768, ep: 10.62, adv: 95.4, r16: 63.7, qf: 40.3, sf: 20.4, final: 10, win: 4.5 },
-  Brazil: { pot: 1, group: "C", rating: 1766, ep: 10.73, adv: 97.4, r16: 62.9, qf: 41.3, sf: 21.4, final: 10.2, win: 4.7 },
-  Netherlands: { pot: 1, group: "F", rating: 1754, ep: 9.72, adv: 94, r16: 51.9, qf: 34.7, sf: 16.7, final: 7.7, win: 3.3 },
-  Germany: { pot: 1, group: "E", rating: 1736, ep: 10.3, adv: 96.8, r16: 66.5, qf: 30.5, sf: 15.7, final: 6.8, win: 2.7 },
-  Belgium: { pot: 2, group: "G", rating: 1742, ep: 10.79, adv: 97.1, r16: 70, qf: 40.4, sf: 17.9, final: 8.3, win: 3.4 },
-  Colombia: { pot: 2, group: "K", rating: 1698, ep: 8.18, adv: 89.7, r16: 49, qf: 24.6, sf: 10.5, final: 4.2, win: 1.6 },
-  Mexico: { pot: 2, group: "A", rating: 1687, ep: 10.5, adv: 95.6, r16: 69.2, qf: 33.1, sf: 15.8, final: 6.8, win: 2.7 },
-  Uruguay: { pot: 2, group: "H", rating: 1673, ep: 7.17, adv: 91.1, r16: 34.1, qf: 16.6, sf: 7.6, final: 2.7, win: 0.8 },
-  USA: { pot: 2, group: "D", rating: 1671, ep: 9.51, adv: 91.6, r16: 62.8, qf: 32.5, sf: 13.6, final: 5.7, win: 2.2 },
-  Japan: { pot: 2, group: "F", rating: 1662, ep: 6.8, adv: 84.1, r16: 34.5, qf: 17.7, sf: 6.3, final: 2, win: 0.6 },
-  Turkey: { pot: 2, group: "D", rating: 1606, ep: 5.58, adv: 71.3, r16: 33.2, qf: 10.8, sf: 3.4, final: 0.9, win: 0.2 },
-  Norway: { pot: 2, group: "I", rating: 1557, ep: 4, adv: 55.6, r16: 21.4, qf: 6.1, sf: 1.3, final: 0.3, win: 0.1 },
-  Morocco: { pot: 3, group: "C", rating: 1755, ep: 10.32, adv: 96.9, r16: 60.4, qf: 38.8, sf: 19.3, final: 8.8, win: 3.8 },
-  Croatia: { pot: 3, group: "L", rating: 1715, ep: 8.71, adv: 92.5, r16: 56.2, qf: 27.4, sf: 13.5, final: 5.7, win: 2 },
-  Senegal: { pot: 3, group: "I", rating: 1684, ep: 7.49, adv: 83.4, r16: 51, qf: 24.2, sf: 10.2, final: 3.7, win: 1.3 },
-  Switzerland: { pot: 3, group: "B", rating: 1650, ep: 8.39, adv: 91.3, r16: 53.8, qf: 22.2, sf: 7.3, final: 2.4, win: 0.6 },
-  Ecuador: { pot: 3, group: "E", rating: 1599, ep: 6.48, adv: 85.6, r16: 37.7, qf: 11.6, sf: 3.6, final: 0.9, win: 0.2 },
-  Austria: { pot: 3, group: "J", rating: 1597, ep: 5.06, adv: 73.8, r16: 21.8, qf: 8.4, sf: 2.7, final: 0.7, win: 0.1 },
-  "Ivory Coast": { pot: 3, group: "E", rating: 1541, ep: 5.12, adv: 75.1, r16: 26.4, qf: 6.7, sf: 1.5, final: 0.3, win: 0 },
-  Canada: { pot: 3, group: "B", rating: 1559, ep: 7.48, adv: 88.9, r16: 46.6, qf: 16.3, sf: 4.3, final: 1.1, win: 0.3 },
-  Australia: { pot: 4, group: "D", rating: 1579, ep: 4.89, adv: 64.6, r16: 27.2, qf: 8, sf: 2.2, final: 0.6, win: 0.1 },
-  Algeria: { pot: 4, group: "J", rating: 1572, ep: 4.55, adv: 68.4, r16: 18.5, qf: 6.7, sf: 1.7, final: 0.5, win: 0.1 },
-  Paraguay: { pot: 4, group: "D", rating: 1505, ep: 3.27, adv: 44.8, r16: 13.2, qf: 2.8, sf: 0.6, final: 0.1, win: 0 },
-  Scotland: { pot: 4, group: "C", rating: 1503, ep: 3.8, adv: 60.2, r16: 14.4, qf: 3.7, sf: 0.7, final: 0.1, win: 0 },
-  Sweden: { pot: 4, group: "F", rating: 1510, ep: 3.45, adv: 50.7, r16: 11.9, qf: 3.3, sf: 0.6, final: 0.1, win: 0 },
-  Bosnia: { pot: 4, group: "B", rating: 1385, ep: 2.53, adv: 35.2, r16: 7.1, qf: 0.8, sf: 0.1, final: 0, win: 0 },
-  "Cape Verde": { pot: 4, group: "H", rating: 1366, ep: 1.88, adv: 23.8, r16: 2.1, qf: 0.3, sf: 0, final: 0, win: 0 },
-  Curacao: { pot: 4, group: "E", rating: 1294, ep: 1.36, adv: 14.9, r16: 1.4, qf: 0.1, sf: 0, final: 0, win: 0 },
-  Iran: { pot: 5, group: "G", rating: 1620, ep: 7.04, adv: 87.8, r16: 45.4, qf: 16.4, sf: 5, final: 1.5, win: 0.4 },
-  Panama: { pot: 5, group: "L", rating: 1539, ep: 4.08, adv: 61.4, r16: 18.6, qf: 5.4, sf: 1.3, final: 0.2, win: 0 },
-  "DR Congo": { pot: 5, group: "K", rating: 1474, ep: 2.89, adv: 42.2, r16: 8.3, qf: 1.8, sf: 0.4, final: 0.1, win: 0 },
-  Iraq: { pot: 5, group: "I", rating: 1447, ep: 2.13, adv: 26.7, r16: 6.4, qf: 1.1, sf: 0.2, final: 0, win: 0 },
-  Qatar: { pot: 5, group: "B", rating: 1454, ep: 3.72, adv: 55, r16: 15.1, qf: 2.7, sf: 0.3, final: 0, win: 0 },
-  Jordan: { pot: 5, group: "J", rating: 1391, ep: 1.78, adv: 22.3, r16: 2.7, qf: 0.4, sf: 0, final: 0, win: 0 },
-  Haiti: { pot: 5, group: "C", rating: 1291, ep: 1.11, adv: 10.3, r16: 0.8, qf: 0.1, sf: 0, final: 0, win: 0 },
-  "New Zealand": { pot: 5, group: "G", rating: 1281, ep: 1.17, adv: 11.5, r16: 1.2, qf: 0.1, sf: 0, final: 0, win: 0 },
-  "South Korea": { pot: 6, group: "A", rating: 1592, ep: 6.08, adv: 77.4, r16: 38.8, qf: 11.9, sf: 3.2, final: 0.8, win: 0.2 },
-  Egypt: { pot: 6, group: "G", rating: 1562, ep: 5.58, adv: 78.7, r16: 32.3, qf: 9.3, sf: 2.3, final: 0.6, win: 0.1 },
-  Czechia: { pot: 6, group: "A", rating: 1506, ep: 4.08, adv: 57.7, r16: 20.4, qf: 4.4, sf: 0.8, final: 0.1, win: 0 },
-  Tunisia: { pot: 6, group: "F", rating: 1476, ep: 2.82, adv: 40.2, r16: 8.1, qf: 1.8, sf: 0.3, final: 0, win: 0 },
-  Uzbekistan: { pot: 6, group: "K", rating: 1459, ep: 2.6, adv: 37.4, r16: 6.3, qf: 1.1, sf: 0.2, final: 0, win: 0 },
-  "Saudi Arabia": { pot: 6, group: "H", rating: 1421, ep: 2.5, adv: 36.7, r16: 4.5, qf: 0.8, sf: 0.1, final: 0, win: 0 },
-  "South Africa": { pot: 6, group: "A", rating: 1429, ep: 2.68, adv: 36.6, r16: 9, qf: 1.4, sf: 0.1, final: 0, win: 0 },
-  Ghana: { pot: 6, group: "L", rating: 1346, ep: 1.32, adv: 13.5, r16: 1.5, qf: 0.1, sf: 0, final: 0, win: 0 }
+  Argentina: { pot: 1, group: "J", rating: 1877, ep: 15.2, adv: 99, r16: 73.1, qf: 58.9, sf: 44.6, final: 29.9, win: 18.2 },
+  Spain: { pot: 1, group: "H", rating: 1875, ep: 14.2, adv: 99.5, r16: 76.6, qf: 55.9, sf: 42.6, final: 27.7, win: 17.1 },
+  France: { pot: 1, group: "I", rating: 1871, ep: 16.1, adv: 98.1, r16: 84.1, qf: 64.1, sf: 46.4, final: 28.9, win: 18 },
+  England: { pot: 1, group: "L", rating: 1828, ep: 12.0, adv: 98.2, r16: 77.8, qf: 52.3, sf: 33.7, final: 19.5, win: 10.6 },
+  Portugal: { pot: 1, group: "K", rating: 1768, ep: 9.9, adv: 95.4, r16: 63.7, qf: 40.3, sf: 20.4, final: 10, win: 4.5 },
+  Brazil: { pot: 1, group: "C", rating: 1766, ep: 11.8, adv: 97.4, r16: 62.9, qf: 41.3, sf: 21.4, final: 10.2, win: 4.7 },
+  Netherlands: { pot: 1, group: "F", rating: 1754, ep: 11.6, adv: 94, r16: 51.9, qf: 34.7, sf: 16.7, final: 7.7, win: 3.3 },
+  Germany: { pot: 1, group: "E", rating: 1736, ep: 10.2, adv: 96.8, r16: 66.5, qf: 30.5, sf: 15.7, final: 6.8, win: 2.7 },
+  Belgium: { pot: 2, group: "G", rating: 1742, ep: 9.3, adv: 97.1, r16: 70, qf: 40.4, sf: 17.9, final: 8.3, win: 3.4 },
+  Colombia: { pot: 2, group: "K", rating: 1698, ep: 11.1, adv: 89.7, r16: 49, qf: 24.6, sf: 10.5, final: 4.2, win: 1.6 },
+  Mexico: { pot: 2, group: "A", rating: 1687, ep: 12.3, adv: 95.6, r16: 69.2, qf: 33.1, sf: 15.8, final: 6.8, win: 2.7 },
+  Uruguay: { pot: 2, group: "H", rating: 1673, ep: 2.0, adv: 91.1, r16: 34.1, qf: 16.6, sf: 7.6, final: 2.7, win: 0.8 },
+  USA: { pot: 2, group: "D", rating: 1671, ep: 9.1, adv: 91.6, r16: 62.8, qf: 32.5, sf: 13.6, final: 5.7, win: 2.2 },
+  Japan: { pot: 2, group: "F", rating: 1662, ep: 8.0, adv: 84.1, r16: 34.5, qf: 17.7, sf: 6.3, final: 2, win: 0.6 },
+  Turkey: { pot: 2, group: "D", rating: 1606, ep: 3.0, adv: 71.3, r16: 33.2, qf: 10.8, sf: 3.4, final: 0.9, win: 0.2 },
+  Norway: { pot: 2, group: "I", rating: 1557, ep: 7.7, adv: 55.6, r16: 21.4, qf: 6.1, sf: 1.3, final: 0.3, win: 0.1 },
+  Morocco: { pot: 3, group: "C", rating: 1755, ep: 11.6, adv: 96.9, r16: 60.4, qf: 38.8, sf: 19.3, final: 8.8, win: 3.8 },
+  Croatia: { pot: 3, group: "L", rating: 1715, ep: 6.5, adv: 92.5, r16: 56.2, qf: 27.4, sf: 13.5, final: 5.7, win: 2 },
+  Senegal: { pot: 3, group: "I", rating: 1684, ep: 6.3, adv: 83.4, r16: 51, qf: 24.2, sf: 10.2, final: 3.7, win: 1.3 },
+  Switzerland: { pot: 3, group: "B", rating: 1650, ep: 9.8, adv: 91.3, r16: 53.8, qf: 22.2, sf: 7.3, final: 2.4, win: 0.6 },
+  Ecuador: { pot: 3, group: "E", rating: 1599, ep: 6.1, adv: 85.6, r16: 37.7, qf: 11.6, sf: 3.6, final: 0.9, win: 0.2 },
+  Austria: { pot: 3, group: "J", rating: 1597, ep: 6.0, adv: 73.8, r16: 21.8, qf: 8.4, sf: 2.7, final: 0.7, win: 0.1 },
+  "Ivory Coast": { pot: 3, group: "E", rating: 1541, ep: 7.6, adv: 75.1, r16: 26.4, qf: 6.7, sf: 1.5, final: 0.3, win: 0 },
+  Canada: { pot: 3, group: "B", rating: 1559, ep: 5.7, adv: 88.9, r16: 46.6, qf: 16.3, sf: 4.3, final: 1.1, win: 0.3 },
+  Australia: { pot: 4, group: "D", rating: 1579, ep: 5.9, adv: 64.6, r16: 27.2, qf: 8, sf: 2.2, final: 0.6, win: 0.1 },
+  Algeria: { pot: 4, group: "J", rating: 1572, ep: 5.1, adv: 68.4, r16: 18.5, qf: 6.7, sf: 1.7, final: 0.5, win: 0.1 },
+  Paraguay: { pot: 4, group: "D", rating: 1505, ep: 5.3, adv: 44.8, r16: 13.2, qf: 2.8, sf: 0.6, final: 0.1, win: 0 },
+  Scotland: { pot: 4, group: "C", rating: 1503, ep: 3.0, adv: 60.2, r16: 14.4, qf: 3.7, sf: 0.7, final: 0.1, win: 0 },
+  Sweden: { pot: 4, group: "F", rating: 1510, ep: 5.3, adv: 50.7, r16: 11.9, qf: 3.3, sf: 0.6, final: 0.1, win: 0 },
+  Bosnia: { pot: 4, group: "B", rating: 1385, ep: 4.7, adv: 35.2, r16: 7.1, qf: 0.8, sf: 0.1, final: 0, win: 0 },
+  "Cape Verde": { pot: 4, group: "H", rating: 1366, ep: 3.6, adv: 23.8, r16: 2.1, qf: 0.3, sf: 0, final: 0, win: 0 },
+  Curacao: { pot: 4, group: "E", rating: 1294, ep: 1.0, adv: 14.9, r16: 1.4, qf: 0.1, sf: 0, final: 0, win: 0 },
+  Iran: { pot: 5, group: "G", rating: 1620, ep: 5.4, adv: 87.8, r16: 45.4, qf: 16.4, sf: 5, final: 1.5, win: 0.4 },
+  Panama: { pot: 5, group: "L", rating: 1539, ep: 1.3, adv: 61.4, r16: 18.6, qf: 5.4, sf: 1.3, final: 0.2, win: 0 },
+  "DR Congo": { pot: 5, group: "K", rating: 1474, ep: 2.4, adv: 42.2, r16: 8.3, qf: 1.8, sf: 0.4, final: 0.1, win: 0 },
+  Iraq: { pot: 5, group: "I", rating: 1447, ep: 0.0, adv: 26.7, r16: 6.4, qf: 1.1, sf: 0.2, final: 0, win: 0 },
+  Qatar: { pot: 5, group: "B", rating: 1454, ep: 1.0, adv: 55, r16: 15.1, qf: 2.7, sf: 0.3, final: 0, win: 0 },
+  Jordan: { pot: 5, group: "J", rating: 1391, ep: 0.7, adv: 22.3, r16: 2.7, qf: 0.4, sf: 0, final: 0, win: 0 },
+  Haiti: { pot: 5, group: "C", rating: 1291, ep: 0.0, adv: 10.3, r16: 0.8, qf: 0.1, sf: 0, final: 0, win: 0 },
+  "New Zealand": { pot: 5, group: "G", rating: 1281, ep: 1.0, adv: 11.5, r16: 1.2, qf: 0.1, sf: 0, final: 0, win: 0 },
+  "South Korea": { pot: 6, group: "A", rating: 1592, ep: 5.1, adv: 77.4, r16: 38.8, qf: 11.9, sf: 3.2, final: 0.8, win: 0.2 },
+  Egypt: { pot: 6, group: "G", rating: 1562, ep: 6.8, adv: 78.7, r16: 32.3, qf: 9.3, sf: 2.3, final: 0.6, win: 0.1 },
+  Czechia: { pot: 6, group: "A", rating: 1506, ep: 1.0, adv: 57.7, r16: 20.4, qf: 4.4, sf: 0.8, final: 0.1, win: 0 },
+  Tunisia: { pot: 6, group: "F", rating: 1476, ep: 0.0, adv: 40.2, r16: 8.1, qf: 1.8, sf: 0.3, final: 0, win: 0 },
+  Uzbekistan: { pot: 6, group: "K", rating: 1459, ep: 1.0, adv: 37.4, r16: 6.3, qf: 1.1, sf: 0.2, final: 0, win: 0 },
+  "Saudi Arabia": { pot: 6, group: "H", rating: 1421, ep: 2.0, adv: 36.7, r16: 4.5, qf: 0.8, sf: 0.1, final: 0, win: 0 },
+  "South Africa": { pot: 6, group: "A", rating: 1429, ep: 4.9, adv: 36.6, r16: 9, qf: 1.4, sf: 0.1, final: 0, win: 0 },
+  Ghana: { pot: 6, group: "L", rating: 1346, ep: 4.9, adv: 13.5, r16: 1.5, qf: 0.1, sf: 0, final: 0, win: 0 }
 };
 const FLAGS = {
   Argentina: "\u{1F1E6}\u{1F1F7}",
@@ -5383,30 +5383,27 @@ const CSS = `
 
 /* ===== light-theme contrast fixes ===== */
 .how-p b{color:#DC2626 !important}
-.me-today{background:#FFFFFF !important}
+.lg-row,.fxv,.fxv-card,.grpv,.sc-pred,.mng,.cpx,.bk-slip,.me-today{background:#FFFFFF !important}
+.lg-row.lead{background:linear-gradient(180deg,#FFF5F5,#FFFFFF) !important;border-color:rgba(220,38,38,.3) !important}
+.lg-row.open{border-color:rgba(220,38,38,.3) !important}
+.fxv-mid b{color:#111 !important}
+.grpv-h{color:#111 !important}
+.grpv-pts{color:#DC2626 !important}
 .me-pick{background:linear-gradient(180deg,#FFF5F5,#FFFFFF) !important;border-color:rgba(220,38,38,.25) !important}
 .lg-manage{background:linear-gradient(160deg,#DC2626,#991B1B) !important;color:#fff !important;border-color:rgba(220,38,38,.5) !important}
 .lg-manage:hover{border-color:#fff !important}
 .champ{background:radial-gradient(600px 200px at 50% 0%,rgba(220,38,38,.07),transparent 70%),linear-gradient(180deg,#FFF5F5,#FFEAEA) !important}
-.champ-final{color:#333 !important}
 .sc-board{background:linear-gradient(180deg,#FFFFFF,#F6F6F6) !important}
 .sc-controls{background:#F6F6F6 !important}
 .sc-pick select{background:#FFFFFF !important;color:#111 !important}
-.sc-clock{color:#fff !important}
-.sc-speed button.on{color:#fff !important}
-.lg-closest{color:#fff !important}
-.kfx-pens button.on{color:#fff !important}
+.sc-clock,.sc-speed button.on,.lg-closest,.kfx-pens button.on{color:#fff !important}
 .mark{background:linear-gradient(135deg,#DC2626,#991B1B) !important}
 .lg-hero{background:linear-gradient(120deg,#FFF5F5,#FFEAEA 62%) !important}
 .bk-head{background:linear-gradient(180deg,#FFFFFF,#F6F6F6) !important;box-shadow:none !important}
-.bk-out,.bk-fix{background:#FFFFFF !important;box-shadow:none !important}
-.bk-rail{background:#FFFFFF !important;box-shadow:none !important}
-.bk-orow{background:#FAFAFA !important}
-.bk-orow.sel{background:linear-gradient(180deg,rgba(220,38,38,.08),#FFFFFF) !important}
-.bk-game{background:#FFFFFF !important;box-shadow:none !important}
-.bk-pick{background:#FAFAFA !important}
-.bk-pick.sel{background:linear-gradient(180deg,rgba(220,38,38,.08),#FFFFFF) !important}
-.bk-wire-item{background:#FFFFFF !important}
+.bk-out,.bk-fix,.bk-rail{background:#FFFFFF !important;box-shadow:none !important}
+.bk-orow,.bk-pick{background:#FAFAFA !important}
+.bk-orow.sel,.bk-pick.sel{background:linear-gradient(180deg,rgba(220,38,38,.08),#FFFFFF) !important}
+.bk-game,.bk-wire-item{background:#FFFFFF !important;box-shadow:none !important}
 .bk-md button.on{background:#DC2626 !important;border-color:#DC2626 !important;color:#fff !important}
 `;
 (function() {
