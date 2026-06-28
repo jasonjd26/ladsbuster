@@ -5438,10 +5438,10 @@ const CSS = `
 @keyframes mdrPop{0%{transform:scale(0) rotate(-18deg)}100%{transform:scale(1)}}
 .mdr-phone{position:relative;width:100%;max-width:440px;height:100%;max-height:860px;background:#FAF7F4;overflow:hidden}
 @media(min-width:480px){.mdr-phone{border-radius:24px;height:94%}}
-.mdr-bars{position:absolute;top:10px;left:10px;right:10px;display:flex;gap:5px;z-index:30}
+.mdr-bars{position:absolute;top:calc(env(safe-area-inset-top, 0px) + 14px);left:10px;right:10px;display:flex;gap:5px;z-index:30}
 .mdr-bar{flex:1;height:3px;border-radius:3px;background:rgba(0,0,0,.16);overflow:hidden}
 .mdr-bar i{display:block;height:100%;width:0;background:#15110E;border-radius:3px}
-.mdr-x{position:absolute;top:18px;right:14px;z-index:40;width:30px;height:30px;border:none;border-radius:50%;background:rgba(0,0,0,.22);color:#fff;font-size:17px;font-weight:800;cursor:pointer;line-height:1}
+.mdr-x{position:absolute;top:calc(env(safe-area-inset-top, 0px) + 34px);right:16px;z-index:40;width:42px;height:42px;border:none;border-radius:50%;background:rgba(0,0,0,.32);color:#fff;font-size:24px;font-weight:800;cursor:pointer;line-height:1}
 .mdr-nav{position:absolute;top:0;bottom:0;width:42%;z-index:20;cursor:pointer}
 .mdr-s{position:absolute;inset:0;padding:48px 24px 26px;display:flex;flex-direction:column;opacity:0;transform:scale(1.04);transition:opacity .35s,transform .35s;pointer-events:none;overflow:hidden;color:#15110E}
 .mdr-s.on{opacity:1;transform:scale(1);pointer-events:auto}
@@ -5480,7 +5480,8 @@ const CSS = `
 .mdr-banter{background:#0b0807;color:#fff;justify-content:center}
 .mdr-slag{font-size:26px;font-weight:900;line-height:1.18;letter-spacing:-.5px}
 .mdr-share{margin-top:20px;background:#25D366;color:#06351c;border:none;border-radius:13px;padding:14px;font-size:15px;font-weight:900;cursor:pointer}
-.mdr-again{margin-top:9px;background:transparent;border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:11px;padding:10px;font-weight:700;cursor:pointer;font-size:13px}`;
+.mdr-again{margin-top:9px;background:transparent;border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:11px;padding:10px;font-weight:700;cursor:pointer;font-size:13px}
+.mdr-close{margin-top:16px;background:#fff;color:#15110E;border:none;border-radius:16px;padding:21px;font-weight:900;cursor:pointer;font-size:19px;width:100%}`;
 
 class _EB extends React.Component{
   constructor(p){super(p);this.state={e:null};}
@@ -5592,7 +5593,7 @@ function _mdReview(matches,me){
     if(upset){var um=upset.m,uw=upset.hw?um.home:um.away,ul=upset.hw?um.away:um.home;
       up='<div class="mdr-spot"><div class="mdr-k" style="color:#fff;opacity:.6">Shock of the day</div><div class="mdr-huge" style="margin-top:6px">'+esc(uw)+'</div><div style="opacity:.85;font-weight:700;margin-top:4px">beat '+esc(ul)+' '+um.hs+'-'+um.as+', '+Math.round(upset.p*100)+'% pre-match odds</div></div>';}
     S.push('<div class="mdr-k">Movers and shocks</div><div class="mdr-big">Who is surging</div><div class="mdr-card"><div class="mdr-k" style="color:#6B6B66">Biggest climber</div><div class="mdr-huge" style="margin-top:4px">'+(mover&&mover.delta>0?esc(mover.name):"-")+'</div><div style="color:#6B6B66;font-weight:700">'+(mover&&mover.delta>0?("up "+mover.delta+" to "+mover.rank+(mover.rank===1?"st":mover.rank===2?"nd":mover.rank===3?"rd":"th")):"no movement today")+'</div></div>'+up);
-    S.push('<div style="text-align:center"><div style="font-size:56px">\uD83E\uDD44</div><div class="mdr-k" style="color:#fff;opacity:.6">Wooden spoon watch</div><div class="mdr-slag" style="margin-top:8px">'+esc(spoon.name)+', dead last on '+spoon.pts+'. Picked the six with the eyes shut and it shows.</div></div><button class="mdr-share" id="mdr-share">\uD83D\uDCF2 Share to the lads</button><button class="mdr-again" id="mdr-again">Watch again</button>');
+    S.push('<div style="text-align:center"><div style="font-size:56px">\uD83E\uDD44</div><div class="mdr-k" style="color:#fff;opacity:.6">Wooden spoon watch</div><div class="mdr-slag" style="margin-top:8px">'+esc(spoon.name)+', dead last on '+spoon.pts+'. Picked the six with the eyes shut and it shows.</div></div><button class="mdr-share" id="mdr-share">\uD83D\uDCF2 Share to the lads</button><button class="mdr-close" id="mdr-close">Close review</button><button class="mdr-again" id="mdr-again">Watch again</button>');
     var ov=document.createElement("div");ov.id="mdr-ov";ov.className="mdr-ov";
     var barsH="";for(var bi=0;bi<S.length;bi++){barsH+='<div class="mdr-bar"><i></i></div>';}
     var slidesH="";for(var si=0;si<S.length;si++){var cl=si===0?"mdr-cover":si===5?"mdr-banter":"";slidesH+='<div class="mdr-s '+cl+'">'+S[si]+'</div>';}
@@ -5614,7 +5615,7 @@ function _mdReview(matches,me){
     var tx=0,ph=ov.querySelector(".mdr-phone");
     ph.addEventListener("touchstart",function(e){tx=e.touches[0].clientX;},{passive:true});
     ph.addEventListener("touchend",function(e){var dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>40)go(dx<0?1:-1);},{passive:true});
-    var ag=ov.querySelector("#mdr-again");if(ag){ag.onclick=function(){idx=0;rend();};}
+    var ag=ov.querySelector("#mdr-again");if(ag){ag.onclick=function(){idx=0;rend();};}var cl=ov.querySelector("#mdr-close");if(cl){cl.onclick=closeOv;}
     var sh=ov.querySelector("#mdr-share");if(sh){sh.onclick=function(){_mdrShare(now,day,lead,spoon,fday);};}
     rend();
     var cov=ov.querySelector(".mdr-cover"),cols=["#DC2626","#E9B23C","#ffffff","#15803D"];
