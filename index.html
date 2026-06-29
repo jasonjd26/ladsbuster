@@ -1271,10 +1271,14 @@ function teamColours(a, b) {
   return [cA, cB];
 }
 const DEFAULT_WORKER = "https://ladsbuster-data.dalyjason1.workers.dev";
-const NORM = { "Cape Verde Islands": "Cape Verde", "Cabo Verde": "Cape Verde", "Korea Republic": "South Korea", "IR Iran": "Iran", "Czech Republic": "Czechia", "United States": "USA", "C\xF4te d'Ivoire": "Ivory Coast", "Cote d'Ivoire": "Ivory Coast", "Bosnia and Herzegovina": "Bosnia", "T\xFCrkiye": "Turkey", "Turkiye": "Turkey", "Cura\xE7ao": "Curacao", "Congo DR": "DR Congo" };
+const NORM = { "Cape Verde Islands": "Cape Verde", "Cabo Verde": "Cape Verde", "Korea Republic": "South Korea", "IR Iran": "Iran", "Czech Republic": "Czechia", "United States": "USA", "C\xF4te d'Ivoire": "Ivory Coast", "Cote d'Ivoire": "Ivory Coast", "Bosnia and Herzegovina": "Bosnia", "Bosnia-Herzegovina": "Bosnia", "Bosnia & Herzegovina": "Bosnia", "T\xFCrkiye": "Turkey", "Turkiye": "Turkey", "Cura\xE7ao": "Curacao", "Congo DR": "DR Congo" };
+let _teamSlugIdx = null;
+function _teamSlug(s) { return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, ""); }
 function normTeam(n) {
   if (!n) return n;
-  return NORM[n] || n;
+  if (NORM[n]) return NORM[n];
+  if (!_teamSlugIdx) { _teamSlugIdx = {}; ((typeof TEAM_LIST !== "undefined" && TEAM_LIST) || []).forEach(function (t) { _teamSlugIdx[_teamSlug(t)] = t; }); }
+  return _teamSlugIdx[_teamSlug(n)] || n;
 }
 function assignThirds(tg) {
   const slots = [...SLOT_ORDER].sort((a, b) => tg.filter((g) => ALLOWED[a].includes(g)).length - tg.filter((g) => ALLOWED[b].includes(g)).length);
@@ -4300,11 +4304,19 @@ function App() {
       const s = T.stats[t];
       return /* @__PURE__ */ React.createElement("div", { key: t, className: "grpv-row" + (i < 2 ? " q" : "") }, /* @__PURE__ */ React.createElement("span", { className: "grpv-pos" }, i + 1), /* @__PURE__ */ React.createElement("span", { className: "grpv-team" }, /* @__PURE__ */ React.createElement(Flag, { t }), " ", CODES[t] || t), /* @__PURE__ */ React.createElement("span", null, s.pld), /* @__PURE__ */ React.createElement("span", null, s.gd > 0 ? "+" + s.gd : s.gd), /* @__PURE__ */ React.createElement("span", { className: "grpv-pts" }, s.pts));
     }));
-  })), /* @__PURE__ */ React.createElement("p", { className: "grpv-note" }, "Top two of each group (highlighted) plus the best third-placed teams go through. Tables fill in as group results land \u2014 tap ", /* @__PURE__ */ React.createElement("b", null, "Refresh"), ".")), lgView === "knockouts" && /* @__PURE__ */ React.createElement("div", { className: "lg-pane" }, !bracket.anyLive && /* @__PURE__ */ React.createElement("div", { className: "lg-empty" }, "The bracket fills in automatically once the group stage ends and knockout results come in \u2014 tap ", /* @__PURE__ */ React.createElement("b", null, "Refresh"), ". Until then it shows matchups as they're confirmed."), /* @__PURE__ */ React.createElement("div", { className: "kov" }, KO_ROUNDS.map((rd) => {
-    const ms = bracket.rounds[rd] || [];
-    if (!ms.length) return null;
-    return /* @__PURE__ */ React.createElement("div", { key: rd, className: "kov-round" }, /* @__PURE__ */ React.createElement("div", { className: "kov-rh" }, rd), /* @__PURE__ */ React.createElement("div", { className: "kov-matches" }, ms.map((m, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: "kov-m" }, /* @__PURE__ */ React.createElement("div", { className: "kov-side" + (m.win === "a" ? " win" : m.win === "b" ? " lose" : "") }, /* @__PURE__ */ React.createElement("span", { className: "kov-fl" }, m.a ? /* @__PURE__ */ React.createElement(Flag, { t: m.a }) : /* @__PURE__ */ React.createElement("span", { className: "kov-tbd-fl" })), /* @__PURE__ */ React.createElement("span", { className: "kov-nm" }, m.a ? CODES[m.a] || m.a : "TBD"), /* @__PURE__ */ React.createElement("span", { className: "kov-sc" }, m.sa != null ? m.sa : "")), /* @__PURE__ */ React.createElement("div", { className: "kov-side" + (m.win === "b" ? " win" : m.win === "a" ? " lose" : "") }, /* @__PURE__ */ React.createElement("span", { className: "kov-fl" }, m.b ? /* @__PURE__ */ React.createElement(Flag, { t: m.b }) : /* @__PURE__ */ React.createElement("span", { className: "kov-tbd-fl" })), /* @__PURE__ */ React.createElement("span", { className: "kov-nm" }, m.b ? CODES[m.b] || m.b : "TBD"), /* @__PURE__ */ React.createElement("span", { className: "kov-sc" }, m.sb != null ? m.sb : ""))))));
-  })))), stView === "pot" && /* @__PURE__ */ React.createElement(SidePotPanel, { potBoard, balance: bets.balance, loan: bets.loan || 0, achievements, shareCard, takeLoan, repayLoan, canReset: me === "Jason", resetAll }), stView === "gaffer" && /* @__PURE__ */ React.createElement(Gaffer, { facts: gafferFacts })), tab === "scout" && /* @__PURE__ */ React.createElement("div", { className: "scout" }, /* @__PURE__ */ React.createElement("div", { className: "scout-hd" }, /* @__PURE__ */ React.createElement("span", { className: "scout-eye" }, "\u25C6 SCOUTING DEPARTMENT"), /* @__PURE__ */ React.createElement("h2", { className: "scout-h" }, "Pick your six \u2014 one per pot."), /* @__PURE__ */ React.createElement("p", { className: "scout-sub" }, "Tap ", /* @__PURE__ */ React.createElement("b", null, "Pick"), " on any card to claim that nation for its pot. The letter grade and bars are the model's read on the squad. Your buster sits up top \u2014 add a total-goals guess to settle ties.")), /* @__PURE__ */ React.createElement("div", { className: "cpx" }, /* @__PURE__ */ React.createElement("div", { className: "cpx-h" }, /* @__PURE__ */ React.createElement("span", null, "YOUR BUSTER"), /* @__PURE__ */ React.createElement("button", { className: "cpx-oracle", onClick: () => {
+  })), /* @__PURE__ */ React.createElement("p", { className: "grpv-note" }, "Top two of each group (highlighted) plus the best third-placed teams go through. Tables fill in as group results land \u2014 tap ", /* @__PURE__ */ React.createElement("b", null, "Refresh"), ".")), lgView === "knockouts" && /* @__PURE__ */ React.createElement("div", { className: "lg-pane" }, !bracket.anyLive && /* @__PURE__ */ React.createElement("div", { className: "lg-empty" }, "The bracket fills in as knockout results land - tap ", /* @__PURE__ */ React.createElement("b", null, "Refresh"), ". Confirmed matchups appear as soon as the groups finish."), (function(){
+var R = bracket.rounds || {};
+var fof = function(t){ return t ? /* @__PURE__ */ React.createElement(Flag, { t: t }) : /* @__PURE__ */ React.createElement("span", { className: "kov-tbd-fl" }); };
+var side = function(t, sc, cls){ return /* @__PURE__ */ React.createElement("div", { className: "kov-side" + cls }, /* @__PURE__ */ React.createElement("span", { className: "kov-fl" }, fof(t)), /* @__PURE__ */ React.createElement("span", { className: "kov-nm" }, t ? (CODES[t] || t) : "TBD"), /* @__PURE__ */ React.createElement("span", { className: "kov-sc" }, sc != null ? sc : "")); };
+var card = function(m, mir, key){ m = m || {}; var wa = m.win === "a" ? " win" : m.win === "b" ? " lose" : "", wb = m.win === "b" ? " win" : m.win === "a" ? " lose" : ""; return /* @__PURE__ */ React.createElement("div", { key: key, className: "kov-m" + (mir ? " mir" : "") }, side(m.a, m.sa, wa), side(m.b, m.sb, wb)); };
+var col = function(lab, items, extra){ return /* @__PURE__ */ React.createElement("div", { className: "kob-col " + extra }, /* @__PURE__ */ React.createElement("div", { className: "kov-rh kob-rh" }, lab), items); };
+var qf = R["Quarter-final"] || [], sf = R["Semi-final"] || [], fin = (R["Final"] || [])[0] || {};
+var aw = fin.win === "a", bw = fin.win === "b";
+var finCol = /* @__PURE__ */ React.createElement("div", { className: "kob-col kob-fincol" }, /* @__PURE__ */ React.createElement("div", { className: "kob-finwrap" }, /* @__PURE__ */ React.createElement("div", { className: "kob-fin" }, /* @__PURE__ */ React.createElement("div", { className: "kob-fin-h" }, "\u2605 FINAL \u2605"), /* @__PURE__ */ React.createElement("div", { className: "kob-fin-row" }, /* @__PURE__ */ React.createElement("div", { className: "kob-fin-team" + (aw ? " w" : "") }, /* @__PURE__ */ React.createElement("span", { className: "kob-fin-fl" }, fof(fin.a)), /* @__PURE__ */ React.createElement("span", { className: "kob-fin-tc" }, fin.a ? (CODES[fin.a] || fin.a) : "TBD"), /* @__PURE__ */ React.createElement("span", { className: "kob-fin-fs" }, fin.sa != null ? fin.sa : "")), /* @__PURE__ */ React.createElement("div", { className: "kob-fin-vs" }, "\u{1F3C6}"), /* @__PURE__ */ React.createElement("div", { className: "kob-fin-team" + (bw ? " w" : "") }, /* @__PURE__ */ React.createElement("span", { className: "kob-fin-fl" }, fof(fin.b)), /* @__PURE__ */ React.createElement("span", { className: "kob-fin-tc" }, fin.b ? (CODES[fin.b] || fin.b) : "TBD"), /* @__PURE__ */ React.createElement("span", { className: "kob-fin-fs" }, fin.sb != null ? fin.sb : "")))), (aw || bw) ? /* @__PURE__ */ React.createElement("div", { className: "kob-champ" }, /* @__PURE__ */ React.createElement("span", null, "\u{1F451} " + (CODES[aw ? fin.a : fin.b] || (aw ? fin.a : fin.b)))) : null));
+var mirrored = /* @__PURE__ */ React.createElement("div", { className: "kob" }, /* @__PURE__ */ React.createElement("div", { className: "kob-inner" }, col("QF", [card(qf[0], false, "l0"), card(qf[1], false, "l1")], "kob-tall"), col("SF", [card(sf[0], false, "sl")], "kob-mid"), finCol, col("SF", [card(sf[1], true, "sr")], "kob-mid"), col("QF", [card(qf[2], true, "r0"), card(qf[3], true, "r1")], "kob-tall")));
+var earlier = (function(){ var rows = ["Round of 32", "Round of 16"].map(function(rd){ var ms = R[rd] || []; if (!ms.length) return null; return /* @__PURE__ */ React.createElement("div", { key: rd, className: "kov-round" }, /* @__PURE__ */ React.createElement("div", { className: "kov-rh" }, rd), /* @__PURE__ */ React.createElement("div", { className: "kov-matches" }, ms.map(function(m, i){ return card(m, false, rd + i); }))); }).filter(Boolean); if (!rows.length) return null; return /* @__PURE__ */ React.createElement(Collapsible, { title: "Round of 32 and Round of 16" }, /* @__PURE__ */ React.createElement("div", { className: "kov" }, rows)); })();
+return /* @__PURE__ */ React.createElement(React.Fragment, null, earlier, mirrored);
+})())), stView === "pot" && /* @__PURE__ */ React.createElement(SidePotPanel, { potBoard, balance: bets.balance, loan: bets.loan || 0, achievements, shareCard, takeLoan, repayLoan, canReset: me === "Jason", resetAll }), stView === "gaffer" && /* @__PURE__ */ React.createElement(Gaffer, { facts: gafferFacts })), tab === "scout" && /* @__PURE__ */ React.createElement("div", { className: "scout" }, /* @__PURE__ */ React.createElement("div", { className: "scout-hd" }, /* @__PURE__ */ React.createElement("span", { className: "scout-eye" }, "\u25C6 SCOUTING DEPARTMENT"), /* @__PURE__ */ React.createElement("h2", { className: "scout-h" }, "Pick your six \u2014 one per pot."), /* @__PURE__ */ React.createElement("p", { className: "scout-sub" }, "Tap ", /* @__PURE__ */ React.createElement("b", null, "Pick"), " on any card to claim that nation for its pot. The letter grade and bars are the model's read on the squad. Your buster sits up top \u2014 add a total-goals guess to settle ties.")), /* @__PURE__ */ React.createElement("div", { className: "cpx" }, /* @__PURE__ */ React.createElement("div", { className: "cpx-h" }, /* @__PURE__ */ React.createElement("span", null, "YOUR BUSTER"), /* @__PURE__ */ React.createElement("button", { className: "cpx-oracle", onClick: () => {
     setPicks(__spreadValues({}, RECO));
     setToast("Loaded the suggested six");
   } }, /* @__PURE__ */ React.createElement(RotateCcw, { size: 12 }), " Suggested six")), /* @__PURE__ */ React.createElement("div", { className: "cpx-slots" }, Object.keys(POTS).map((p) => {
@@ -4999,20 +5011,49 @@ const CSS = `
 .grpv-row.q .grpv-pos{color:#0e7490}
 .grpv-note{font-size:11px;color:var(--muted);line-height:1.5;margin:13px 0 0}
 /* knockout bracket view */
-.kov{display:flex;gap:14px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch}
-.kov-round{flex:none;min-width:184px;display:flex;flex-direction:column}
-.kov-rh{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#0e7490;margin-bottom:9px}
-.kov-matches{display:flex;flex-direction:column;gap:8px;justify-content:space-around;flex:1}
-.kov-m{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
-.kov-side{display:flex;align-items:center;gap:7px;padding:7px 9px;font-size:12px;color:var(--text)}
+.kov{display:flex;gap:16px;overflow-x:auto;padding:4px 2px 16px;-webkit-overflow-scrolling:touch}
+.kov-round{flex:none;min-width:196px;display:flex;flex-direction:column}
+.kov-rh{align-self:flex-start;font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#1a1205;background:linear-gradient(180deg,#F0CE66,#D9A93C);padding:4px 11px;border-radius:999px;margin-bottom:13px;box-shadow:0 2px 10px rgba(217,169,60,.28)}
+.kov-matches{display:flex;flex-direction:column;gap:13px;justify-content:space-around;flex:1}
+.kov-m{position:relative;border:1px solid var(--line);border-radius:13px;overflow:hidden;background:linear-gradient(180deg,#181a1f,#101115);box-shadow:0 5px 16px rgba(0,0,0,.4);transition:transform .15s,box-shadow .15s,border-color .15s}
+.kov-m:hover{transform:translateY(-2px);border-color:rgba(240,206,102,.45);box-shadow:0 10px 26px rgba(0,0,0,.55)}
+.kov-side{position:relative;display:flex;align-items:center;gap:8px;padding:9px 12px;font-size:12.5px;color:var(--text)}
 .kov-side+.kov-side{border-top:1px solid var(--line)}
-.kov-fl{width:18px;height:13px;flex:none;display:flex}
-.kov-fl svg,.kov-fl img{width:18px;height:13px;border-radius:2px}
-.kov-tbd-fl{width:18px;height:13px;border-radius:2px;background:rgba(0,0,0,.06)}
-.kov-nm{flex:1;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.kov-sc{font-family:'Archivo';font-weight:800;font-size:13px;color:var(--muted);min-width:14px;text-align:right}
-.kov-side.win{background:rgba(52,211,153,.1)}.kov-side.win .kov-nm{color:#fff}.kov-side.win .kov-sc{color:#00D46A}
-.kov-side.lose{opacity:.55}
+.kov-fl{width:20px;height:14px;flex:none;display:flex;border-radius:3px;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.09)}
+.kov-fl svg,.kov-fl img{width:20px;height:14px;border-radius:3px}
+.kov-tbd-fl{width:20px;height:14px;border-radius:3px;background:rgba(255,255,255,.06)}
+.kov-nm{flex:1;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.01em}
+.kov-sc{font-family:'Archivo';font-weight:800;font-size:14px;color:var(--muted);min-width:16px;text-align:right}
+.kov-side.win{background:linear-gradient(90deg,rgba(240,206,102,.18),rgba(240,206,102,.02))}
+.kov-side.win::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#F4D879,#D9A93C)}
+.kov-side.win .kov-nm{color:#fff;font-weight:800}
+.kov-side.win .kov-sc{color:#F4D879}
+.kov-side.lose{opacity:.5}
+.home-hero{display:none}
+.kov-m.mir .kov-side{flex-direction:row-reverse}
+.kov-m.mir .kov-sc{text-align:left}
+.kov-m.mir .kov-side.win::before{left:auto;right:0}
+.kob{overflow-x:auto;-webkit-overflow-scrolling:touch;padding:8px 0 12px}
+.kob-inner{display:flex;align-items:center;justify-content:center;gap:12px;width:max-content;margin:0 auto;min-height:252px;padding:0 10px}
+.kob-col{display:flex;flex-direction:column;flex:none;width:108px}
+.kob-col.kob-tall{justify-content:space-between;height:230px}
+.kob-col.kob-mid{justify-content:center;height:230px}
+.kob-col.kob-fincol{justify-content:center;height:230px;width:132px}
+.kob-col .kob-rh{align-self:center;margin-bottom:10px}
+.kob-finwrap{display:flex;flex-direction:column;align-items:center;width:100%}
+.kob-fin{width:100%;border:1.5px solid #D9A93C;border-radius:14px;background:linear-gradient(180deg,#1d1a12,#121013);box-shadow:0 0 26px rgba(217,169,60,.25);overflow:hidden}
+.kob-fin-h{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.14em;text-align:center;color:#D9A93C;padding:7px 0 2px;font-weight:700}
+.kob-fin-row{display:flex;align-items:stretch}
+.kob-fin-team{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 4px}
+.kob-fin-fl{width:26px;height:18px;display:flex}
+.kob-fin-fl svg,.kob-fin-fl img{width:26px;height:18px;border-radius:3px}
+.kob-fin-tc{font-weight:800;font-size:11px;color:var(--text);letter-spacing:.03em}
+.kob-fin-fs{font-family:'Archivo';font-weight:800;font-size:20px;color:var(--muted)}
+.kob-fin-team.w .kob-fin-tc{color:#fff}
+.kob-fin-team.w .kob-fin-fs{color:#F4D879}
+.kob-fin-vs{display:flex;align-items:center;justify-content:center;font-size:16px;padding:0 3px}
+.kob-champ{margin-top:11px;display:flex;justify-content:center}
+.kob-champ span{display:inline-flex;align-items:center;gap:6px;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.05em;color:#1a1205;background:linear-gradient(180deg,#F4D879,#D9A93C);padding:6px 12px;border-radius:999px;box-shadow:0 4px 14px rgba(217,169,60,.4)}
 /* dossier live news */
 .dos-news{display:flex;flex-wrap:wrap;align-items:center;gap:6px;text-decoration:none;padding:8px 10px;margin-top:1px;border:1px solid var(--line);border-radius:9px;background:rgba(123,216,245,.05)}
 .dos-news-k{font-family:'Space Mono',monospace;font-size:8.5px;letter-spacing:.04em;text-transform:uppercase;color:#0e7490;flex:none}
