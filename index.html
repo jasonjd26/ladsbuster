@@ -13,7 +13,12 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png"/>
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"/>
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20180%20180%22%3E%3Crect%20width%3D%22180%22%20height%3D%22180%22%20rx%3D%2240%22%20fill%3D%22%23DC2626%22%2F%3E%3Cg%20transform%3D%22translate(32%2020)%20scale(2.4)%22%3E%3Crect%20x%3D%2212%22%20y%3D%2252%22%20width%3D%2224%22%20height%3D%225.2%22%20rx%3D%222.4%22%20fill%3D%22%23E9B23C%22%2F%3E%3Crect%20x%3D%2216%22%20y%3D%2247.5%22%20width%3D%2216%22%20height%3D%224.6%22%20rx%3D%221.6%22%20fill%3D%22%231f7a44%22%2F%3E%3Crect%20x%3D%2218.5%22%20y%3D%2242%22%20width%3D%2211%22%20height%3D%226%22%20rx%3D%221.4%22%20fill%3D%22%23E9B23C%22%2F%3E%3Cpath%20d%3D%22M18.5%2018%20C%2015%2027%2021.2%2030%2021.2%2035%20C%2021.2%2039.5%2017.4%2039.5%2019%2043%20L29%2043%20C%2030.6%2039.5%2026.8%2039.5%2026.8%2035%20C%2026.8%2030%2033%2027%2029.5%2018%20Z%22%20fill%3D%22%23E9B23C%22%2F%3E%3Ccircle%20cx%3D%2224%22%20cy%3D%2213%22%20r%3D%228.1%22%20fill%3D%22%23E9B23C%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E"/>
-<style>html,body{margin:0;padding:0;background:#F5F5F5}#root{min-height:100vh}img{-webkit-user-drag:none}</style>
+<style>html,body{margin:0;padding:0;background:#F5F5F5}#root{min-height:100vh}img{-webkit-user-drag:none}.sm-mode button.on{color:#fff !important}
+.sc-controls>button{color:#fff !important}
+.mdr-share,.mdr-again,.mdr-matches,.mdr-tbl{position:relative;z-index:25}
+.kob-third{margin-top:10px;width:100%}
+.tabs button span{white-space:nowrap}
+</style>
 </head>
 <body>
 <div id="root"><div style="color:#333;font:15px/1.6 system-ui,-apple-system,sans-serif;padding:40px 24px;max-width:480px;margin:0 auto;text-align:center">Loading The Oracle&#8230;<br><br><span style="font-size:13px;color:#666">If this stays blank, this page needs to run JavaScript &#8212; open it in a web browser (Chrome or Safari) or via its hosted link, not a file preview.</span></div></div>
@@ -533,56 +538,6 @@ const CODES = {
   Tunisia: "TUN",
   Uzbekistan: "UZB"
 };
-const CC = {
-  Argentina: "ar",
-  Brazil: "br",
-  England: "gb-eng",
-  France: "fr",
-  Germany: "de",
-  Netherlands: "nl",
-  Portugal: "pt",
-  Spain: "es",
-  Belgium: "be",
-  Colombia: "co",
-  Japan: "jp",
-  Mexico: "mx",
-  Norway: "no",
-  Turkey: "tr",
-  Uruguay: "uy",
-  USA: "us",
-  Austria: "at",
-  Canada: "ca",
-  Croatia: "hr",
-  Ecuador: "ec",
-  "Ivory Coast": "ci",
-  Morocco: "ma",
-  Senegal: "sn",
-  Switzerland: "ch",
-  Algeria: "dz",
-  Australia: "au",
-  Bosnia: "ba",
-  "Cape Verde": "cv",
-  Curacao: "cw",
-  Paraguay: "py",
-  Scotland: "gb-sct",
-  Sweden: "se",
-  "DR Congo": "cd",
-  Haiti: "ht",
-  Iran: "ir",
-  Iraq: "iq",
-  Jordan: "jo",
-  "New Zealand": "nz",
-  Panama: "pa",
-  Qatar: "qa",
-  Czechia: "cz",
-  Egypt: "eg",
-  Ghana: "gh",
-  "Saudi Arabia": "sa",
-  "South Africa": "za",
-  "South Korea": "kr",
-  Tunisia: "tn",
-  Uzbekistan: "uz"
-};
 function Flag({ t }) {
   if (t === "England" || t === "Scotland" || t === "Wales" || t === "Northern Ireland")
     return /* @__PURE__ */ React.createElement("span", { className: "fcode" }, CODES[t] || (t || "").slice(0, 3).toUpperCase());
@@ -800,14 +755,6 @@ const POTS = {
   6: { label: "The Wildcards", hue: "#F472B6", desc: "Low seeds with a puncher's chance in a kind draw." }
 };
 const RECO = { 1: "France", 2: "Mexico", 3: "Morocco", 4: "Australia", 5: "Iran", 6: "Egypt" };
-const REASONS = {
-  France: "Highest projected haul and the deepest knockout runs \u2014 a true coin-flip with Spain and Argentina at the top.",
-  Belgium: "The softest group of any seed (Iran, Egypt, New Zealand). 97% to advance and keep banking points.",
-  Morocco: "Strongest side in the tier and 2022 semifinalists; clears Group C in behind Brazil.",
-  Australia: "A wafer-thin pot \u2014 Australia just edges Algeria for the best points floor.",
-  Iran: "Runs away with the pot: 88% to advance from a group it's second-favourite in.",
-  "South Korea": "The kindest draw in the wildcards \u2014 Group A behind only Mexico."
-};
 const CAPSULES = {
   Argentina: { verdict: "Reigning champions, top-rated side and the softest group of any favourite \u2014 a real title threat.", weak: "Ageing spine and heavy reliance on a 38-year-old Messi." },
   Spain: { verdict: "Euro 2024 winners and the bookies' co-favourite; relentless control and 99% to reach the knockouts.", weak: "Lamine Yamal's hamstring fitness \u2014 little like-for-like spark without him." },
@@ -858,7 +805,6 @@ const CAPSULES = {
   "South Africa": { verdict: "Pacey and back among the elite after a long absence.", weak: "A lightweight squad with limited tournament pedigree." },
   Ghana: { verdict: "Big names and real pace on the break.", weak: "Chaotic defensively and stuck in England's group \u2014 ~14% to advance." }
 };
-const ROUNDS = [["adv", "R32"], ["r16", "R16"], ["qf", "QF"], ["sf", "SF"], ["final", "Final"], ["win", "Cup"]];
 const STAGE_LABEL = { GROUP: "Group stage", R32: "Round of 32", R16: "Round of 16", QF: "Quarter-final", SF: "Semi-final", RU: "Runner-up", WIN: "Champion" };
 function prettyStage(s) {
   return { GROUP_STAGE: "Group stage", LAST_32: "Round of 32", ROUND_OF_32: "Round of 32", LAST_16: "Round of 16", ROUND_OF_16: "Round of 16", QUARTER_FINALS: "Quarter-finals", QUARTER_FINAL: "Quarter-final", SEMI_FINALS: "Semi-finals", SEMI_FINAL: "Semi-final", THIRD_PLACE: "Third place", PLAYOFF_FOR_THIRD_PLACE: "Third place", FINAL: "Final" }[s] || (s ? s.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase()) : "Knockouts");
@@ -1475,18 +1421,6 @@ function useCountUp(value, ms = 520) {
     return () => cancelAnimationFrame(raf.current);
   }, [value, ms]);
   return disp;
-}
-function RunProfile({ t, large }) {
-  return /* @__PURE__ */ React.createElement("div", { className: "prof" + (large ? " prof-lg" : "") }, ROUNDS.map(([k, lab], i) => {
-    const v = t[k];
-    const h = Math.max(3, v);
-    const gold = i === ROUNDS.length - 1;
-    return /* @__PURE__ */ React.createElement("div", { className: "prof-col", key: k }, /* @__PURE__ */ React.createElement("div", { className: "prof-track" }, /* @__PURE__ */ React.createElement("div", { className: "prof-fill", style: {
-      height: h + "%",
-      background: gold ? "linear-gradient(180deg,#F4CF6B,#D89B2C)" : "linear-gradient(180deg,#7BD8F5,#3E9FD0)",
-      boxShadow: gold ? "0 0 9px rgba(233,178,60,.45)" : "none"
-    } })), large && /* @__PURE__ */ React.createElement("div", { className: "prof-meta" }, /* @__PURE__ */ React.createElement("span", { className: "prof-pct" }, v >= 1 ? Math.round(v) : v > 0 ? "<1" : "0"), /* @__PURE__ */ React.createElement("span", { className: "prof-lab" }, lab)));
-  }));
 }
 function MatchCard({ r }) {
   if (!r) return /* @__PURE__ */ React.createElement("div", { className: "mc mc-empty" });
@@ -3222,7 +3156,7 @@ function App() {
   const couponRun = sim ? Object.keys(POTS).map((p) => ({ pot: p, team: picks[p], pts: sim.pts[picks[p]], stage: sim.fin[picks[p]] })) : [];
   const couponRunTotal = couponRun.reduce((s, x) => s + x.pts, 0);
   const advSet = sim ? new Set(Object.keys(sim.fin).filter((t) => sim.fin[t] !== "GROUP")) : /* @__PURE__ */ new Set();
-  const lgRes = { group: league.group, ko: league.ko };
+  const lgRes = useMemo(() => ({ group: league.group, ko: league.ko }), [league]);
   useEffect(() => {
     if (!live.matches || !live.matches.length) return;
     var ALIAS = { "Bosnia-Herzegovina": "Bosnia", "Cape Verde Islands": "Cape Verde", "Czech Republic": "Czechia", "Korea Republic": "South Korea", "IR Iran": "Iran", "United States": "USA", "Turkiye": "Turkey" };
@@ -3251,16 +3185,24 @@ function App() {
   const liveKo = useMemo(() => {
     const pts = {};
     let goals2 = 0, n = 0;
+    const manual = {};
+    KO_DEF.forEach((d) => {
+      const r = league.ko[d.id];
+      if (r && r.a && r.b && ent(r.ga) && ent(r.gb)) manual[[normTeam(r.a), normTeam(r.b)].sort().join("|")] = 1;
+    });
     (live.matches || []).forEach((m) => {
       if (!m || m.stage === "GROUP_STAGE" || m.status !== "FINISHED" || m.hs == null || m.as == null) return;
-      const hs = +m.hs, as = +m.as;
+      const home = normTeam(m.home), away = normTeam(m.away);
+      if (manual[[home, away].sort().join("|")]) return;
+      const ph = m.penHome != null ? +m.penHome : 0, pa = m.penAway != null ? +m.penAway : 0;
+      const hs = +m.hs - ph, as = +m.as - pa;
       goals2 += hs + as;
       n++;
-      const w = m.winner === "HOME_TEAM" ? m.home : m.winner === "AWAY_TEAM" ? m.away : m.penHome != null && m.penAway != null ? m.penHome > m.penAway ? m.home : m.away : hs > as ? m.home : as > hs ? m.away : null;
+      const w = m.winner === "HOME_TEAM" ? home : m.winner === "AWAY_TEAM" ? away : m.penHome != null && m.penAway != null ? m.penHome > m.penAway ? home : away : hs > as ? home : as > hs ? away : null;
       if (w) pts[w] = (pts[w] || 0) + 3;
     });
     return { pts, goals: goals2, n };
-  }, [live.matches]);
+  }, [live.matches, league.ko]);
   const table = useMemo(() => {
     const base = standings(league.picks, lgRes, league.guesses);
     if (!liveKo.n) return base;
@@ -3301,6 +3243,7 @@ function App() {
       cur[r.name] = r.rank;
     });
     const snap = prevSnap.current;
+    if (snap && snap.played != null && table.played < snap.played) return;
     if (snap && snap.played != null && snap.played !== table.played) {
       const mv = {};
       table.rows.forEach((r) => {
@@ -3481,7 +3424,14 @@ function App() {
     (live.matches || []).forEach((m) => {
       if (!m || m.stage === "GROUP_STAGE" || m.hs == null || m.as == null) return;
       const h = normTeam(m.home), a = normTeam(m.away);
-      liveKO[[h, a].sort().join("|")] = { home: h, away: a, hs: m.hs, as: m.as, status: m.status, winner: m.winner ? normTeam(m.winner) : null, penHome: m.penHome, penAway: m.penAway };
+      liveKO[[h, a].sort().join("|")] = { home: h, away: a, hs: m.penHome != null ? m.hs - m.penHome : m.hs, as: m.penAway != null ? m.as - m.penAway : m.as, status: m.status, winner: m.winner === "HOME_TEAM" ? h : m.winner === "AWAY_TEAM" ? a : null, penHome: m.penHome, penAway: m.penAway };
+    });
+    const liveR32 = {};
+    (live.matches || []).forEach((m) => {
+      if (m && m.stage === "LAST_32" && m.home && m.away) {
+        liveR32[normTeam(m.home)] = normTeam(m.away);
+        liveR32[normTeam(m.away)] = normTeam(m.home);
+      }
     });
     const pairLive = (a, b) => {
       if (!a || !b) return null;
@@ -3490,12 +3440,14 @@ function App() {
       const aHome = normTeam(a) === lv.home;
       const sa = aHome ? lv.hs : lv.as, sb = aHome ? lv.as : lv.hs;
       let win = null;
-      if (lv.winner) win = normTeam(a) === lv.winner ? "a" : normTeam(b) === lv.winner ? "b" : null;
-      else if (sa > sb) win = "a";
-      else if (sb > sa) win = "b";
-      else if (lv.penHome != null && lv.penAway != null) {
-        const pa = aHome ? lv.penHome : lv.penAway, pb = aHome ? lv.penAway : lv.penHome;
-        win = pa > pb ? "a" : pb > pa ? "b" : null;
+      if (lv.status === "FINISHED") {
+        if (lv.winner) win = normTeam(a) === lv.winner ? "a" : normTeam(b) === lv.winner ? "b" : null;
+        else if (sa > sb) win = "a";
+        else if (sb > sa) win = "b";
+        else if (lv.penHome != null && lv.penAway != null) {
+          const pa = aHome ? lv.penHome : lv.penAway, pb = aHome ? lv.penAway : lv.penHome;
+          win = pa > pb ? "a" : pb > pa ? "b" : null;
+        }
       }
       return { sa, sb, win, status: lv.status };
     };
@@ -3503,7 +3455,7 @@ function App() {
     const resolved = {};
     const winById = (id) => {
       const r = resolved[id];
-      if (r && r.win) return r.win === "a" ? r.a : r.b;
+      if (r && r.win && r.status === "FINISHED") return r.win === "a" ? r.a : r.b;
       const w = winnerOf(lgRes, id);
       return w || "";
     };
@@ -3514,6 +3466,11 @@ function App() {
       const slot = af.ko[d.id] || {};
       if (!a) a = slot.a || "";
       if (!b) b = slot.b || "";
+      if (d.round === "Round of 32") {
+        const na = normTeam(a), nb = normTeam(b);
+        if (na && liveR32[na] && liveR32[na] !== nb) b = liveR32[na];
+        else if (nb && liveR32[nb] && liveR32[nb] !== na) a = liveR32[nb];
+      }
       const lv = pairLive(a, b);
       resolved[d.id] = { a, b, sa: lv ? lv.sa : null, sb: lv ? lv.sb : null, win: lv ? lv.win : null, status: lv ? lv.status : null, round: d.round };
     });
@@ -3831,8 +3788,8 @@ function App() {
       }
     });
     const out = teams.filter((t) => eliminated.has(t));
-    return { hasProfile: true, name: me, rank: row.rank || PLAYERS.length, n: PLAYERS.length, total: row.total || 0, best: best2, bestOdds: bestW.toFixed(1), worst, outCount: out.length, outList: out.join(", "), profit: Math.round((bets.balance - 1e3) * 100) / 100 };
-  }, [meIdx, me, table, eliminated, bets.balance]);
+    return { hasProfile: true, name: me, rank: row.rank || PLAYERS.length, n: PLAYERS.length, total: row.total || 0, best: best2, bestOdds: bestW.toFixed(1), worst, outCount: out.length, outList: out.join(", "), profit: Math.round((bets.balance - (bets.loan || 0) - 1e3) * 100) / 100 };
+  }, [meIdx, me, table, eliminated, bets.balance, bets.loan]);
   const achievements = useMemo(() => {
     const all = [...bets.settled || [], ...bets.open || []];
     const placed = all.length;
@@ -3979,16 +3936,76 @@ function App() {
         if (!j || j.error || !j.matches) throw new Error(j && j.error || "no data");
         const matches = j.matches.map((m) => __spreadProps(__spreadValues({}, m), { home: normTeam(m.home), away: normTeam(m.away) }));
         setLeague((L) => {
+          let anyChange = false;
           const group = __spreadValues({}, L.group);
           matches.forEach((m) => {
-            if (m.stage === "GROUP_STAGE" && m.hs != null && m.as != null) {
+            if (m.stage === "GROUP_STAGE" && m.status === "FINISHED" && m.hs != null && m.as != null) {
               const fx = fixtureFor(m.group, m.home, m.away);
               if (fx) {
-                group[fx.id] = fx.a === m.home ? { ga: m.hs, gb: m.as } : { ga: m.as, gb: m.hs };
+                const nv = fx.a === m.home ? { ga: m.hs, gb: m.as } : { ga: m.as, gb: m.hs };
+                const ov = group[fx.id];
+                if (!ov || +ov.ga !== +nv.ga || +ov.gb !== +nv.gb) { group[fx.id] = nv; anyChange = true; }
               }
             }
           });
-          return __spreadProps(__spreadValues({}, L), { group });
+          const ko = {};
+          Object.keys(L.ko || {}).forEach((k) => ko[k] = __spreadValues({}, L.ko[k]));
+          const koLive = {};
+          matches.forEach((m) => {
+            if (m.stage !== "GROUP_STAGE" && m.hs != null && m.as != null) koLive[[m.home, m.away].sort().join("|")] = m;
+          });
+          const usedKeys = {};
+          const S2R = { LAST_32: "Round of 32", LAST_16: "Round of 16", QUARTER_FINALS: "Quarter-final", QUARTER_FINAL: "Quarter-final", SEMI_FINALS: "Semi-final", SEMI_FINAL: "Semi-final", THIRD_PLACE: "Third place", THIRD_PLACE_PLAYOFF: "Third place", FINAL: "Final" };
+          const koEntry = (slotA, slotB, lv) => {
+            const aHome = normTeam(slotA) === lv.home;
+            const hReal = lv.penHome != null ? lv.hs - lv.penHome : lv.hs, aReal = lv.penAway != null ? lv.as - lv.penAway : lv.as;
+            const ga = aHome ? hReal : aReal, gb = aHome ? aReal : hReal;
+            let pens = "";
+            if (ga === gb) {
+              if (lv.winner) pens = normTeam(slotA) === normTeam(lv.winner) ? "a" : normTeam(slotB) === normTeam(lv.winner) ? "b" : "";
+              if (!pens && lv.penHome != null && lv.penAway != null) pens = (aHome ? lv.penHome - lv.penAway : lv.penAway - lv.penHome) > 0 ? "a" : "b";
+            }
+            return { a: slotA, b: slotB, ga: ga, gb: gb, pens: pens };
+          };
+          for (let pass = 0; pass < 8; pass++) {
+            const af = applyAutoFill({ group: group, ko: ko });
+            let changed = false;
+            KO_DEF.forEach((d) => {
+              const slot = af.ko[d.id];
+              if (!slot || !slot.a || !slot.b) return;
+              const key = [normTeam(slot.a), normTeam(slot.b)].sort().join("|");
+              const lv = koLive[key];
+              if (!lv) return;
+              usedKeys[key] = 1;
+              const e = koEntry(slot.a, slot.b, lv);
+              const cur = ko[d.id] || {};
+              if (cur.a !== e.a || cur.b !== e.b || +cur.ga !== e.ga || +cur.gb !== e.gb || (cur.pens || "") !== e.pens) { ko[d.id] = e; changed = true; anyChange = true; }
+            });
+            const af2 = applyAutoFill({ group: group, ko: ko });
+            Object.keys(koLive).forEach((key) => {
+              if (usedKeys[key]) return;
+              const lv = koLive[key];
+              const round = S2R[lv.stage];
+              if (!round) return;
+              let best = null;
+              KO_DEF.forEach((d) => {
+                if (d.round !== round || best) return;
+                const cur = ko[d.id] || {};
+                if (ent(cur.ga) && ent(cur.gb)) return;
+                const ps = af2.ko[d.id] || {};
+                const pa = normTeam(ps.a || ""), pb = normTeam(ps.b || "");
+                if (pa === lv.home || pa === lv.away || pb === lv.home || pb === lv.away || (!ps.a && !ps.b)) best = d;
+              });
+              if (best) {
+                usedKeys[key] = 1;
+                ko[best.id] = koEntry(lv.home, lv.away, lv);
+                changed = true;
+                anyChange = true;
+              }
+            });
+            if (!changed) break;
+          }
+          return anyChange ? __spreadProps(__spreadValues({}, L), { group: group, ko: ko }) : L;
         });
         // Detect score changes and fire toasts
         const prev = prevMatchesRef.current;
@@ -4128,7 +4145,7 @@ function App() {
         )
       )
     ),
-    /* @__PURE__ */ React.createElement("header", { className: "top" }, /* @__PURE__ */ React.createElement("div", { className: "brand" }, /* @__PURE__ */ React.createElement("div", { className: "mark" }, /* @__PURE__ */ React.createElement(WCTrophy, { className: "mark-tro" })), /* @__PURE__ */ React.createElement("div", { className: "brand-tx" }, /* @__PURE__ */ React.createElement("div", { className: "brand-t" }, "DALY SPORT CO."), /* @__PURE__ */ React.createElement("div", { className: "brand-s" }, "World Cup 2026 \xB7 the lads' sweepstake"))), /* @__PURE__ */ React.createElement("nav", { className: "tabs" }, /* @__PURE__ */ React.createElement("button", { className: tab === "home" ? "on" : "", onClick: () => setTab("home") }, /* @__PURE__ */ React.createElement(Crown, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Home")), /* @__PURE__ */ React.createElement("button", { className: tab === "standings" ? "on" : "", onClick: () => setTab("standings") }, /* @__PURE__ */ React.createElement(Users, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Table")), /* @__PURE__ */ React.createElement("button", { className: tab === "scout" ? "on" : "", onClick: () => setTab("scout") }, /* @__PURE__ */ React.createElement(BookOpen, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Scout")), /* @__PURE__ */ React.createElement("button", { className: tab === "sim" ? "on" : "", onClick: () => setTab("sim") }, /* @__PURE__ */ React.createElement(Zap, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Simulate")), /* @__PURE__ */ React.createElement("button", { className: tab === "bookie" ? "on" : "", onClick: () => setTab("bookie") }, /* @__PURE__ */ React.createElement(Coins, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Bookie"))), /* @__PURE__ */ React.createElement("button", { className: "refresh" + (live.loading ? " spin" : "") + (live.ok ? " ok" : ""), onClick: refreshLive, title: live.ok ? "Live \xB7 updated " + (liveAgo === 0 ? "just now" : liveAgo + "m ago") : live.err ? "Tap to retry" : "Tap to load live scores" }, /* @__PURE__ */ React.createElement(RotateCcw, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, live.loading ? "Refreshing\u2026" : live.ok ? liveAgo === 0 ? "Live \xB7 now" : "Live \xB7 " + liveAgo + "m" : "Refresh"), liveMatchCount > 0 && /* @__PURE__ */ React.createElement("span", { className: "live-pill" }, liveMatchCount, " LIVE"))), tab === "home" && /* @__PURE__ */ React.createElement("div", {className:"home"}, /* @__PURE__ */ React.createElement("div", {className:"home-hero"}, /* @__PURE__ */ React.createElement("div", {className:"home-hero-bg"}), /* @__PURE__ */ React.createElement("div", {className:"home-tro"}, /* @__PURE__ */ React.createElement(WCTrophy, null)), /* @__PURE__ */ React.createElement("div", {className:"home-title"}, "DALY SPORT CO."), /* @__PURE__ */ React.createElement("div", {className:"home-sub"}, "World Cup 2026 \xB7 The Lads\' Sweepstake")), /* @__PURE__ */ React.createElement("div", {className:"home-body"}, /* @__PURE__ */ React.createElement("div", {className:"home-leader"}, /* @__PURE__ */ React.createElement("div", {className:"home-leader-h"}, /* @__PURE__ */ React.createElement("span", {className:"home-leader-dot"}), table.rows.length > 0 && table.rows[0].total > 0 ? "LEADING THE LEAGUE" : "STANDINGS"), /* @__PURE__ */ React.createElement("div", {className:"home-leader-body"}, table.rows.length > 0 ? (function(){ var L = table.rows[0]; return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", {className:"home-l-name"}, L.name), /* @__PURE__ */ React.createElement("div", {className:"home-l-pts"}, /* @__PURE__ */ React.createElement("b", null, L.total), /* @__PURE__ */ React.createElement("span", null, "pts")), /* @__PURE__ */ React.createElement("div", {className:"home-l-flags"}, L.teams.map(function(t,k){return /* @__PURE__ */ React.createElement("span",{key:k,className:"home-l-flag"}, /* @__PURE__ */ React.createElement(Flag,{t:t}));})));})() : /* @__PURE__ */ React.createElement("div", {className:"home-l-empty"}, "Hit Refresh to load scores"))), /* @__PURE__ */ React.createElement("div", {className:"home-podium"}, [0,1,2].map(function(i){ var medals = ["\u{1F947}","\u{1F948}","\u{1F949}"]; var r = table.rows[i]; return /* @__PURE__ */ React.createElement("div", {key:i, className:"home-pod"+(i===0?" p1":"")}, /* @__PURE__ */ React.createElement("div", {className:"home-pod-medal"}, medals[i]), /* @__PURE__ */ React.createElement("div", {className:"home-pod-name"}, r ? r.name : "\u2014"), /* @__PURE__ */ React.createElement("div", {className:"home-pod-pts"+((!r||r.total===0)?" muted":"")}, r ? r.total+"pts" : "\u2014"));})), /* @__PURE__ */ React.createElement("div", {className:"home-stats"}, /* @__PURE__ */ React.createElement("div", {className:"home-stat"}, /* @__PURE__ */ React.createElement("div", {className:"home-stat-v"}, table.played||0), /* @__PURE__ */ React.createElement("div", {className:"home-stat-l"}, "matches played")), /* @__PURE__ */ React.createElement("div", {className:"home-stat"}, /* @__PURE__ */ React.createElement("div", {className:"home-stat-v"}, liveMatchCount > 0 ? liveMatchCount : totalGoals||0), /* @__PURE__ */ React.createElement("div", {className:"home-stat-l"}, liveMatchCount > 0 ? "\u26BD live now" : "goals scored"))), /* @__PURE__ */ React.createElement("div", {className:"home-links"}, /* @__PURE__ */ React.createElement("button", {className:"home-link mdr-btn", onClick:function(){try{_mdReview(live.matches,me);}catch(e){}}}, /* @__PURE__ */ React.createElement(Crown, {size:16}), "Review"), /* @__PURE__ */ React.createElement("button", {className:"home-link", onClick:function(){setTab("standings");}}, /* @__PURE__ */ React.createElement(Users, {size:16}), "Table"), /* @__PURE__ */ React.createElement("button", {className:"home-link", onClick:function(){setTab("scout");}}, /* @__PURE__ */ React.createElement(BookOpen, {size:16}), "Scout"), /* @__PURE__ */ React.createElement("button", {className:"home-link", onClick:function(){setTab("sim");}}, /* @__PURE__ */ React.createElement(Zap, {size:16}), "Sim"), /* @__PURE__ */ React.createElement("button", {className:"home-link", onClick:function(){setTab("bookie");}}, /* @__PURE__ */ React.createElement(Coins, {size:16}), "Bookie")))), tab === "standings" && /* @__PURE__ */ React.createElement("div", { className: "lg" }, /* @__PURE__ */ React.createElement("div", { className: "st-sub" }, /* @__PURE__ */ React.createElement("button", { className: stView === "table" ? "on" : "", onClick: () => setStView("table") }, "Standings"), /* @__PURE__ */ React.createElement("button", { className: stView === "gaffer" ? "on" : "", onClick: () => setStView("gaffer") }, "\u{1F399}\uFE0F Gaffer"), /* @__PURE__ */ React.createElement("button", { className: stView === "pot" ? "on" : "", onClick: () => setStView("pot") }, "\u{1F4B0} Side Pot")), stView === "table" && /* @__PURE__ */ React.createElement(React.Fragment, null, meIdx < 0 ? /* @__PURE__ */ React.createElement("div", { className: "me-pick" }, /* @__PURE__ */ React.createElement("div", { className: "me-pick-h" }, "\u{1F44B} Who are you?"), /* @__PURE__ */ React.createElement("div", { className: "me-pick-sub" }, "Tap your name to follow your six and see your teams' games. It's just for this phone \u2014 no password needed."), /* @__PURE__ */ React.createElement("div", { className: "me-pick-grid" }, PLAYERS.map((n) => /* @__PURE__ */ React.createElement("button", { key: n, onClick: () => setMe(n) }, n)))) : /* @__PURE__ */ React.createElement("div", { className: "me-today" }, /* @__PURE__ */ React.createElement("div", { className: "me-today-top" }, /* @__PURE__ */ React.createElement("span", { className: "me-today-who" }, "Following ", /* @__PURE__ */ React.createElement("b", null, me)), /* @__PURE__ */ React.createElement("button", { className: "me-switch", onClick: () => setMe("") }, "change")), !live.matches ? /* @__PURE__ */ React.createElement("div", { className: "me-today-none" }, "Tap Refresh up top to load today's games.") : todayMatches.length === 0 ? /* @__PURE__ */ React.createElement("div", { className: "me-today-none" }, liveMatchCount > 0 ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("span", {className:"live-dot-sm"}), "", liveMatchCount, " live match", liveMatchCount>1?"es":"", " \u2014 none are your teams") : "None of your six are out today \u2014 your games show here on match days.") : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "me-today-h" }, "Your teams today"), /* @__PURE__ */ React.createElement("div", { className: "me-today-list" }, todayMatches.map((m) => {
+    /* @__PURE__ */ React.createElement("header", { className: "top" }, /* @__PURE__ */ React.createElement("div", { className: "brand" }, /* @__PURE__ */ React.createElement("div", { className: "mark" }, /* @__PURE__ */ React.createElement(WCTrophy, { className: "mark-tro" })), /* @__PURE__ */ React.createElement("div", { className: "brand-tx" }, /* @__PURE__ */ React.createElement("div", { className: "brand-t" }, "DALY SPORT CO."), /* @__PURE__ */ React.createElement("div", { className: "brand-s" }, "World Cup 2026 \xB7 the lads' sweepstake"))), /* @__PURE__ */ React.createElement("nav", { className: "tabs" }, /* @__PURE__ */ React.createElement("button", { className: tab === "home" ? "on" : "", onClick: () => setTab("home") }, /* @__PURE__ */ React.createElement(Crown, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Home")), /* @__PURE__ */ React.createElement("button", { className: tab === "standings" ? "on" : "", onClick: () => setTab("standings") }, /* @__PURE__ */ React.createElement(Users, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Table")), /* @__PURE__ */ React.createElement("button", { className: tab === "scout" ? "on" : "", onClick: () => setTab("scout") }, /* @__PURE__ */ React.createElement(BookOpen, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Scout")), /* @__PURE__ */ React.createElement("button", { className: tab === "sim" ? "on" : "", onClick: () => setTab("sim") }, /* @__PURE__ */ React.createElement(Zap, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Simulate")), /* @__PURE__ */ React.createElement("button", { className: tab === "bookie" ? "on" : "", onClick: () => setTab("bookie") }, /* @__PURE__ */ React.createElement(Coins, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, "Bookie"))), /* @__PURE__ */ React.createElement("button", { className: "refresh" + (live.loading ? " spin" : "") + (live.ok ? " ok" : ""), onClick: refreshLive, title: live.ok ? "Live \xB7 updated " + (liveAgo === 0 ? "just now" : liveAgo + "m ago") : live.err ? "Tap to retry" : "Tap to load live scores" }, /* @__PURE__ */ React.createElement(RotateCcw, { size: 15 }), /* @__PURE__ */ React.createElement("span", null, live.loading ? "Refreshing\u2026" : live.ok ? liveAgo === 0 ? "Live \xB7 now" : "Live \xB7 " + liveAgo + "m" : "Refresh"), liveMatchCount > 0 && /* @__PURE__ */ React.createElement("span", { className: "live-pill" }, liveMatchCount, " LIVE"))), tab === "home" && /* @__PURE__ */ React.createElement("div", {className:"home"}, /* @__PURE__ */ React.createElement("div", {className:"home-hero bh"}, /* @__PURE__ */ React.createElement("div", {className:"bh-topline"}, /* @__PURE__ */ React.createElement("span", {className:"bh-chan"}, "DSC \u00b7 HQ"), /* @__PURE__ */ React.createElement("span", {className:"bh-live" + (liveMatchCount > 0 ? " on" : "")}, /* @__PURE__ */ React.createElement("i", {className:"bh-live-dot"}), liveMatchCount > 0 ? (liveMatchCount + " LIVE NOW") : (live.ok ? "ON AIR" : "OFF AIR")), /* @__PURE__ */ React.createElement("span", {className:"bh-round"}, "KNOCKOUT STAGE")), /* @__PURE__ */ React.createElement("div", {className:"bh-main"}, /* @__PURE__ */ React.createElement("div", {className:"bh-tro"}, /* @__PURE__ */ React.createElement(WCTrophy, null)), /* @__PURE__ */ React.createElement("div", {className:"bh-tx"}, /* @__PURE__ */ React.createElement("div", {className:"bh-eyebrow"}, "DALY SPORT CO. PRESENTS"), /* @__PURE__ */ React.createElement("div", {className:"bh-title"}, "KNOCKOUT ", /* @__PURE__ */ React.createElement("span", {className:"bh-title-gold"}, "NIGHT")), /* @__PURE__ */ React.createElement("div", {className:"bh-sub"}, "WORLD CUP 2026 \u00b7 THE LADS' SWEEPSTAKE"))), (function(){ var r = table.rows && table.rows[0]; if (!r || !r.total) { return /* @__PURE__ */ React.createElement("button", {className:"bh-l3", onClick:function(){ setTab("standings"); }}, /* @__PURE__ */ React.createElement("span", {className:"bh-l3-tag"}, "STUDIO"), /* @__PURE__ */ React.createElement("span", {className:"bh-l3-name"}, "Waiting on scores \u2014 tap for the table"), /* @__PURE__ */ React.createElement("span", {className:"bh-l3-pts"}, "\u2192")); } var r2 = table.rows[1]; var gap = r2 ? (r.total - r2.total) : 0; return /* @__PURE__ */ React.createElement("button", {className:"bh-l3", onClick:function(){ setTab("standings"); }}, /* @__PURE__ */ React.createElement("span", {className:"bh-l3-tag"}, /* @__PURE__ */ React.createElement(Crown, {size:11}), "P1"), /* @__PURE__ */ React.createElement("span", {className:"bh-l3-name"}, r.name, me && r.name === me ? /* @__PURE__ */ React.createElement("i", {className:"bh-you"}, "YOU") : null), /* @__PURE__ */ React.createElement("span", {className:"bh-l3-flags"}, (r.teams || []).slice(0, 3).map(function(t, k){ return /* @__PURE__ */ React.createElement("span", {key:k, className:"bh-l3-flag"}, /* @__PURE__ */ React.createElement(Flag, {t:t})); })), /* @__PURE__ */ React.createElement("span", {className:"bh-l3-pts"}, r.total, /* @__PURE__ */ React.createElement("i", null, "PTS")), /* @__PURE__ */ React.createElement("span", {className:"bh-l3-gap"}, gap > 0 ? ("+" + gap + " CLEAR") : "ALL LEVEL")); })(), /* @__PURE__ */ React.createElement("div", {className:"bh-bugs"}, /* @__PURE__ */ React.createElement("button", {className:"bh-bug-btn", onClick:function(){ setTab("scout"); }}, /* @__PURE__ */ React.createElement("b", null, liveMatchCount > 0 ? liveMatchCount : (totalGoals || 0)), /* @__PURE__ */ React.createElement("span", null, liveMatchCount > 0 ? "MATCHES ON" : "GOALS SO FAR")), /* @__PURE__ */ React.createElement("button", {className:"bh-bug-btn", onClick:function(){ setTab("sim"); }}, /* @__PURE__ */ React.createElement("b", null, "SIM"), /* @__PURE__ */ React.createElement("span", null, "PLAY IT OUT")), /* @__PURE__ */ React.createElement("button", {className:"bh-bug-btn gold", onClick:function(){ setTab("bookie"); }}, /* @__PURE__ */ React.createElement("b", null, "ODDS"), /* @__PURE__ */ React.createElement("span", null, "THE BOOKIE"))), (function(){ var rows = (table.rows || []).filter(function(x){ return x && x.name; }); if (!rows.length) return null; var mk = function(r, j){ return /* @__PURE__ */ React.createElement("span", {key:j + "-" + r.name, className:"bh-tk"}, /* @__PURE__ */ React.createElement("i", null, "P" + (r.rank || "-")), /* @__PURE__ */ React.createElement("b", null, (r.name || "").toUpperCase()), /* @__PURE__ */ React.createElement("em", null, r.total + " PTS"), (r.teams && r.teams[0] && CODES[r.teams[0]]) ? /* @__PURE__ */ React.createElement("u", null, CODES[r.teams[0]]) : null); }; return /* @__PURE__ */ React.createElement("div", {className:"bh-ticker"}, /* @__PURE__ */ React.createElement("div", {className:"bh-ticker-track"}, rows.map(function(r){ return mk(r, "a"); }).concat(rows.map(function(r){ return mk(r, "b"); })))); })()), /* @__PURE__ */ React.createElement("div", {className:"home-body"}, /* @__PURE__ */ React.createElement("div", {className:"home-leader"}, /* @__PURE__ */ React.createElement("div", {className:"home-leader-h"}, /* @__PURE__ */ React.createElement("span", {className:"home-leader-dot"}), table.rows.length > 0 && table.rows[0].total > 0 ? "LEADING THE LEAGUE" : "STANDINGS"), /* @__PURE__ */ React.createElement("div", {className:"home-leader-body"}, table.rows.length > 0 ? (function(){ var L = table.rows[0]; return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", {className:"home-l-name"}, L.name), /* @__PURE__ */ React.createElement("div", {className:"home-l-pts"}, /* @__PURE__ */ React.createElement("b", null, L.total), /* @__PURE__ */ React.createElement("span", null, "pts")), /* @__PURE__ */ React.createElement("div", {className:"home-l-flags"}, L.teams.map(function(t,k){return /* @__PURE__ */ React.createElement("span",{key:k,className:"home-l-flag"}, /* @__PURE__ */ React.createElement(Flag,{t:t}));})));})() : /* @__PURE__ */ React.createElement("div", {className:"home-l-empty"}, "Hit Refresh to load scores"))), /* @__PURE__ */ React.createElement("div", {className:"home-podium"}, [0,1,2].map(function(i){ var medals = ["\u{1F947}","\u{1F948}","\u{1F949}"]; var r = table.rows[i]; return /* @__PURE__ */ React.createElement("div", {key:i, className:"home-pod"+(i===0?" p1":"")}, /* @__PURE__ */ React.createElement("div", {className:"home-pod-medal"}, medals[i]), /* @__PURE__ */ React.createElement("div", {className:"home-pod-name"}, r ? r.name : "\u2014"), /* @__PURE__ */ React.createElement("div", {className:"home-pod-pts"+((!r||r.total===0)?" muted":"")}, r ? r.total+"pts" : "\u2014"));})), /* @__PURE__ */ React.createElement("div", {className:"home-stats"}, /* @__PURE__ */ React.createElement("div", {className:"home-stat"}, /* @__PURE__ */ React.createElement("div", {className:"home-stat-v"}, table.played||0), /* @__PURE__ */ React.createElement("div", {className:"home-stat-l"}, "matches played")), /* @__PURE__ */ React.createElement("div", {className:"home-stat"}, /* @__PURE__ */ React.createElement("div", {className:"home-stat-v"}, liveMatchCount > 0 ? liveMatchCount : totalGoals||0), /* @__PURE__ */ React.createElement("div", {className:"home-stat-l"}, liveMatchCount > 0 ? "\u26BD live now" : "goals scored"))), /* @__PURE__ */ React.createElement("div", {className:"home-links"}, /* @__PURE__ */ React.createElement("button", {className:"home-link mdr-btn", onClick:function(){try{_mdReview(live.matches,me);}catch(e){}}}, /* @__PURE__ */ React.createElement(Crown, {size:16}), "Review"), /* @__PURE__ */ React.createElement("button", {className:"home-link", onClick:function(){setTab("standings");}}, /* @__PURE__ */ React.createElement(Users, {size:16}), "Table"), /* @__PURE__ */ React.createElement("button", {className:"home-link", onClick:function(){setTab("scout");}}, /* @__PURE__ */ React.createElement(BookOpen, {size:16}), "Scout"), /* @__PURE__ */ React.createElement("button", {className:"home-link", onClick:function(){setTab("sim");}}, /* @__PURE__ */ React.createElement(Zap, {size:16}), "Sim"), /* @__PURE__ */ React.createElement("button", {className:"home-link", onClick:function(){setTab("bookie");}}, /* @__PURE__ */ React.createElement(Coins, {size:16}), "Bookie")))), tab === "standings" && /* @__PURE__ */ React.createElement("div", { className: "lg" }, /* @__PURE__ */ React.createElement("div", { className: "st-sub" }, /* @__PURE__ */ React.createElement("button", { className: stView === "table" ? "on" : "", onClick: () => setStView("table") }, "Standings"), /* @__PURE__ */ React.createElement("button", { className: stView === "gaffer" ? "on" : "", onClick: () => setStView("gaffer") }, "\u{1F399}\uFE0F Gaffer"), /* @__PURE__ */ React.createElement("button", { className: stView === "pot" ? "on" : "", onClick: () => setStView("pot") }, "\u{1F4B0} Side Pot")), stView === "table" && /* @__PURE__ */ React.createElement(React.Fragment, null, meIdx < 0 ? /* @__PURE__ */ React.createElement("div", { className: "me-pick" }, /* @__PURE__ */ React.createElement("div", { className: "me-pick-h" }, "\u{1F44B} Who are you?"), /* @__PURE__ */ React.createElement("div", { className: "me-pick-sub" }, "Tap your name to follow your six and see your teams' games. It's just for this phone \u2014 no password needed."), /* @__PURE__ */ React.createElement("div", { className: "me-pick-grid" }, PLAYERS.map((n) => /* @__PURE__ */ React.createElement("button", { key: n, onClick: () => setMe(n) }, n)))) : /* @__PURE__ */ React.createElement("div", { className: "me-today" }, /* @__PURE__ */ React.createElement("div", { className: "me-today-top" }, /* @__PURE__ */ React.createElement("span", { className: "me-today-who" }, "Following ", /* @__PURE__ */ React.createElement("b", null, me)), /* @__PURE__ */ React.createElement("button", { className: "me-switch", onClick: () => setMe("") }, "change")), !live.matches ? /* @__PURE__ */ React.createElement("div", { className: "me-today-none" }, "Tap Refresh up top to load today's games.") : todayMatches.length === 0 ? /* @__PURE__ */ React.createElement("div", { className: "me-today-none" }, liveMatchCount > 0 ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("span", {className:"live-dot-sm"}), "", liveMatchCount, " live match", liveMatchCount>1?"es":"", " \u2014 none are your teams") : "None of your six are out today \u2014 your games show here on match days.") : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "me-today-h" }, "Your teams today"), /* @__PURE__ */ React.createElement("div", { className: "me-today-list" }, todayMatches.map((m) => {
     const played = m.hs != null && m.as != null;
     const d = new Date(m.date);
     const ko = isNaN(d.getTime()) ? "" : d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -4312,17 +4329,17 @@ var card = function(m, mir, key){ m = m || {}; var wa = m.win === "a" ? " win" :
 var col = function(lab, items, extra){ return /* @__PURE__ */ React.createElement("div", { className: "kob-col " + extra }, /* @__PURE__ */ React.createElement("div", { className: "kov-rh kob-rh" }, lab), items); };
 var qf = R["Quarter-final"] || [], sf = R["Semi-final"] || [], fin = (R["Final"] || [])[0] || {};
 var aw = fin.win === "a", bw = fin.win === "b";
-var finCol = /* @__PURE__ */ React.createElement("div", { className: "kob-col kob-fincol" }, /* @__PURE__ */ React.createElement("div", { className: "kob-finwrap" }, /* @__PURE__ */ React.createElement("div", { className: "kob-fin" }, /* @__PURE__ */ React.createElement("div", { className: "kob-fin-h" }, "\u2605 FINAL \u2605"), /* @__PURE__ */ React.createElement("div", { className: "kob-fin-row" }, /* @__PURE__ */ React.createElement("div", { className: "kob-fin-team" + (aw ? " w" : "") }, /* @__PURE__ */ React.createElement("span", { className: "kob-fin-fl" }, fof(fin.a)), /* @__PURE__ */ React.createElement("span", { className: "kob-fin-tc" }, fin.a ? (CODES[fin.a] || fin.a) : "TBD"), /* @__PURE__ */ React.createElement("span", { className: "kob-fin-fs" }, fin.sa != null ? fin.sa : "")), /* @__PURE__ */ React.createElement("div", { className: "kob-fin-vs" }, "\u{1F3C6}"), /* @__PURE__ */ React.createElement("div", { className: "kob-fin-team" + (bw ? " w" : "") }, /* @__PURE__ */ React.createElement("span", { className: "kob-fin-fl" }, fof(fin.b)), /* @__PURE__ */ React.createElement("span", { className: "kob-fin-tc" }, fin.b ? (CODES[fin.b] || fin.b) : "TBD"), /* @__PURE__ */ React.createElement("span", { className: "kob-fin-fs" }, fin.sb != null ? fin.sb : "")))), (aw || bw) ? /* @__PURE__ */ React.createElement("div", { className: "kob-champ" }, /* @__PURE__ */ React.createElement("span", null, "\u{1F451} " + (CODES[aw ? fin.a : fin.b] || (aw ? fin.a : fin.b)))) : null));
+var finCol = /* @__PURE__ */ React.createElement("div", { className: "kob-col kob-fincol" }, /* @__PURE__ */ React.createElement("div", { className: "kob-finwrap" }, /* @__PURE__ */ React.createElement("div", { className: "kob-fin" }, /* @__PURE__ */ React.createElement("div", { className: "kob-fin-h" }, "\u2605 FINAL \u2605"), /* @__PURE__ */ React.createElement("div", { className: "kob-fin-row" }, /* @__PURE__ */ React.createElement("div", { className: "kob-fin-team" + (aw ? " w" : "") }, /* @__PURE__ */ React.createElement("span", { className: "kob-fin-fl" }, fof(fin.a)), /* @__PURE__ */ React.createElement("span", { className: "kob-fin-tc" }, fin.a ? (CODES[fin.a] || fin.a) : "TBD"), /* @__PURE__ */ React.createElement("span", { className: "kob-fin-fs" }, fin.sa != null ? fin.sa : "")), /* @__PURE__ */ React.createElement("div", { className: "kob-fin-vs" }, "\u{1F3C6}"), /* @__PURE__ */ React.createElement("div", { className: "kob-fin-team" + (bw ? " w" : "") }, /* @__PURE__ */ React.createElement("span", { className: "kob-fin-fl" }, fof(fin.b)), /* @__PURE__ */ React.createElement("span", { className: "kob-fin-tc" }, fin.b ? (CODES[fin.b] || fin.b) : "TBD"), /* @__PURE__ */ React.createElement("span", { className: "kob-fin-fs" }, fin.sb != null ? fin.sb : "")))), (aw || bw) ? /* @__PURE__ */ React.createElement("div", { className: "kob-champ" }, /* @__PURE__ */ React.createElement("span", null, "\u{1F451} " + (CODES[aw ? fin.a : fin.b] || (aw ? fin.a : fin.b)))) : null, (function(){ var tp3 = (R["Third place"] || [])[0]; return tp3 && (tp3.a || tp3.b) ? React.createElement("div", { className: "kob-third" }, React.createElement("div", { className: "kob-fin-h" }, "3RD PLACE"), card(tp3, false, "tp3")) : null; })()));
 var mirrored = /* @__PURE__ */ React.createElement("div", { className: "kob" }, /* @__PURE__ */ React.createElement("div", { className: "kob-inner" }, col("QF", [card(qf[0], false, "l0"), card(qf[1], false, "l1")], "kob-tall"), col("SF", [card(sf[0], false, "sl")], "kob-mid"), finCol, col("SF", [card(sf[1], true, "sr")], "kob-mid"), col("QF", [card(qf[2], true, "r0"), card(qf[3], true, "r1")], "kob-tall")));
 var earlier = (function(){ var rows = ["Round of 32", "Round of 16"].map(function(rd){ var ms = R[rd] || []; if (!ms.length) return null; return /* @__PURE__ */ React.createElement("div", { key: rd, className: "kov-round" }, /* @__PURE__ */ React.createElement("div", { className: "kov-rh" }, rd), /* @__PURE__ */ React.createElement("div", { className: "kov-matches" }, ms.map(function(m, i){ return card(m, false, rd + i); }))); }).filter(Boolean); if (!rows.length) return null; return /* @__PURE__ */ React.createElement(Collapsible, { title: "Round of 32 and Round of 16" }, /* @__PURE__ */ React.createElement("div", { className: "kov" }, rows)); })();
 return /* @__PURE__ */ React.createElement(React.Fragment, null, earlier, mirrored);
-})())), stView === "pot" && /* @__PURE__ */ React.createElement(SidePotPanel, { potBoard, balance: bets.balance, loan: bets.loan || 0, achievements, shareCard, takeLoan, repayLoan, canReset: me === "Jason", resetAll }), stView === "gaffer" && /* @__PURE__ */ React.createElement(Gaffer, { facts: gafferFacts })), tab === "scout" && /* @__PURE__ */ React.createElement("div", { className: "scout" }, /* @__PURE__ */ React.createElement("div", { className: "scout-hd" }, /* @__PURE__ */ React.createElement("span", { className: "scout-eye" }, "\u25C6 SCOUTING DEPARTMENT"), /* @__PURE__ */ React.createElement("h2", { className: "scout-h" }, "Pick your six \u2014 one per pot."), /* @__PURE__ */ React.createElement("p", { className: "scout-sub" }, "Tap ", /* @__PURE__ */ React.createElement("b", null, "Pick"), " on any card to claim that nation for its pot. The letter grade and bars are the model's read on the squad. Your buster sits up top \u2014 add a total-goals guess to settle ties.")), /* @__PURE__ */ React.createElement("div", { className: "cpx" }, /* @__PURE__ */ React.createElement("div", { className: "cpx-h" }, /* @__PURE__ */ React.createElement("span", null, "YOUR BUSTER"), /* @__PURE__ */ React.createElement("button", { className: "cpx-oracle", onClick: () => {
+})())), stView === "pot" && /* @__PURE__ */ React.createElement(SidePotPanel, { potBoard, balance: bets.balance, loan: bets.loan || 0, achievements, shareCard, takeLoan, repayLoan, canReset: me === "Jason", resetAll }), stView === "gaffer" && /* @__PURE__ */ React.createElement(Gaffer, { facts: gafferFacts })), tab === "scout" && /* @__PURE__ */ React.createElement("div", { className: "scout" }, /* @__PURE__ */ React.createElement("div", { className: "scout-hd" }, /* @__PURE__ */ React.createElement("span", { className: "scout-eye" }, "\u25C6 SCOUTING DEPARTMENT"), /* @__PURE__ */ React.createElement("h2", { className: "scout-h" }, "Scout the survivors."), /* @__PURE__ */ React.createElement("p", { className: "scout-sub" }, "Tap ", /* @__PURE__ */ React.createElement("b", null, "Pick"), " to build what-if sixes in the sandbox up top, it does not touch the real league. The letter grade and bars are the model's live read on every squad still standing.")), /* @__PURE__ */ React.createElement("div", { className: "cpx" }, /* @__PURE__ */ React.createElement("div", { className: "cpx-h" }, /* @__PURE__ */ React.createElement("span", null, "YOUR BUSTER"), /* @__PURE__ */ React.createElement("button", { className: "cpx-oracle", onClick: () => {
     setPicks(__spreadValues({}, RECO));
     setToast("Loaded the suggested six");
   } }, /* @__PURE__ */ React.createElement(RotateCcw, { size: 12 }), " Suggested six")), /* @__PURE__ */ React.createElement("div", { className: "cpx-slots" }, Object.keys(POTS).map((p) => {
     const tm = picks[p], off = RECO[p] !== tm, here = scoutFilter === +p;
     return /* @__PURE__ */ React.createElement("button", { key: p, className: "cpx-slot" + (here ? " here" : ""), style: here ? { borderColor: POTS[p].hue } : {}, onClick: () => setScoutFilter(+p) }, /* @__PURE__ */ React.createElement("span", { className: "cpx-dot", style: { background: POTS[p].hue } }), /* @__PURE__ */ React.createElement("span", { className: "cpx-p" }, "P", p), /* @__PURE__ */ React.createElement("span", { className: "cpx-fl" }, /* @__PURE__ */ React.createElement(Flag, { t: tm })), /* @__PURE__ */ React.createElement("span", { className: "cpx-nm" }, tm || "\u2014", off && /* @__PURE__ */ React.createElement("i", { className: "cp-off" }, "off")));
-  })), /* @__PURE__ */ React.createElement("div", { className: "cpx-foot" }, /* @__PURE__ */ React.createElement("div", { className: "cpx-goals" }, /* @__PURE__ */ React.createElement("span", { className: "cpx-glab" }, "Total goals guess"), /* @__PURE__ */ React.createElement("div", { className: "cpx-gstep" }, /* @__PURE__ */ React.createElement("button", { onClick: () => setGoals((g) => Math.max(0, g - 1)) }, /* @__PURE__ */ React.createElement(Minus, { size: 14 })), /* @__PURE__ */ React.createElement("input", { type: "number", value: goals, onChange: (e) => setGoals(Math.max(0, parseInt(e.target.value || "0", 10))) }), /* @__PURE__ */ React.createElement("button", { onClick: () => setGoals((g) => g + 1) }, /* @__PURE__ */ React.createElement(Plus, { size: 14 }))), /* @__PURE__ */ React.createElement("span", { className: "cpx-model" }, "model ", MODEL_GOALS)), /* @__PURE__ */ React.createElement("div", { className: "cpx-proj" }, /* @__PURE__ */ React.createElement("span", { className: "cpx-plab" }, "Projected"), /* @__PURE__ */ React.createElement("b", null, dispTotal.toFixed(1)), /* @__PURE__ */ React.createElement("span", { className: "cpx-punit" }, "pts")), /* @__PURE__ */ React.createElement("button", { className: "cpx-copy", onClick: copyCoupon }, /* @__PURE__ */ React.createElement(Copy, { size: 13 }), " Copy")), conflicts.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "cpx-warn" }, /* @__PURE__ */ React.createElement(TriangleAlert, { size: 13 }), /* @__PURE__ */ React.createElement("span", null, conflicts.map(([g, a]) => a.join(" & ") + " (Grp " + g + ")").join(" \xB7 "), " \u2014 fine for points, already priced in.")), /* @__PURE__ */ React.createElement("div", { className: "cpx-save" }, LOCK_PICKS ? /* @__PURE__ */ React.createElement("span", { className: "cpx-locked" }, "\u{1F512} Picks are locked for the tournament \u2014 this tab is just for scouting form & odds.") : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("button", { className: "cpx-savebtn" + (cloud.busy ? " busy" : ""), onClick: saveMine, disabled: cloud.busy }, cloud.busy ? "Saving\u2026" : meIdx >= 0 ? "Save my six to the league" : "Pick your name first"), /* @__PURE__ */ React.createElement("span", { className: "cpx-sync " + (cloud.state === "on" ? "on" : cloud.state === "off" ? "off" : "") }, cloud.state === "on" ? "\u25CF Cloud sync on" : cloud.state === "off" ? "\u25CB Saved on this phone" : "checking\u2026"))), !LOCK_PICKS && /* @__PURE__ */ React.createElement("p", { className: "cpx-savehint" }, meIdx >= 0 ? "This sends your six to the shared league so everyone sees them. Cloud sync needs the one-time setup below \u2014 until then it just saves here." : "Tap your name on the Standings tab, then come back to save your six.")), /* @__PURE__ */ React.createElement("div", { className: "sc-filter" }, /* @__PURE__ */ React.createElement("button", { className: scoutFilter === 0 ? "on" : "", onClick: () => setScoutFilter(0) }, "All 48"), Object.keys(POTS).map((p) => /* @__PURE__ */ React.createElement("button", { key: p, className: scoutFilter === +p ? "on" : "", style: scoutFilter === +p ? { borderColor: POTS[p].hue, color: "#fff" } : {}, onClick: () => setScoutFilter(+p) }, /* @__PURE__ */ React.createElement("span", { className: "sc-dot", style: { background: POTS[p].hue } }), "Pot ", p))), /* @__PURE__ */ React.createElement("div", { className: "dos-key" }, /* @__PURE__ */ React.createElement("span", { className: "dos-key-h" }, "What the bars mean"), /* @__PURE__ */ React.createElement("span", { className: "dos-key-i" }, /* @__PURE__ */ React.createElement("b", null, "PWR"), " squad power rating (0\u201399)"), /* @__PURE__ */ React.createElement("span", { className: "dos-key-i" }, /* @__PURE__ */ React.createElement("b", null, "RUN"), " chance to get out of the group"), /* @__PURE__ */ React.createElement("span", { className: "dos-key-i" }, /* @__PURE__ */ React.createElement("b", null, "CUP"), " chance to win the whole thing"), /* @__PURE__ */ React.createElement("span", { className: "dos-key-i" }, /* @__PURE__ */ React.createElement("b", null, "proj pts"), " expected sweepstake points \u2014 sets the grade")), /* @__PURE__ */ React.createElement("div", { className: "dossier", key: scoutFilter }, scoutTeams.map((name, idx) => {
+  })), /* @__PURE__ */ React.createElement("div", { className: "cpx-foot" }, /* @__PURE__ */ React.createElement("div", { className: "cpx-goals" }, /* @__PURE__ */ React.createElement("span", { className: "cpx-glab" }, "Total goals guess"), /* @__PURE__ */ React.createElement("div", { className: "cpx-gstep" }, /* @__PURE__ */ React.createElement("button", { onClick: () => setGoals((g) => Math.max(0, g - 1)) }, /* @__PURE__ */ React.createElement(Minus, { size: 14 })), /* @__PURE__ */ React.createElement("input", { type: "number", value: goals, onChange: (e) => setGoals(Math.max(0, parseInt(e.target.value || "0", 10))) }), /* @__PURE__ */ React.createElement("button", { onClick: () => setGoals((g) => g + 1) }, /* @__PURE__ */ React.createElement(Plus, { size: 14 }))), /* @__PURE__ */ React.createElement("span", { className: "cpx-model" }, "model ", MODEL_GOALS)), /* @__PURE__ */ React.createElement("div", { className: "cpx-proj" }, /* @__PURE__ */ React.createElement("span", { className: "cpx-plab" }, "Projected"), /* @__PURE__ */ React.createElement("b", null, dispTotal.toFixed(1)), /* @__PURE__ */ React.createElement("span", { className: "cpx-punit" }, "pts")), /* @__PURE__ */ React.createElement("button", { className: "cpx-copy", onClick: copyCoupon }, /* @__PURE__ */ React.createElement(Copy, { size: 13 }), " Copy")), conflicts.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "cpx-warn" }, /* @__PURE__ */ React.createElement(TriangleAlert, { size: 13 }), /* @__PURE__ */ React.createElement("span", null, conflicts.map(([g, a]) => a.join(" & ") + " (Grp " + g + ")").join(" \xB7 "), " \u2014 fine for points, already priced in.")), /* @__PURE__ */ React.createElement("div", { className: "cpx-save" }, LOCK_PICKS ? /* @__PURE__ */ React.createElement("span", { className: "cpx-locked" }, "\u{1F512} Picks are locked for the tournament \u2014 this tab is just for scouting form & odds.") : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("button", { className: "cpx-savebtn" + (cloud.busy ? " busy" : ""), onClick: saveMine, disabled: cloud.busy }, cloud.busy ? "Saving\u2026" : meIdx >= 0 ? "Save my six to the league" : "Pick your name first"), /* @__PURE__ */ React.createElement("span", { className: "cpx-sync " + (cloud.state === "on" ? "on" : cloud.state === "off" ? "off" : "") }, cloud.state === "on" ? "\u25CF Cloud sync on" : cloud.state === "off" ? "\u25CB Saved on this phone" : "checking\u2026"))), !LOCK_PICKS && /* @__PURE__ */ React.createElement("p", { className: "cpx-savehint" }, meIdx >= 0 ? "This sends your six to the shared league so everyone sees them. Cloud sync needs the one-time setup below \u2014 until then it just saves here." : "Tap your name on the Standings tab, then come back to save your six.")), /* @__PURE__ */ React.createElement("div", { className: "sc-filter" }, /* @__PURE__ */ React.createElement("button", { className: scoutFilter === 0 ? "on" : "", onClick: () => setScoutFilter(0) }, "All 48"), Object.keys(POTS).map((p) => /* @__PURE__ */ React.createElement("button", { key: p, className: scoutFilter === +p ? "on" : "", style: scoutFilter === +p ? { borderColor: POTS[p].hue, color: "#fff" } : {}, onClick: () => setScoutFilter(+p) }, /* @__PURE__ */ React.createElement("span", { className: "sc-dot", style: { background: POTS[p].hue } }), "Pot ", p))), /* @__PURE__ */ React.createElement("div", { className: "dos-key" }, /* @__PURE__ */ React.createElement("span", { className: "dos-key-h" }, "What the bars mean"), /* @__PURE__ */ React.createElement("span", { className: "dos-key-i" }, /* @__PURE__ */ React.createElement("b", null, "PWR"), " squad power rating (0\u201399)"), /* @__PURE__ */ React.createElement("span", { className: "dos-key-i" }, /* @__PURE__ */ React.createElement("b", null, "RUN"), " pre-tournament group-escape odds"), /* @__PURE__ */ React.createElement("span", { className: "dos-key-i" }, /* @__PURE__ */ React.createElement("b", null, "CUP"), " chance to win the whole thing"), /* @__PURE__ */ React.createElement("span", { className: "dos-key-i" }, /* @__PURE__ */ React.createElement("b", null, "proj pts"), " expected sweepstake points \u2014 sets the grade")), /* @__PURE__ */ React.createElement("div", { className: "dossier", key: scoutFilter }, scoutTeams.map((name, idx) => {
     const t = TEAMS[name], isReco = RECO[t.pot] === name, c = CAPSULES[name];
     const picked = picks[t.pot] === name, gr = gradeOf(t.ep), pwr = clampi(Math.round((t.rating - 58) / 0.42), 5, 99);
     return /* @__PURE__ */ React.createElement("div", { key: name, className: "dos" + (picked ? " drafted" : ""), style: { animationDelay: idx * 16 + "ms" } }, /* @__PURE__ */ React.createElement("span", { className: "dos-grade g" + gr.replace("+", "p") }, gr), /* @__PURE__ */ React.createElement("div", { className: "dos-top" }, /* @__PURE__ */ React.createElement("span", { className: "dos-flag" }, /* @__PURE__ */ React.createElement(Flag, { t: name })), /* @__PURE__ */ React.createElement("span", { className: "dos-name" }, name), /* @__PURE__ */ React.createElement("span", { className: "dos-grp" }, CODES[name], " \xB7 Grp ", t.group, " \xB7 Pot ", t.pot)), /* @__PURE__ */ React.createElement("div", { className: "dos-bars" }, /* @__PURE__ */ React.createElement("div", { className: "dos-bar" }, /* @__PURE__ */ React.createElement("span", null, "PWR"), /* @__PURE__ */ React.createElement("i", null, /* @__PURE__ */ React.createElement("b", { style: { width: pwr + "%" } })), /* @__PURE__ */ React.createElement("em", null, pwr)), /* @__PURE__ */ React.createElement("div", { className: "dos-bar" }, /* @__PURE__ */ React.createElement("span", null, "RUN"), /* @__PURE__ */ React.createElement("i", null, /* @__PURE__ */ React.createElement("b", { style: { width: Math.round(t.adv) + "%" } })), /* @__PURE__ */ React.createElement("em", null, Math.round(t.adv))), /* @__PURE__ */ React.createElement("div", { className: "dos-bar" }, /* @__PURE__ */ React.createElement("span", null, "CUP"), /* @__PURE__ */ React.createElement("i", null, /* @__PURE__ */ React.createElement("b", { style: { width: Math.min(100, Math.round(t.win)) + "%" } })), /* @__PURE__ */ React.createElement("em", null, t.win < 1 && t.win > 0 ? "<1" : Math.round(t.win)))), /* @__PURE__ */ React.createElement("p", { className: "dos-verdict" }, c.verdict), /* @__PURE__ */ React.createElement("div", { className: "dos-weak" }, /* @__PURE__ */ React.createElement(TriangleAlert, { size: 12 }), /* @__PURE__ */ React.createElement("span", null, c.weak)), /* @__PURE__ */ React.createElement("div", { className: "dos-foot" }, /* @__PURE__ */ React.createElement("span", { className: "dos-ep" }, /* @__PURE__ */ React.createElement("b", null, t.ep.toFixed(1)), " proj pts"), /* @__PURE__ */ React.createElement("button", { className: "dos-draft" + (picked ? " on" : ""), onClick: () => {
@@ -4769,9 +4786,9 @@ const CSS = `
 .bk-share{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin-top:16px;padding:13px;font-weight:700;font-size:14px;color:#0a0a0a;background:#D4AF37;border:none;border-radius:11px;cursor:pointer}
 .bj-felt{background:linear-gradient(160deg,#16623f,#0d3d27);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:18px;min-height:210px}
 .bj-row{display:flex;flex-direction:column;gap:8px}
-.bj-lbl{font-family:'Space Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:rgba(0,0,0,.6)}
+.bj-lbl{font-family:'Space Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.85)}
 .bj-hand{display:flex;gap:8px;flex-wrap:wrap;min-height:64px}
-.bj-empty{color:rgba(0,0,0,.4);font-size:26px;line-height:64px}
+.bj-empty{color:rgba(255,255,255,.45);font-size:26px;line-height:64px}
 .bj-card{width:46px;height:64px;background:#fff;border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#1a1a1a;box-shadow:0 2px 6px rgba(0,0,0,.3)}
 .bj-card b{font-size:18px;line-height:1}.bj-card i{font-size:15px;font-style:normal;line-height:1}
 .bj-card.red{color:#d11}
@@ -5028,8 +5045,8 @@ const CSS = `
 .kov-side.win::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#F4D879,#D9A93C)}
 .kov-side.win .kov-nm{color:#fff;font-weight:800}
 .kov-side.win .kov-sc{color:#F4D879}
-.kov-side.lose{opacity:.5}
-.home-hero{display:none}
+.kov-side.lose{opacity:.65}
+
 .kov-m.mir .kov-side{flex-direction:row-reverse}
 .kov-m.mir .kov-sc{text-align:left}
 .kov-m.mir .kov-side.win::before{left:auto;right:0}
@@ -5093,7 +5110,7 @@ const CSS = `
 .mng{margin-top:16px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#111}
 .mng-tabs{display:flex;gap:4px;padding:10px;border-bottom:1px solid var(--line);background:rgba(0,0,0,.02)}
 .mng-tabs button{flex:1;font-family:'Archivo';font-weight:700;font-size:13px;color:var(--muted);background:transparent;border:1px solid transparent;border-radius:9px;padding:10px;cursor:pointer;transition:.15s}
-.mng-tabs button.on{color:var(--fg);background:#1A1A1A;border-color:#2A2A2A}
+.mng-tabs button.on{color:#fff;background:#1A1A1A;border-color:#2A2A2A}
 .mng-body{padding:16px}
 .mng-sub{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.1em;color:var(--fg);margin:2px 0 12px;display:flex;align-items:center;gap:10px}
 .mng-sub2{margin-top:22px;justify-content:space-between}
@@ -5389,8 +5406,8 @@ const CSS = `
   .top{flex-wrap:wrap;gap:10px;padding:12px 14px}
   .brand{flex:1 1 auto}
   .top-total{order:2;flex:0 0 auto}
-  .tabs{order:3;flex:1 1 100%;justify-content:space-between}
-  .tabs button{flex:1;justify-content:center;padding:10px 8px}
+  .tabs{order:3;flex:1 1 100%;justify-content:space-between;min-width:0}
+  .tabs button{flex:1;justify-content:center;padding:10px 3px;gap:4px;font-size:11.5px;min-width:0}
   .pk,.sc,.sm{padding:16px 14px}
   .row{grid-template-columns:24px 1fr auto auto;gap:11px;padding:12px}
   .prof-cell,.adv{display:none}
@@ -5485,7 +5502,7 @@ const CSS = `
 .mdr-x{position:absolute;bottom:calc(env(safe-area-inset-bottom, 0px) + 20px);left:50%;transform:translateX(-50%);z-index:40;border:none;border-radius:999px;background:rgba(0,0,0,.55);color:#fff;font-size:18px;font-weight:900;cursor:pointer;line-height:1;padding:16px 42px;letter-spacing:.5px;box-shadow:0 8px 22px rgba(0,0,0,.35)}
 .mdr-nav{position:absolute;top:0;bottom:0;width:42%;z-index:20;cursor:pointer}
 .mdr-s{position:absolute;inset:0;padding:48px 24px 26px;display:flex;flex-direction:column;opacity:0;transform:scale(1.04);transition:opacity .35s,transform .35s;pointer-events:none;overflow:hidden;color:#15110E}
-.mdr-s.on{opacity:1;transform:scale(1);pointer-events:auto}
+.mdr-s.on{opacity:1;transform:none;pointer-events:auto}
 .mdr-k{font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#DC2626}
 .mdr-big{font-size:32px;line-height:1.05;font-weight:900;letter-spacing:-.5px;margin:6px 0}
 .mdr-huge{font-size:42px;line-height:1;font-weight:900;letter-spacing:-1px}
@@ -5522,7 +5539,303 @@ const CSS = `
 .mdr-slag{font-size:26px;font-weight:900;line-height:1.18;letter-spacing:-.5px}
 .mdr-share{margin-top:20px;background:#25D366;color:#06351c;border:none;border-radius:13px;padding:14px;font-size:15px;font-weight:900;cursor:pointer}
 .mdr-again{margin-top:9px;background:transparent;border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:11px;padding:10px;font-weight:700;cursor:pointer;font-size:13px}
-.mdr-close{margin-top:16px;background:#fff;color:#15110E;border:none;border-radius:16px;padding:21px;font-weight:900;cursor:pointer;font-size:19px;width:100%}`;
+.mdr-close{margin-top:16px;background:#fff;color:#15110E;border:none;border-radius:16px;padding:21px;font-weight:900;cursor:pointer;font-size:19px;width:100%}
+
+/* ================================================================
+   KNOCKOUT NIGHT - broadcast studio theme (appended override)
+   Steel-navy stage, brushed gold, red LIVE grammar. !important is
+   used ONLY to mirror the existing light-theme hotfix selectors.
+   ================================================================ */
+
+/* ---- motion ---- */
+@keyframes bcShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes bcLive{0%,100%{box-shadow:0 0 0 0 rgba(255,46,77,.45)}50%{box-shadow:0 0 0 7px rgba(255,46,77,0)}}
+@keyframes bcGoldPulse{0%,100%{box-shadow:0 0 0 1px rgba(240,206,102,.14),0 18px 44px -26px rgba(240,206,102,.35)}50%{box-shadow:0 0 0 1px rgba(240,206,102,.3),0 18px 50px -22px rgba(240,206,102,.55)}}
+@keyframes bcIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes bcTicker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes bcFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes bcBlink{0%,100%{opacity:1}50%{opacity:.25}}
+@keyframes bcBreathe{0%,100%{opacity:.75}50%{opacity:1}}
+
+/* ---- global stage ---- */
+html,body{background:#05070c}
+.app{
+  --ink:#0d1420;--ink2:#101828;--ink3:#141d30;--card:#0e1522;
+  --line:rgba(159,178,206,.17);--line2:rgba(159,178,206,.09);
+  --fg:#EAF0F9;--muted:#9AA8BC;--faint:#76839A;
+  --gold:#F0CE66;--ice:#7BD8F5;--rose:#FF5C7A;--red:#FF2E4D;--green:#00D46A;
+  color:var(--fg);color-scheme:dark;
+  background:
+    radial-gradient(1100px 480px at 50% -170px,rgba(240,206,102,.14),transparent 62%),
+    radial-gradient(900px 420px at 88% 4%,rgba(64,102,161,.16),transparent 60%),
+    linear-gradient(180deg,#0a0f19 0%,#070b12 46%,#05070c 100%)}
+.app ::selection{background:rgba(240,206,102,.35);color:#FFF8E1}
+.app button:focus-visible,.app select:focus-visible,.app input:focus-visible,.app textarea:focus-visible{outline:2px solid rgba(240,206,102,.75);outline-offset:2px}
+
+/* floodlight + vignette + faint scanline atmosphere (re-enables .bg-glow) */
+.bg-glow{display:block;position:fixed;inset:0;pointer-events:none;z-index:90;
+  background:
+    radial-gradient(560px 380px at -4% -6%,rgba(244,222,138,.10),transparent 62%),
+    radial-gradient(560px 380px at 104% -6%,rgba(244,222,138,.08),transparent 62%),
+    repeating-linear-gradient(0deg,rgba(255,255,255,.016) 0 1px,transparent 1px 4px),
+    radial-gradient(135% 100% at 50% 0%,transparent 58%,rgba(0,0,0,.4) 100%);
+  animation:bcBreathe 9s ease-in-out infinite}
+
+/* ---- header = broadcast top bar ---- */
+.top{background:rgba(8,12,20,.9);border-bottom:1px solid rgba(240,206,102,.3);
+  box-shadow:0 1px 0 rgba(0,0,0,.6),0 18px 44px -26px rgba(0,0,0,.95)}
+.brand-t{color:#F0CE66;-webkit-text-fill-color:#F0CE66;text-shadow:0 0 18px rgba(240,206,102,.35)}
+.brand-s{color:var(--muted)}
+.mark{background:linear-gradient(140deg,#F4D879,#B9871F) !important;color:#1a1205;
+  box-shadow:0 4px 18px -4px rgba(240,206,102,.5)}
+.tabs{background:rgba(255,255,255,.03);border-color:var(--line)}
+.tabs button{color:var(--muted);min-height:40px;border-radius:9px}
+.tabs button:hover:not(.on){color:var(--fg)}
+.tabs button.on{color:#181004;border:1px solid #E6B84A;
+  background:linear-gradient(110deg,#D9A93C 0%,#F4D879 30%,#FFF3C4 46%,#F4D879 62%,#D9A93C 100%);
+  background-size:250% 100%;animation:bcShimmer 3.4s linear infinite;
+  box-shadow:0 4px 16px -6px rgba(240,206,102,.6)}
+.tabs button.on svg{color:#181004}
+.refresh{background:rgba(255,255,255,.04);border-color:var(--line);color:var(--muted);min-height:40px}
+.refresh:hover{border-color:rgba(240,206,102,.5);color:var(--fg)}
+.refresh.ok{color:var(--green);border-color:rgba(0,212,106,.35)}
+.live-pill{background:rgba(255,46,77,.16);color:#FF8D9E;border-color:rgba(255,46,77,.45);animation:bcLive 1.6s ease-in-out infinite}
+.top-total b{text-shadow:0 0 16px rgba(240,206,102,.35)}
+.ticker-wrap{background:linear-gradient(90deg,rgba(240,206,102,.08),rgba(240,206,102,.02));border-bottom:1px solid rgba(240,206,102,.24)}
+.ticker-item{border-right-color:rgba(159,178,206,.16)}
+
+/* ---- dark surfaces: this set mirrors the existing hotfix !important layer ---- */
+.lg-row,.fxv,.fxv-card,.grpv,.sc-pred,.mng,.cpx,.me-today{background:linear-gradient(180deg,#111a2a,#0d1420) !important;border-color:var(--line)}
+.lg-row.lead{background:linear-gradient(180deg,rgba(240,206,102,.13),#0e1522) !important;border-color:rgba(240,206,102,.5) !important}
+.lg-row.open{border-color:rgba(159,178,206,.38) !important}
+.fxv-mid b{color:#fff !important}
+.grpv-h{color:#fff !important}
+.grpv-pts{color:var(--gold) !important}
+.me-pick{background:linear-gradient(180deg,rgba(240,206,102,.09),#0e1522) !important;border-color:rgba(240,206,102,.32) !important}
+.lg-manage{background:linear-gradient(160deg,#F4D879,#C99B2E) !important;color:#181004 !important;border-color:#E6B84A !important}
+.lg-manage:hover{border-color:#FFF3C4 !important}
+.champ{background:radial-gradient(600px 200px at 50% 0%,rgba(240,206,102,.15),transparent 70%),linear-gradient(180deg,#131c2e,#0d1420) !important;border-color:rgba(240,206,102,.35)}
+.sc-board{background:linear-gradient(180deg,#101a2c,#0b1120) !important}
+.sc-controls{background:#0b1120 !important}
+.sc-pick select{background:#0e1522 !important;color:var(--fg) !important}
+.sc-clock,.sc-speed button.on,.lg-closest,.kfx-pens button.on{color:#181004 !important}
+.lg-hero{background:linear-gradient(120deg,#17233c,#0d1526 62%) !important;border-color:rgba(240,206,102,.5);
+  box-shadow:0 22px 60px -36px rgba(217,169,60,.4)}
+.bk-head{background:linear-gradient(180deg,#12261b,#0b1a12) !important;box-shadow:inset 0 0 60px rgba(0,0,0,.4) !important;border-color:rgba(240,206,102,.3)}
+.bk-out,.bk-fix,.bk-rail{background:#0e1522 !important;box-shadow:none !important}
+.bk-orow,.bk-pick{background:#101a2c !important}
+.bk-orow.sel,.bk-pick.sel{background:linear-gradient(180deg,rgba(240,206,102,.15),#101a2c) !important;border-color:rgba(240,206,102,.5)}
+.bk-game,.bk-wire-item{background:#0e1522 !important;box-shadow:none !important}
+.bk-md button.on{background:linear-gradient(160deg,#F4D879,#C99B2E) !important;border-color:#E6B84A !important;color:#181004 !important}
+.how-p b{color:var(--gold) !important}
+.bk-slip{background:
+  repeating-linear-gradient(180deg,rgba(122,90,26,0) 0 21px,rgba(122,90,26,.12) 21px 22px),
+  linear-gradient(180deg,#F8F1DC,#ECE2C9) !important;
+  border-color:rgba(122,90,26,.4);box-shadow:0 20px 50px -18px rgba(0,0,0,.85)}
+.bk-slip::before{background:radial-gradient(circle at 6px 5px,#0e1522 0 4px,transparent 4.6px);background-size:12px 10px}
+
+/* ---- remaining light leftovers -> steel panels (plain cascade wins) ---- */
+.row,.pot,.mc,.gm,.run-coupon,.coupon,.dos{background:#0e1522;border-color:var(--line)}
+.row:hover{background:linear-gradient(180deg,#152238,#101a2c);border-color:rgba(240,206,102,.4)}
+.pot:hover,.dos:hover{border-color:rgba(240,206,102,.35)}
+.coupon{box-shadow:0 24px 60px -34px rgba(0,0,0,.9)}
+.resim{background:linear-gradient(160deg,#152238,#0e1522);color:var(--fg);border-color:var(--line)}
+.resim:hover{border-color:rgba(240,206,102,.55)}
+.oracle-tip,.rc-card,.ac-runner,.coll,.bk-bet,.fx-group,.kfx,.pe-row,.share-card,.gaf,.bk-pot-list li,.lg-empty{background:rgba(255,255,255,.03);border-color:var(--line2)}
+.rc-card.champ-pick{background:rgba(240,206,102,.07);border-color:rgba(240,206,102,.5)}
+.ac-runner.on{background:rgba(240,206,102,.1);border-color:rgba(240,206,102,.55);box-shadow:0 0 0 1px rgba(240,206,102,.4)}
+.drawer{background:linear-gradient(180deg,rgba(240,206,102,.05),rgba(240,206,102,.01));border-color:rgba(240,206,102,.16)}
+.grp,.rtg{background:rgba(255,255,255,.05);border-color:var(--line2);color:var(--muted)}
+.fx-sc,.pe-goals,.kfx-team,.pe-sel,.share-in,.bj-stk-in,.pe-lk{background:rgba(255,255,255,.05);border-color:var(--line);color:var(--fg)}
+.fx-sc:focus,.pe-goals:focus,.kfx-team:focus,.pe-sel:focus,.share-in:focus{border-color:rgba(240,206,102,.6)}
+.sm-mode button,.sc-speed button,.kfx-pens button,.goals-step button,.cz-tabs button{background:rgba(255,255,255,.05);border-color:var(--line)}
+.cz-tabs button{color:#B9C6DC}
+.mng-tabs{background:rgba(255,255,255,.02)}
+.mng-tabs button.on{color:var(--fg);background:#152238;border-color:rgba(240,206,102,.35)}
+.cp-row:hover{background:rgba(255,255,255,.05)}
+.cp-row.here{background:rgba(240,206,102,.1)}
+.cp-bar{background:rgba(255,255,255,.08)}
+.cp-bar i{background:linear-gradient(90deg,#D9A93C,#F4D879)}
+.autofill,.cpx-oracle,.sc-rand{color:var(--gold);background:rgba(240,206,102,.08);border-color:rgba(240,206,102,.3)}
+.autofill:hover,.cpx-oracle:hover,.sc-rand:hover{background:rgba(240,206,102,.14)}
+.ac-stake{background:rgba(255,255,255,.05);border-color:var(--line);color:var(--gold)}
+.st-sub{background:rgba(240,206,102,.05);border-color:rgba(240,206,102,.22)}
+.st-sub button,.lg-sub button,.bk-sub button,.sc-filter button,.mng-tabs button,.sm-mode button{min-height:40px}
+
+/* text repairs: slate/teal leftovers -> readable on dark */
+.dn-verdict,.dos-verdict,.champ-final,.ac-live,.how-p{color:#C3CEDF}
+.dn-weak{color:#FFAFA6}
+.dn-weak b{color:#FFCEC8}
+.warn{background:rgba(255,92,122,.1);border-color:rgba(255,92,122,.3);color:#FFB9C6}
+.warn-sub{color:#FFB9C6}
+.gaf-bubble{color:#C3CEDF}
+.gaf-foot,.bx-meta,.bk-ach-h span,.bk-ach-d{color:var(--faint)}
+.bx-nick{color:#AEBACE}
+.fxv-h,.grpv-row.q .grpv-pos,.dos-news-k{color:#7BD8F5}
+.grpv-row.q{background:rgba(123,216,245,.08)}
+.bk-head-t,.bk-bal-v{color:#F0CE66}
+.bk-bal-l{color:var(--muted)}
+.bk-orow.sel .bk-odds{background:var(--gold);color:#181004}
+.lg-you{background:var(--gold);color:#181004;-webkit-text-fill-color:#181004}
+.scout-h,.sm-title{color:#fff}
+.foot{color:var(--faint)}
+
+/* primary red-gradient actions -> broadcast gold with dark text */
+.copy,.sc-filter button.on,.champ-badge,.bk-sub button.on,.st-sub button.on,
+.lg-sub button.on,.share-btn,.cpx-copy,.cpx-savebtn,.dos-draft,.toast,
+.home-link.mdr-btn,.kick,.ac-go,.ac-again,.br-champ{
+  background:linear-gradient(160deg,#F4D879,#C99B2E);color:#181004;
+  box-shadow:0 10px 26px -14px rgba(240,206,102,.7)}
+.home-link.mdr-btn svg,.copy svg,.share-btn svg,.cpx-copy svg,.dos-draft svg{color:#181004}
+.bk-place{background:linear-gradient(135deg,#26B565,#158043);box-shadow:0 10px 24px -12px rgba(38,181,101,.6)}
+
+/* staggered entrances + gold pulse on the leader */
+.lg-table .lg-row{animation:bcIn .45s ease both}
+.lg-table .lg-row:nth-child(1){animation-delay:.04s}
+.lg-table .lg-row:nth-child(2){animation-delay:.09s}
+.lg-table .lg-row:nth-child(3){animation-delay:.14s}
+.lg-table .lg-row:nth-child(4){animation-delay:.19s}
+.lg-table .lg-row:nth-child(5){animation-delay:.24s}
+.lg-table .lg-row:nth-child(6){animation-delay:.29s}
+.lg-table .lg-row.lead{animation:bcIn .45s ease both,bcGoldPulse 2.6s ease-in-out .6s infinite}
+.lg-row.lead .lg-rank{background:linear-gradient(160deg,#F4D879,#C99B2E);color:#181004;border-color:#E6B84A}
+.dossier .dos:nth-child(1){animation-delay:.03s}
+.dossier .dos:nth-child(2){animation-delay:.07s}
+.dossier .dos:nth-child(3){animation-delay:.11s}
+.dossier .dos:nth-child(4){animation-delay:.15s}
+.dossier .dos:nth-child(5){animation-delay:.19s}
+.dossier .dos:nth-child(6){animation-delay:.23s}
+.fxv-card.fxv-live{box-shadow:0 0 0 1px rgba(0,212,106,.35),0 0 22px -6px rgba(0,212,106,.4)}
+.kov-rh,.kob-rh,.kob-champ span{background:linear-gradient(100deg,#D9A93C 0%,#F4D879 28%,#FFF3C4 46%,#F4D879 62%,#D9A93C 100%);
+  background-size:250% 100%;animation:bcShimmer 4.5s linear infinite}
+
+/* ================================================================
+   HOME HERO - the broadcast opening board (bh-*)
+   ================================================================ */
+.home-hero{display:block;position:relative;overflow:hidden;text-align:left;
+  padding:14px 16px 0;color:#EAF0F9;
+  background:linear-gradient(165deg,#101b30 0%,#0a1120 55%,#080d18 100%);
+  border-bottom:1px solid rgba(240,206,102,.4)}
+.home-hero::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(520px 230px at 82% -70px,rgba(240,206,102,.22),transparent 65%),
+    radial-gradient(420px 200px at 8% 110%,rgba(64,102,161,.25),transparent 70%),
+    repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 1px,transparent 1px 56px)}
+
+.bh-topline{position:relative;z-index:2;display:flex;align-items:center;gap:8px;
+  font-family:'Space Mono',monospace;animation:bcIn .5s ease both}
+.bh-chan{font-size:10px;letter-spacing:.16em;font-weight:700;color:#181004;
+  background:linear-gradient(160deg,#F4D879,#C99B2E);padding:5px 10px 5px 8px;
+  clip-path:polygon(0 0,100% 0,calc(100% - 7px) 100%,0 100%)}
+.bh-live{display:inline-flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.12em;
+  font-weight:700;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:5px 9px}
+.bh-live.on{color:#FF8D9E;border-color:rgba(255,46,77,.5);background:rgba(255,46,77,.12);
+  animation:bcLive 1.6s ease-in-out infinite}
+.bh-live-dot{width:6px;height:6px;border-radius:50%;background:var(--faint);flex:none}
+.bh-live.on .bh-live-dot{background:#FF2E4D;animation:bcBlink 1s steps(2,end) infinite}
+.bh-round{margin-left:auto;font-size:10px;letter-spacing:.14em;font-weight:700;color:var(--gold)}
+
+.bh-main{position:relative;z-index:2;display:flex;align-items:center;gap:14px;
+  padding:18px 0 14px;animation:bcIn .5s ease .08s both}
+.bh-tro{flex:none;width:56px;filter:drop-shadow(0 8px 22px rgba(240,206,102,.45));
+  animation:bcFloat 5s ease-in-out infinite}
+.bh-tro svg{width:56px;height:68px;display:block}
+.bh-tx{min-width:0}
+.bh-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--muted)}
+.bh-title{font-size:34px;font-weight:900;letter-spacing:.01em;line-height:.95;
+  margin-top:6px;color:#fff;text-transform:uppercase}
+.bh-title-gold{background:linear-gradient(100deg,#D9A93C 0%,#F4D879 28%,#FFF3C4 46%,#F4D879 64%,#D9A93C 100%);
+  background-size:250% 100%;-webkit-background-clip:text;background-clip:text;
+  color:#F0CE66;-webkit-text-fill-color:transparent;animation:bcShimmer 4s linear infinite}
+.bh-sub{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.12em;color:var(--muted);margin-top:8px}
+
+/* leader lower-third chyron */
+.bh-l3{position:relative;z-index:2;width:100%;display:flex;align-items:center;gap:9px;
+  min-height:50px;padding:10px 20px 10px 12px;border:none;cursor:pointer;
+  font-family:'Archivo',system-ui,sans-serif;color:var(--fg);text-align:left;
+  background:linear-gradient(90deg,rgba(240,206,102,.18),rgba(16,26,44,.94) 34%,rgba(13,20,32,.96));
+  border-left:3px solid #F0CE66;
+  clip-path:polygon(0 0,100% 0,calc(100% - 14px) 100%,0 100%);
+  animation:bcIn .5s ease .16s both}
+.bh-l3:active{transform:translateY(1px)}
+.bh-l3-tag{display:inline-flex;align-items:center;gap:4px;flex:none;
+  font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.08em;
+  color:#181004;background:linear-gradient(160deg,#F4D879,#C99B2E);padding:5px 8px 5px 6px;
+  clip-path:polygon(0 0,100% 0,calc(100% - 6px) 100%,0 100%)}
+.bh-l3-tag svg{color:#181004}
+.bh-l3-name{display:flex;align-items:center;gap:6px;min-width:0;font-weight:800;font-size:15px;
+  color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bh-you{font-style:normal;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.08em;
+  color:#181004;background:#F0CE66;padding:2px 6px;border-radius:4px;flex:none}
+.bh-l3-flags{display:flex;gap:3px;flex:none}
+.bh-l3-flag{display:inline-flex;font-size:13px;line-height:1}
+.bh-l3-flag .fimg{height:13px}
+.bh-l3-pts{margin-left:auto;flex:none;display:flex;align-items:baseline;gap:3px;
+  font-family:'Space Mono',monospace;font-weight:700;font-size:20px;color:var(--gold)}
+.bh-l3-pts i{font-style:normal;font-size:10px;color:var(--muted);letter-spacing:.06em}
+.bh-l3-gap{flex:none;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.04em;color:var(--green)}
+
+/* stat bugs */
+.bh-bugs{position:relative;z-index:2;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px 0 14px}
+.bh-bug-btn{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:52px;
+  padding:9px 11px;cursor:pointer;text-align:left;color:var(--fg);
+  font-family:'Archivo',system-ui,sans-serif;
+  background:rgba(255,255,255,.04);border:1px solid var(--line);border-left:3px solid #F0CE66;
+  clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);
+  transition:background .15s,border-color .15s;animation:bcIn .5s ease both}
+.bh-bugs .bh-bug-btn:nth-child(1){animation-delay:.22s}
+.bh-bugs .bh-bug-btn:nth-child(2){animation-delay:.28s}
+.bh-bugs .bh-bug-btn:nth-child(3){animation-delay:.34s}
+.bh-bug-btn:hover{background:rgba(240,206,102,.08);border-color:rgba(240,206,102,.4)}
+.bh-bug-btn:active{transform:translateY(1px)}
+.bh-bug-btn b{font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:#fff}
+.bh-bug-btn span{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;color:var(--muted)}
+.bh-bug-btn.gold{background:linear-gradient(160deg,#F4D879,#C99B2E);border-color:#E6B84A}
+.bh-bug-btn.gold b,.bh-bug-btn.gold span{color:#181004}
+
+/* standings ticker (full bleed at hero base) */
+.bh-ticker{position:relative;z-index:2;overflow:hidden;margin:0 -16px;
+  border-top:1px solid rgba(240,206,102,.28);background:rgba(4,7,12,.78);
+  animation:bcIn .5s ease .4s both}
+.bh-ticker-track{display:flex;width:max-content;white-space:nowrap;animation:bcTicker 26s linear infinite}
+.bh-tk{display:inline-flex;align-items:center;gap:7px;padding:10px 16px;
+  font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);
+  border-right:1px solid rgba(159,178,206,.14)}
+.bh-tk i{font-style:normal;color:var(--faint)}
+.bh-tk b{color:#fff;font-weight:700;letter-spacing:.04em}
+.bh-tk em{font-style:normal;color:var(--gold);font-weight:700}
+.bh-tk u{text-decoration:none;color:var(--ice);letter-spacing:.06em}
+@media (max-width:360px){.bh-title{font-size:29px}.bh-tro{width:48px}.bh-tro svg{width:48px;height:58px}}
+
+/* ---- home body below the hero ---- */
+.home-body>*{animation:bcIn .5s ease both}
+.home-body>*:nth-child(1){animation-delay:.1s}
+.home-body>*:nth-child(2){animation-delay:.18s}
+.home-body>*:nth-child(3){animation-delay:.26s}
+.home-body>*:nth-child(4){animation-delay:.34s}
+.home-leader{background:#0e1522;border:1px solid var(--line);
+  box-shadow:0 18px 40px -28px #000}
+.home-leader-h{background:linear-gradient(90deg,#F4D879,#C99B2E);color:#181004}
+.home-leader-dot{background:#181004;opacity:.85}
+.home-l-name{color:#fff}
+.home-l-pts b{color:var(--gold)}
+.home-l-pts span{color:var(--muted)}
+.home-l-empty{color:var(--faint)}
+.home-pod{background:#0e1522;border:1px solid var(--line)}
+.home-pod.p1{border-color:rgba(240,206,102,.5);
+  background:linear-gradient(180deg,rgba(240,206,102,.12),#0e1522);
+  animation:bcGoldPulse 2.6s ease-in-out infinite}
+.home-pod-name{color:var(--fg)}
+.home-pod-pts{color:var(--gold)}
+.home-pod-pts.muted{color:var(--faint)}
+.home-stat{background:#0e1522;border:1px solid var(--line)}
+.home-stat-v{color:var(--gold)}
+.home-stat-l{color:var(--muted)}
+.home-link{background:#101a2c;border:1px solid var(--line);color:var(--fg);min-height:48px}
+.home-link:hover{background:#152238;border-color:rgba(240,206,102,.45);color:var(--gold)}
+.home-link svg{color:var(--gold)}
+
+`;
 
 class _EB extends React.Component{
   constructor(p){super(p);this.state={e:null};}
@@ -5561,6 +5874,7 @@ function _mdrShare(rows,day,lead,spoon,fday){
     x.textAlign="center";x.fillStyle="rgba(255,255,255,.92)";x.font="italic 800 32px Arial";
     x.fillText("\uD83E\uDD44 "+spoon.name+" props up the table on "+spoon.pts,W/2,y+44);
     c.toBlob(function(b){
+      if(!b)return;
       try{var f=new File([b],"ladsbuster-review.png",{type:"image/png"});
         if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:"Ladsbuster Matchday Review"});return;}}catch(e){}
       var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="ladsbuster-review.png";a.click();
@@ -5584,9 +5898,14 @@ function _mdReview(matches,me){
       ms.forEach(function(m){
         if(m.status!=="FINISHED"||m.hs==null||m.as==null)return;
         var h=nmf(m.home),a=nmf(m.away);tp[h]=tp[h]||0;tp[a]=tp[a]||0;
-        if(m.hs>m.as)tp[h]+=3;else if(m.as>m.hs)tp[a]+=3;else{tp[h]+=1;tp[a]+=1;}
+        var ph=m.penHome!=null?+m.penHome:0,pa2=m.penAway!=null?+m.penAway:0;
+        var rh=m.hs-ph,ra=m.as-pa2;
+        if(m.stage!=="GROUP_STAGE"){
+          var w=m.winner==="HOME_TEAM"?h:m.winner==="AWAY_TEAM"?a:(m.penHome!=null&&m.penAway!=null?(m.penHome>m.penAway?h:a):(rh>ra?h:ra>rh?a:null));
+          if(w)tp[w]+=3;
+        } else if(rh>ra)tp[h]+=3;else if(ra>rh)tp[a]+=3;else{tp[h]+=1;tp[a]+=1;}
       });
-      var tg=0;ms.forEach(function(m){if(m.status==="FINISHED")tg+=(m.hs+m.as);});
+      var tg=0;ms.forEach(function(m){if(m.status==="FINISHED"&&m.hs!=null&&m.as!=null)tg+=(m.hs-(m.penHome!=null?+m.penHome:0))+(m.as-(m.penAway!=null?+m.penAway:0));});
       var rows=PLAYERS.map(function(n){
         var teams=PLAYER_PICKS[n]||[];
         var pts=teams.reduce(function(s,t){return s+(tp[nmf(t)]||0);},0);
@@ -5597,7 +5916,7 @@ function _mdReview(matches,me){
       return rows;
     }
     var fin=matches.filter(function(m){return m.status==="FINISHED";});
-    if(!fin.length){return;}
+    if(!fin.length){try{var tst=document.createElement("div");tst.className="toast";tst.textContent="No results loaded yet - tap Refresh up top first";document.body.appendChild(tst);setTimeout(function(){tst.remove();},2200);}catch(e){}return;}
     var days={};fin.forEach(function(m){days[(m.date||"").slice(0,10)]=1;});
     var day=Object.keys(days).sort().pop();
     var dayM=fin.filter(function(m){return (m.date||"").slice(0,10)===day;});
